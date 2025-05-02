@@ -29,7 +29,7 @@
     </div>
 
     <div class="text-center">
-        <a href="{{ route('user.dashboard') }}" class="inline-block bg-blue-500 text-white px-6 py-3 rounded-md text-lg font-medium hover:bg-blue-600 transition">
+        <a href="{{ route('user.dashboard') }}" class="inline-block bg-blue-500 text-black px-6 py-3 rounded-md text-lg font-medium hover:bg-blue-600 transition">
             Kembali ke Dashboard
         </a>
     </div>

@@ -96,45 +96,73 @@ public function updated($property)
         $this->booking_price = $days > 0 ? $this->vehicle->price * $days : 0;
     }
 
-   public function submitBooking()
-{
-    $this->validate();
-
-    $this->checkVehicleBookingAvailability();
-
-    if (!$this->isVehicleAvailable) {
-        session()->flash('error', 'Kendaraan tidak tersedia pada tanggal yang dipilih.');
-        return;
-    }
-
-    $booking = Booking::create([
-        'id_user' => auth()->id(),
-        'id_vehicle' => $this->vehicle->id,
-        'id_driver' => $this->id_driver, // <--- Tambahkan ini
-        'start_date' => $this->start_date,
-        'end_date' => $this->end_date,
-        'booking_price' => $this->total_price,
-        'booking_status' => 'ongoing',
-        'payment_status' => 'pending',
-        'booking_date' => now(),
-        'phone_security' => $this->phone_security,
-        'phone_person' => $this->phone_person,
-        'nik_identity' => $this->nik_identity,
-        'identity' => $this->identity->store('identities', 'public'),
-    ]);
+    public function submitBooking()
+    {
+        $this->validate();
     
-
-    if ($this->payment_method === 'midtrans') {
-        return redirect()->route('payment.redirect', $booking->id); // <-- redirect ke Midtrans
-    }
-
-    if ($this->payment_method == 'transfer') {
-        return redirect()->route('transfer.confirmation', ['amount' => $booking->booking_price]);
+        $this->checkVehicleBookingAvailability();
+    
+        if (!$this->isVehicleAvailable) {
+            session()->flash('error', 'Kendaraan tidak tersedia pada tanggal yang dipilih.');
+            return;
+        }
+    
+        // Simpan booking terlebih dahulu
+        $booking = Booking::create([
+            'id_user' => auth()->id(),
+            'id_vehicle' => $this->vehicle->id,
+            'id_driver' => $this->id_driver,
+            'start_date' => $this->start_date,
+            'end_date' => $this->end_date,
+            'booking_price' => $this->total_price,
+            'booking_status' => 'ongoing',
+            'payment_status' => 'pending',
+            'booking_date' => now(),
+            'phone_security' => $this->phone_security,
+            'phone_person' => $this->phone_person,
+            'nik_identity' => $this->nik_identity,
+            'identity' => $this->identity->store('identities', 'public'),
+            'payment_method' => $this->payment_method,
+        ]);
+    
+        // Midtrans
+        if ($this->payment_method === 'midtrans') {
+            // Konfigurasi Midtrans
+            \Midtrans\Config::$serverKey = config('midtrans.server_key');
+            \Midtrans\Config::$isProduction = config('midtrans.is_production');
+            \Midtrans\Config::$isSanitized = true;
+            \Midtrans\Config::$is3ds = true;
+    
+            // Data Snap
+            $params = [
+                'transaction_details' => [
+                    'order_id' => 'ORDER-' . $booking->id . '-' . time(),
+                    'gross_amount' => $booking->booking_price,
+                ],
+                'customer_details' => [
+                    'first_name' => auth()->user()->name,
+                    'email' => auth()->user()->email,
+                ],
+            ];
+    
+            // Ambil Snap Token
+            $snapToken = \Midtrans\Snap::getSnapToken($params);
+    
+            // Simpan snap_token di database booking (kalau kolom tersedia)
+            $booking->update(['snap_token' => $snapToken]);
+    
+            // Redirect ke halaman untuk menampilkan Snap
+            return redirect()->route('payment.redirect', ['booking' => $booking->id]);
+        }
+    
+        // Jika Transfer Manual
+        if ($this->payment_method === 'transfer') {
+            return redirect()->route('transfer.confirmation', ['amount' => $booking->booking_price]);
+        }
+    
+        session()->flash('message', 'Booking berhasil!');
     }
     
-
-    session()->flash('message', 'Booking berhasil!');
-}
 
 
     public function render()
