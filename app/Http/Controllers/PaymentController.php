@@ -24,14 +24,15 @@ class PaymentController extends Controller
         // Detil transaksi
         $transactionDetails = [
             'order_id' => 'order_' . $booking->id,
-            'gross_amount' => $booking->total_price, // Total harga untuk kendaraan sewa
+           'gross_amount' => $booking->total_price, // Total harga untuk kendaraan sewa
         ];
     
         // Detil item
         $itemDetails = [
             [
                 'id' => 'item_' . $booking->id,
-                'price' => $booking->total_price,
+                'price' => $booking->booking_price,
+
                 'quantity' => 1,
                 'name' => 'Booking ' . $booking->vehicle->name
             ]

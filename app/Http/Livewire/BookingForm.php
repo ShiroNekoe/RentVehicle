@@ -92,38 +92,39 @@ public function updated($property)
         $this->booking_price = $days > 0 ? $this->vehicle->price * $days : 0;
     }
 
-    public function submitBooking()
-    {
-        $this->validate();
+   public function submitBooking()
+{
+    $this->validate();
 
-        $this->checkVehicleBookingAvailability();
+    $this->checkVehicleBookingAvailability();
 
-        if (!$this->isVehicleAvailable) {
-            session()->flash('error', 'Kendaraan tidak tersedia pada tanggal yang dipilih.');
-            return;
-        }
-
-        $identityPath = $this->identity->store('identities', 'public');
-
-        $booking = Booking::create([
-            'id_user' => Auth::id(),
-            'id_vehicle' => $this->vehicle->id,
-            'start_date' => $this->start_date,
-            'end_date' => $this->end_date,
-            'booking_price' => $this->booking_price,
-            'payment_status' => 'pending',
-            'booking_status' => 'ongoing',
-            'booking_date' => now(),
-            'phone_security' => $this->phone_security,
-            'phone_person' => $this->phone_person,
-            'nik_identity' => $this->nik_identity,
-            'identity' => $identityPath,
-        ]);
-
-        // Redirect ke halaman pembayaran
-        return redirect()->route('payment.redirect', $booking);
-
+    if (!$this->isVehicleAvailable) {
+        session()->flash('error', 'Kendaraan tidak tersedia pada tanggal yang dipilih.');
+        return;
     }
+
+    $booking = Booking::create([
+        'id_user' => auth()->id(),
+        'id_vehicle' => $this->vehicle->id,
+        'start_date' => $this->start_date,
+        'end_date' => $this->end_date,
+        'booking_price' => $this->total_price, // <--- penting!
+        'booking_status' => 'ongoing',
+        'payment_status' => 'pending',
+        'booking_date' => now(),
+        'phone_security' => $this->phone_security,
+        'phone_person' => $this->phone_person,
+        'nik_identity' => $this->nik_identity,
+        'identity' => $this->identity->store('identities', 'public'),
+    ]);
+
+    if ($this->payment_method === 'midtrans') {
+        return redirect()->route('payment.redirect', $booking->id); // <-- redirect ke Midtrans
+    }
+
+    session()->flash('message', 'Booking berhasil!');
+}
+
 
     public function render()
     {
