@@ -1,14 +1,5 @@
 <div>
     <form wire:submit.prevent="submitBooking" enctype="multipart/form-data">
-        <!-- Durasi Sewa -->
-        <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700">Durasi Sewa:</label>
-            @if ($start_date && $end_date && $days > 0)
-                <p class="text-base">{{ $days }} hari</p>
-            @else
-                <p class="text-base text-gray-500">Silakan pilih tanggal mulai dan selesai</p>
-            @endif
-        </div>
 
         <!-- Tanggal Mulai -->
         <div class="mb-4">
@@ -21,6 +12,8 @@
             <label for="end_date" class="block text-sm font-medium text-gray-700">Tanggal Selesai</label>
             <input type="date" id="end_date" wire:model="end_date" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
         </div>
+
+         
 
         <!-- Pilih Driver -->
         <div class="mb-4">
@@ -65,6 +58,15 @@
                 <option value="transfer">Transfer Bank</option>
                 <option value="midtrans">Payment Gateway (Midtrans)</option>
             </select>
+        </div>
+
+        <!-- Durasi Sewa -->
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Durasi Sewa:</label>
+            @if ($start_date && $end_date && $days > 0)
+                <p class="text-base">{{ $days }} hari</p>
+            @else
+            @endif
         </div>
 
         <!-- Harga -->

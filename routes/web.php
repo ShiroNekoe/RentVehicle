@@ -42,6 +42,8 @@ Route::get('/booking/{booking}/invoice', [BookingController::class, 'downloadInv
 Route::get('/transfer-confirmation/{amount}', function ($amount) {
     return view('pages.transfer-confirmation', ['total_transfer' => $amount]);
 })->name('transfer.confirmation');
+Route::post('/midtrans/callback', [PaymentController::class, 'handleCallback']);
+
 
 //redirect 
 Route::get('/booking/success', function () {

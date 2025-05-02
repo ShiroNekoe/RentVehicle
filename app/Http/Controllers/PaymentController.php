@@ -86,12 +86,12 @@ class PaymentController extends Controller
                     $booking->booking_status = 'cancelled';
                 } else {
                     $booking->payment_status = 'paid';
-                    $booking->booking_status = 'complete';
+                    $booking->booking_status = 'completed';
                 }
             } elseif ($status == 'settlement') {
                 // Pembayaran berhasil (non kartu kredit)
                 $booking->payment_status = 'paid';
-                $booking->booking_status = 'complete';
+                $booking->booking_status = 'completed';
             } elseif ($status == 'pending') {
                 $booking->payment_status = 'pending';
                 $booking->booking_status = 'ongoing';

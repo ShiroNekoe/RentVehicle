@@ -113,7 +113,7 @@ class BookingResource extends Resource
                         'danger' => 'cancelled',
                     ])
                     ->sortable(),
-
+                TextColumn::make('booking_price')->money('IDR'),
                 TextColumn::make('booking_price')->money('IDR'),
                 TextColumn::make('booking_date')->date()->sortable(),
             ])
