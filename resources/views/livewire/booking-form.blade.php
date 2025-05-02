@@ -1,11 +1,5 @@
 <div>
     <form wire:submit.prevent="submitBooking" enctype="multipart/form-data">
-        @if (session()->has('message'))
-            <div class="alert alert-success">
-                {{ session('message') }}
-            </div>
-        @endif
-
         <!-- Durasi Sewa -->
         <div class="mb-4">
             <label class="block text-sm font-medium text-gray-700">Durasi Sewa:</label>
@@ -28,7 +22,7 @@
             <input type="date" id="end_date" wire:model="end_date" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
         </div>
 
-                <!-- Pilih Driver -->
+        <!-- Pilih Driver -->
         <div class="mb-4">
             <label for="id_driver" class="block text-sm font-medium text-gray-700">Pilih Supir (Opsional)</label>
             <select wire:model="id_driver" id="id_driver" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
@@ -39,20 +33,11 @@
             </select>
         </div>
 
-
         <!-- Telepon Keamanan -->
         <div class="mb-4">
             <label for="phone_security" class="block text-sm font-medium text-gray-700">Telepon Keamanan</label>
             <input type="text" id="phone_security" wire:model="phone_security" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
         </div>
-
-        <!-- Telepon Orang yang Bisa Dihubungi -->
-        <div class="mb-4">
-            <label for="phone_person" class="block text-sm font-medium text-gray-700">Telepon Orang yang Bisa Dihubungi</label>
-            <input type="text" id="phone_person" wire:model="phone_person" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-        </div>
-
-
 
         <!-- NIK Identitas -->
         <div class="mb-4">
@@ -80,28 +65,30 @@
         <div class="mb-4">
             <label class="block text-sm font-medium text-gray-700">Total Harga:</label>
             <p class="text-lg font-semibold">
-                Rp{{ number_format($vehicle->price, 0, ',', '.') }}
+                Rp{{ number_format($vehicle->price * $days, 0, ',', '.') }}
             </p>
         </div>
 
         <!-- Pembayaran Transfer Bank -->
-        @if ($payment_method == 'transfer')
-        <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700">Jumlah Transfer:</label>
-            <p class="text-lg font-semibold mb-2">
-                Rp{{ number_format($vehicle->price * $days, 0, ',', '.') }}
-            </p>
-        
-            <a href="{{ route('transfer.confirmation', ['amount' => $vehicle->price * $days]) }}"
-               class="inline-block px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition">
-                Lanjut ke Konfirmasi Transfer
-            </a>
-        </div>
-        
-        @elseif ($payment_method == 'midtrans')
-            <!-- Tombol Bayar Midtrans -->
+        @if ($payment_method === 'transfer')
             <div class="mb-4">
-                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md">
+                <label class="block text-sm font-medium text-gray-700">Jumlah Transfer:</label>
+                <p class="text-lg font-semibold mb-2">
+                    Rp{{ number_format($vehicle->price * $days, 0, ',', '.') }}
+                </p>
+
+                <!-- Link Redirect ke Halaman Konfirmasi Transfer -->
+                <a href="{{ route('transfer.confirmation', ['amount' => $vehicle->price * $days]) }}"
+                   class="inline-block px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition">
+                    Lanjut ke Konfirmasi Transfer
+                </a>
+            </div>
+        @endif
+
+        <!-- Pembayaran Midtrans -->
+        @if ($payment_method === 'midtrans')
+            <div class="mb-4">
+                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">
                     Bayar dengan Midtrans
                 </button>
             </div>
@@ -110,7 +97,7 @@
         <!-- Tombol Submit untuk Booking -->
         <div class="mb-4">
             <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md">
-                {{ $payment_method == 'midtrans' ? 'Bayar dengan Midtrans' : 'Booking' }}
+                {{ $payment_method === 'midtrans' ? 'Bayar dengan Midtrans' : 'Booking' }}
             </button>
         </div>
     </form>
