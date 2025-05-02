@@ -63,40 +63,57 @@ class PaymentController extends Controller
 
 
 
-public function handleCallback(Request $request)
-{
-    // Ambil data dari Midtrans notification
-    $notification = new Notification();
-
-    // Tentukan status pembayaran
-    $status = $notification->transaction_status;
-    $orderId = $notification->order_id;
-    $fraudStatus = $notification->fraud_status;
-
-    // Cari booking berdasarkan order_id
-    $booking = Booking::where('id', str_replace('order_', '', $orderId))->first();
-
-    // Proses status pembayaran
-    if ($status == 'capture') {
-        if ($fraudStatus == 'challenge') {
-            // Pembayaran gagal karena fraud
-            $booking->status = 'failed';
-        } else {
-            // Pembayaran berhasil
-            $booking->status = 'success';
+    public function handleCallback(Request $request)
+    {
+        try {
+            $notification = new Notification();
+    
+            $status = $notification->transaction_status;
+            $orderId = $notification->order_id;
+            $fraudStatus = $notification->fraud_status ?? null;
+    
+            $bookingId = str_replace('order_', '', $orderId);
+            $booking = Booking::find($bookingId);
+    
+            if (!$booking) {
+                return response()->json(['message' => 'Booking not found'], 404);
+            }
+    
+            // Proses status pembayaran
+            if ($status == 'capture') {
+                if ($fraudStatus == 'challenge') {
+                    $booking->payment_status = 'failed';
+                    $booking->booking_status = 'cancelled';
+                } else {
+                    $booking->payment_status = 'paid';
+                    $booking->booking_status = 'complete';
+                }
+            } elseif ($status == 'settlement') {
+                // Pembayaran berhasil (non kartu kredit)
+                $booking->payment_status = 'paid';
+                $booking->booking_status = 'complete';
+            } elseif ($status == 'pending') {
+                $booking->payment_status = 'pending';
+                $booking->booking_status = 'ongoing';
+            } elseif ($status == 'deny') {
+                $booking->payment_status = 'failed';
+                $booking->booking_status = 'cancelled';
+            } elseif ($status == 'expire') {
+                $booking->payment_status = 'expired';
+                $booking->booking_status = 'cancelled';
+            } elseif ($status == 'cancel') {
+                $booking->payment_status = 'failed';
+                $booking->booking_status = 'cancelled';
+            }
+    
+            $booking->save();
+    
+            return response()->json(['message' => 'Callback processed successfully']);
+        } catch (\Exception $e) {
+            Log::error('Midtrans Callback Error: ' . $e->getMessage());
+            return response()->json(['message' => 'Callback failed'], 500);
         }
-    } elseif ($status == 'pending') {
-        // Pembayaran tertunda
-        $booking->status = 'pending';
-    } elseif ($status == 'cancel') {
-        // Pembayaran dibatalkan
-        $booking->status = 'failed';
     }
-
-    // Simpan status transaksi
-    $booking->save();
-
-    return response()->json(['message' => 'Callback received successfully']);
-}
+    
 
 }

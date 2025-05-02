@@ -43,6 +43,18 @@ Route::get('/transfer-confirmation/{amount}', function ($amount) {
     return view('pages.transfer-confirmation', ['total_transfer' => $amount]);
 })->name('transfer.confirmation');
 
+//redirect 
+Route::get('/booking/success', function () {
+    return view('booking.success');
+});
+Route::get('/booking/pending', function () {
+    return view('booking.pending');
+});
+Route::get('/booking/failed', function () {
+    return view('booking.failed');
+});
+
+
 // Google Authentication
 use App\Http\Controllers\Auth\GoogleController;
 Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');

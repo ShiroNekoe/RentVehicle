@@ -33,6 +33,12 @@
             </select>
         </div>
 
+          <!-- Telepon person -->
+          <div class="mb-4">
+            <label for="phone_person" class="block text-sm font-medium text-gray-700">Telepon anda</label>
+            <input type="text" id="phone_person" wire:model="phone_person" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+        </div>
+
         <!-- Telepon Keamanan -->
         <div class="mb-4">
             <label for="phone_security" class="block text-sm font-medium text-gray-700">Telepon Keamanan</label>
@@ -86,13 +92,31 @@
         @endif
 
         <!-- Pembayaran Midtrans -->
-        @if ($payment_method === 'midtrans')
-            <div class="mb-4">
-                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">
-                    Bayar dengan Midtrans
-                </button>
-            </div>
-        @endif
+        @if (session()->has('snap_token'))
+        <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
+        <script type="text/javascript">
+            window.onload = function () {
+                snap.pay('{{ session('snap_token') }}', {
+                    onSuccess: function(result){
+                        console.log('Pembayaran sukses:', result);
+                        window.location.href = "/booking/success";
+                    },
+                    onPending: function(result){
+                        console.log('Menunggu pembayaran:', result);
+                        window.location.href = "/booking/pending";
+                    },
+                    onError: function(result){
+                        console.log('Pembayaran error:', result);
+                        window.location.href = "/booking/failed";
+                    },
+                    onClose: function(){
+                        alert('Kamu menutup popup tanpa menyelesaikan pembayaran');
+                    }
+                });
+            };
+        </script>
+    @endif
+    
 
         <!-- Tombol Submit untuk Booking -->
         <div class="mb-4">
