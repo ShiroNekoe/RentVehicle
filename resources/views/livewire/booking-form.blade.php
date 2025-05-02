@@ -28,6 +28,18 @@
             <input type="date" id="end_date" wire:model="end_date" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
         </div>
 
+                <!-- Pilih Driver -->
+        <div class="mb-4">
+            <label for="id_driver" class="block text-sm font-medium text-gray-700">Pilih Supir (Opsional)</label>
+            <select wire:model="id_driver" id="id_driver" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                <option value="">-- Tanpa Supir --</option>
+                @foreach ($drivers as $driver)
+                    <option value="{{ $driver->id }}">{{ $driver->name }} - {{ $driver->phone }}</option>
+                @endforeach
+            </select>
+        </div>
+
+
         <!-- Telepon Keamanan -->
         <div class="mb-4">
             <label for="phone_security" class="block text-sm font-medium text-gray-700">Telepon Keamanan</label>
@@ -39,6 +51,8 @@
             <label for="phone_person" class="block text-sm font-medium text-gray-700">Telepon Orang yang Bisa Dihubungi</label>
             <input type="text" id="phone_person" wire:model="phone_person" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
         </div>
+
+
 
         <!-- NIK Identitas -->
         <div class="mb-4">
@@ -72,12 +86,18 @@
 
         <!-- Pembayaran Transfer Bank -->
         @if ($payment_method == 'transfer')
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700">Jumlah Transfer:</label>
-                <p class="text-lg font-semibold">
-                    Rp{{ number_format($vehicle->price * $days, 0, ',', '.') }}
-                </p>
-            </div>
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700">Jumlah Transfer:</label>
+            <p class="text-lg font-semibold mb-2">
+                Rp{{ number_format($vehicle->price * $days, 0, ',', '.') }}
+            </p>
+        
+            <a href="{{ route('transfer.confirmation', ['amount' => $vehicle->price * $days]) }}"
+               class="inline-block px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition">
+                Lanjut ke Konfirmasi Transfer
+            </a>
+        </div>
+        
         @elseif ($payment_method == 'midtrans')
             <!-- Tombol Bayar Midtrans -->
             <div class="mb-4">

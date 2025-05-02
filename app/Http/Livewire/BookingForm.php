@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use App\Models\Driver;
 
 class BookingForm extends Component
 {
@@ -23,6 +24,8 @@ class BookingForm extends Component
     public $phone_person;
     public $nik_identity;
     public $identity;
+    public $id_driver;
+    public $drivers = [];
 
 public $total_price = 0;
 public $days = 0;
@@ -42,6 +45,7 @@ public $days = 0;
     {
         $this->vehicleId = $vehicleId;
         $this->vehicle = Vehicle::findOrFail($vehicleId);
+        $this->drivers = Driver::all();
     }
 
    
@@ -88,7 +92,7 @@ public function updated($property)
         $start = Carbon::parse($this->start_date);
         $end = Carbon::parse($this->end_date);
         $days = $start->diffInDays($end);
-
+        $driver_fee = $this->id_driver ? 100000 : 0;
         $this->booking_price = $days > 0 ? $this->vehicle->price * $days : 0;
     }
 
@@ -106,9 +110,10 @@ public function updated($property)
     $booking = Booking::create([
         'id_user' => auth()->id(),
         'id_vehicle' => $this->vehicle->id,
+        'id_driver' => $this->id_driver, // <--- Tambahkan ini
         'start_date' => $this->start_date,
         'end_date' => $this->end_date,
-        'booking_price' => $this->total_price, // <--- penting!
+        'booking_price' => $this->total_price,
         'booking_status' => 'ongoing',
         'payment_status' => 'pending',
         'booking_date' => now(),
@@ -117,10 +122,16 @@ public function updated($property)
         'nik_identity' => $this->nik_identity,
         'identity' => $this->identity->store('identities', 'public'),
     ]);
+    
 
     if ($this->payment_method === 'midtrans') {
         return redirect()->route('payment.redirect', $booking->id); // <-- redirect ke Midtrans
     }
+
+    if ($this->payment_method == 'transfer') {
+        return redirect()->route('transfer.confirmation', ['amount' => $booking->booking_price]);
+    }
+    
 
     session()->flash('message', 'Booking berhasil!');
 }

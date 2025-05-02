@@ -39,6 +39,9 @@ Route::get('/booking/{booking}', [BookingController::class, 'show'])->name('book
 Route::get('/payment/redirect/{booking}', [PaymentController::class, 'redirectToMidtrans'])->name('payment.redirect');
 Route::post('/payment/callback', [PaymentController::class, 'handleCallback'])->name('payment.callback');
 Route::get('/booking/{booking}/invoice', [BookingController::class, 'downloadInvoice'])->name('booking.invoice');
+Route::get('/transfer-confirmation/{amount}', function ($amount) {
+    return view('pages.transfer-confirmation', ['total_transfer' => $amount]);
+})->name('transfer.confirmation');
 
 // Google Authentication
 use App\Http\Controllers\Auth\GoogleController;

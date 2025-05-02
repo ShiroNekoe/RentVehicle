@@ -9,6 +9,7 @@ class Booking extends Model
     protected $fillable = [
         'id_user',
         'id_vehicle',
+        'id_driver', // <--- Tambahkan ini
         'start_date',
         'end_date',
         'booking_date',
@@ -20,6 +21,7 @@ class Booking extends Model
         'nik_identity',
         'identity',
     ];
+    
     
     
 
