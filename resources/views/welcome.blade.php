@@ -1,7 +1,8 @@
 {{-- resources/views/welcome.blade.php --}}
 <x-guest-layout>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <div class="min-h-screen bg-base-100">
-
+        
         <!-- Navbar -->
         <div class="navbar bg-base-100 shadow-md sticky top-0 z-50">
             <div class="flex-1">
