@@ -61,7 +61,7 @@
         </div>
 
         <!-- Durasi Sewa -->
-        <div class="mb-4">
+         <div class="mb-4">
             <label class="block text-sm font-medium text-gray-700">Durasi Sewa:</label>
             @if ($start_date && $end_date && $days > 0)
                 <p class="text-base">{{ $days }} hari</p>

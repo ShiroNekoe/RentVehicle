@@ -45,6 +45,7 @@ Route::get('/transfer-confirmation/{amount}', function ($amount) {
 Route::post('/midtrans/callback', [PaymentController::class, 'handleCallback']);
 
 
+
 //redirect 
 Route::get('/booking/success', function () {
     return view('booking.success');
@@ -55,6 +56,8 @@ Route::get('/booking/pending', function () {
 Route::get('/booking/failed', function () {
     return view('booking.failed');
 });
+
+
 
 
 // Google Authentication

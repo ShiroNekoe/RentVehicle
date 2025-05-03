@@ -3,6 +3,7 @@
 <head>
     <title>Pembayaran Midtrans</title>
     <script type="text/javascript"
+    var snapToken = "{{ $snapToken }}";
         src="https://app.sandbox.midtrans.com/snap/snap.js"
         data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
 </head>
