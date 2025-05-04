@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\DashboardResource\Widgets;
+namespace App\Filament\Widgets;
 
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;

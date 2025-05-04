@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Filament\Resources\DashboardResource\Widgets;
+namespace App\Filament\Widgets;
 
 use App\Models\Booking;
 use Filament\Widgets\ChartWidget;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
+
 
 
 class BookingChart extends ChartWidget

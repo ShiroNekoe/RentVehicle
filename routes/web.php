@@ -8,6 +8,7 @@ use App\Http\Controllers\BookingController;
 use App\Models\Vehicle;
 use Livewire\Livewire;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BookingExportController;
 
 // Halaman utama
 Route::get('/', function () {
@@ -64,5 +65,11 @@ Route::get('/booking/failed', function () {
 use App\Http\Controllers\Auth\GoogleController;
 Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
+
+
+//export
+Route::get('/admin/booking-report/export/{format}', [BookingExportController::class, 'export'])
+    ->name('booking-report.export')
+    ->middleware(['auth', 'verified']);
 
 require __DIR__.'/auth.php';
