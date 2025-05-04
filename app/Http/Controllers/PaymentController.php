@@ -1,13 +1,13 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Midtrans\Snap;
 use Midtrans\Config;
-use Illuminate\Support\Facades\Log;
 use Midtrans\Notification;
+use Illuminate\Support\Facades\Log;
 
 class PaymentController extends Controller
 {
@@ -24,7 +24,7 @@ class PaymentController extends Controller
         // Detil transaksi
         $transactionDetails = [
             'order_id' => 'order_' . $booking->id,
-           'gross_amount' => $booking->total_price, // Total harga untuk kendaraan sewa
+            'gross_amount' => $booking->total_price,
         ];
     
         // Detil item
@@ -32,7 +32,6 @@ class PaymentController extends Controller
             [
                 'id' => 'item_' . $booking->id,
                 'price' => $booking->booking_price,
-
                 'quantity' => 1,
                 'name' => 'Booking ' . $booking->vehicle->name
             ]
@@ -65,42 +64,44 @@ class PaymentController extends Controller
         }
     }
 
+    public function handleCallback(Request $request)
+    {
+        // Ambil data dari Midtrans notification
+        $notification = new Notification();
 
+        // Tentukan status pembayaran
+        $status = $notification->transaction_status;
+        $orderId = $notification->order_id;
+        $fraudStatus = $notification->fraud_status;
 
-public function handleCallback(Request $request)
-{
-    // Ambil data dari Midtrans notification
-    $notification = new Notification();
+        // Cari booking berdasarkan order_id
+        $booking = Booking::where('order_id', $orderId)->first();
 
-    // Tentukan status pembayaran
-    $status = $notification->transaction_status;
-    $orderId = $notification->order_id;
-    $fraudStatus = $notification->fraud_status;
-
-    // Cari booking berdasarkan order_id
-    $booking = Booking::where('id', str_replace('order_', '', $orderId))->first();
-
-    // Proses status pembayaran
-    if ($status == 'capture') {
-        if ($fraudStatus == 'challenge') {
-            // Pembayaran gagal karena fraud
+        // Proses status pembayaran
+        if ($status == 'capture') {
+            if ($fraudStatus == 'challenge') {
+                // Pembayaran challenge
+                $booking->status = 'failed';
+            } else {
+                // Pembayaran berhasil
+                $booking->status = 'complete';
+                $booking->payment_status = 'paid';
+            }
+        } elseif ($status == 'settlement') {
+            // Pembayaran sudah berhasil
+            $booking->status = 'complete';
+            $booking->payment_status = 'paid';
+        } elseif ($status == 'pending') {
+            // Pembayaran menunggu
+            $booking->status = 'pending';
+        } elseif ($status == 'deny') {
+            // Pembayaran gagal
             $booking->status = 'failed';
-        } else {
-            // Pembayaran berhasil
-            $booking->status = 'success';
         }
-    } elseif ($status == 'pending') {
-        // Pembayaran tertunda
-        $booking->status = 'pending';
-    } elseif ($status == 'cancel') {
-        // Pembayaran dibatalkan
-        $booking->status = 'failed';
+
+        // Simpan status pembayaran
+        $booking->save();
+
+        return redirect()->route('booking.details', $booking->id);
     }
-
-    // Simpan status transaksi
-    $booking->save();
-
-    return response()->json(['message' => 'Callback received successfully']);
-}
-
 }

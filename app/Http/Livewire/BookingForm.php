@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\Driver;
+use Midtrans\Snap;
+use Midtrans\Config;
 
 class BookingForm extends Component
 {
@@ -26,6 +28,7 @@ class BookingForm extends Component
     public $identity;
     public $id_driver;
     public $drivers = [];
+    public $agree_terms = false;
 
 public $total_price = 0;
 public $days = 0;
@@ -35,10 +38,11 @@ public $days = 0;
     protected $rules = [
         'start_date' => 'required|date|after_or_equal:today',
         'end_date' => 'required|date|after_or_equal:start_date',
-        'phone_security' => 'required',
-        'phone_person' => 'required',
-        'nik_identity' => 'required',
+        'phone_security' => 'required|numeric|digits_between:12,15',
+        'phone_person' => 'required|numeric|digits_between:12,15',
+        'nik_identity' => 'required|numeric|digits:16',
         'identity' => 'required|file|mimes:jpg,png,pdf|max:10240',
+        'agree_terms' => 'accepted',
     ];
 
     public function mount($vehicleId)
@@ -95,49 +99,51 @@ public function updated($property)
         $driver_fee = $this->id_driver ? 100000 : 0;
         $this->booking_price = $days > 0 ? $this->vehicle->price * $days : 0;
     }
-
     public function submitBooking()
     {
         $this->validate();
     
-        $this->checkVehicleBookingAvailability();
+        // Pastikan total_price sudah dihitung dengan benar
+        $this->total_price = $this->vehicle->price * $this->days + ($this->id_driver ? 100000 : 0);
     
-        if (!$this->isVehicleAvailable) {
-            session()->flash('error', 'Kendaraan tidak tersedia pada tanggal yang dipilih.');
+        // Validasi total_price untuk memastikan lebih dari 0
+        if ($this->total_price < 0.01) {
+            session()->flash('error', 'Total harga harus lebih dari 0');
             return;
         }
     
-        // Simpan booking terlebih dahulu
+        // Simpan booking ke database
         $booking = Booking::create([
             'id_user' => auth()->id(),
             'id_vehicle' => $this->vehicle->id,
             'id_driver' => $this->id_driver,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
-            'booking_price' => $this->total_price,
-            'booking_status' => 'ongoing',
-            'payment_status' => 'pending',
-            'booking_date' => now(),
-            'phone_security' => $this->phone_security,
             'phone_person' => $this->phone_person,
+            'phone_security' => $this->phone_security,
             'nik_identity' => $this->nik_identity,
             'identity' => $this->identity->store('identities', 'public'),
+            'booking_price' => $this->total_price,  // Gunakan total_price
             'payment_method' => $this->payment_method,
+            'status' => 'pending',
+            'booking_date' => Carbon::now(),
         ]);
     
-        // Midtrans
-        if ($this->payment_method === 'midtrans') {
-            // Konfigurasi Midtrans
-            \Midtrans\Config::$serverKey = config('midtrans.server_key');
-            \Midtrans\Config::$isProduction = config('midtrans.is_production');
-            \Midtrans\Config::$isSanitized = true;
-            \Midtrans\Config::$is3ds = true;
+        // Metode pembayaran Transfer
+        if ($this->payment_method === 'transfer') {
+            return redirect()->route('transfer.confirmation', ['amount' => $this->total_price]);
+        }
     
-            // Data Snap
+        // Metode Pembayaran Midtrans
+        if ($this->payment_method === 'midtrans') {
+            Config::$serverKey = config('midtrans.server_key');
+            Config::$isProduction = false;  // Pastikan mode ini sesuai dengan lingkungan Anda
+    
+            $midtrans = new Snap();
             $params = [
                 'transaction_details' => [
-                    'order_id' => 'ORDER-' . $booking->id . '-' . time(),
-                    'gross_amount' => $booking->booking_price,
+                    'order_id' => 'BOOK-' . $booking->id . '-' . time(),
+                    'gross_amount' => (int)$this->total_price,  // Pastikan total_price yang benar
                 ],
                 'customer_details' => [
                     'first_name' => auth()->user()->name,
@@ -145,22 +151,11 @@ public function updated($property)
                 ],
             ];
     
-            // Ambil Snap Token
-            $snapToken = \Midtrans\Snap::getSnapToken($params);
+            $snapToken = $midtrans->getSnapToken($params);
+            session()->flash('snap_token', $snapToken);
     
-            // Simpan snap_token di database booking (kalau kolom tersedia)
-            $booking->update(['snap_token' => $snapToken]);
-    
-            // Redirect ke halaman untuk menampilkan Snap
-            return redirect()->route('payment.redirect', ['booking' => $booking->id]);
+            return;
         }
-    
-        // Jika Transfer Manual
-        if ($this->payment_method === 'transfer') {
-            return redirect()->route('transfer.confirmation', ['amount' => $booking->booking_price]);
-        }
-    
-        session()->flash('message', 'Booking berhasil!');
     }
     
 

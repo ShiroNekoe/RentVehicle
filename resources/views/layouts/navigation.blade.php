@@ -15,6 +15,9 @@
                     <x-nav-link :href="route('user.dashboard')" :active="request()->routeIs('user.dashboard')"> <!-- Updated -->
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('user.history')" :active="request()->routeIs('user.history')">  <!-- Updated -->
+                        {{ __('History') }}
+                    </x-nav-link>
                 </div>
             </div>
 
@@ -71,6 +74,12 @@
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
         </div>
+        <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
+            <div class="pt-2 pb-3 space-y-1">
+                <x-responsive-nav-link :href="route('user.history')" :active="request()->routeIs('user.history')"> <!-- Updated -->
+                    {{ __('History') }}
+                </x-responsive-nav-link>
+            </div>
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User\UserDashboardController;
+use App\Http\Controllers\User\UserHistoryController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RentalController;
 use App\Http\Controllers\BookingController;
@@ -16,6 +17,7 @@ Route::get('/', function () {
 
 // Dashboard pengguna
 Route::middleware('auth')->get('/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
+Route::middleware('auth')->get('/history', [UserHistoryController::class, 'index'])->name('user.history');
 
 // Profil pengguna
 Route::middleware('auth')->group(function () {
@@ -35,14 +37,23 @@ Route::get('/booking/{vehicle}', function (Vehicle $vehicle) {
 Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
 Route::get('/booking/{booking}', [BookingController::class, 'show'])->name('booking.show');
 
-// Rute Pembayaran
+// Rute Pembayaran Midtrans
 Route::get('/payment/redirect/{booking}', [PaymentController::class, 'redirectToMidtrans'])->name('payment.redirect');
 Route::post('/payment/callback', [PaymentController::class, 'handleCallback'])->name('payment.callback');
 Route::get('/booking/{booking}/invoice', [BookingController::class, 'downloadInvoice'])->name('booking.invoice');
+
+// Rute Konfirmasi Pembayaran Transfer
 Route::get('/transfer-confirmation/{amount}', function ($amount) {
     return view('pages.transfer-confirmation', ['total_transfer' => $amount]);
 })->name('transfer.confirmation');
+
+// Rute untuk Callback Midtrans (di sini sudah ada di atas, tidak perlu diulang)
 Route::post('/midtrans/callback', [PaymentController::class, 'handleCallback']);
+
+// Rute Pembayaran Sukses dan Gagal (Jika diperlukan untuk mengarah ke tampilan khusus)
+Route::get('/payment/success/{order_id}', [PaymentController::class, 'success'])->name('payment.success');
+Route::get('/payment/failed/{order_id}', [PaymentController::class, 'failed'])->name('payment.failed');
+
 
 
 
