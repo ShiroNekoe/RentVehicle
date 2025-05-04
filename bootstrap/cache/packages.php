@@ -6,6 +6,13 @@
       0 => 'Akaunting\\Money\\Provider',
     ),
   ),
+  'alperenersoy/filament-export' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'AlperenErsoy\\FilamentExport\\FilamentExportServiceProvider',
+    ),
+  ),
   'anourvalar/eloquent-serialize' => 
   array (
     'aliases' => 
