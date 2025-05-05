@@ -1,4 +1,4 @@
-import defaultTheme from 'tailwindcss/defaultTheme';
+import defaultTheme from 'tailwindcss/defaultTheme'
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -6,19 +6,23 @@ module.exports = {
     './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
     './storage/framework/views/*.php',
     './resources/views/**/*.blade.php',
-    './resources/js/**/*.js',  // Jangan lupa untuk memasukkan file JS jika diperlukan
+    './resources/js/**/*.js',
   ],
 
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+        sans: ['Poppins', ...defaultTheme.fontFamily.sans],
       },
     },
+  },
+
+  daisyui: {
+    themes: ["light", "dark"],  
   },
 
   plugins: [
     require('@tailwindcss/forms'),
     require('daisyui'),
   ],
-};
+}
