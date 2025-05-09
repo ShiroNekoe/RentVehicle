@@ -9,17 +9,40 @@ use Illuminate\Support\Facades\Auth;
 
 class UserDashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
-
-        // Ambil 5 kendaraan terbaru
-        $vehicles = Vehicle::latest()->take(5)->get();
-
-        // Ambil riwayat booking user
-        $bookings = Booking::where('id_user', $user->id)->latest()->take(5)->get();
-
+    
+        // Mulai query builder untuk kendaraan
+        $vehicleQuery = Vehicle::query();
+    
+        // Cek apakah ada filter
+        if ($request->filled('tanggal')) {
+            $vehicleQuery->whereDate('created_at', $request->tanggal);
+        }
+        if ($request->filled('vehicle_brand')) {
+            $vehicleQuery->where('vehicle_brand', 'like', '%' . $request->brand . '%');
+        }
+        if ($request->filled('vehicle_model')) {
+            $vehicleQuery->where('vehicle_model', 'like', '%' . $request->model . '%');
+        }
+        if ($request->filled('vehicle_type')) {
+            $vehicleQuery->where('vehicle_type', 'like', '%' . $request->type . '%');
+        }
+        if ($request->filled('vehicle_name')) {
+            $vehicleQuery->where('vehicle_name', 'like', '%' . $request->nama . '%');
+        }
+    
+        // Ambil 5 kendaraan terbaru setelah filter (atau tanpa filter)
+        $vehicles = $vehicleQuery->latest()->take(5)->get();
+    
+        // Ambil 5 riwayat booking terbaru user
+        $bookings = Booking::where('id_user', $user->id)
+            ->latest()
+            ->take(5)
+            ->get();
+    
         return view('user.dashboard', compact('user', 'vehicles', 'bookings'));
-
     }
+    
 }

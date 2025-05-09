@@ -42,7 +42,7 @@
                                     <span class="capitalize font-medium">{{ $booking->booking_status }}</span>
                                 </p>
                                 <p class="text-sm text-gray-400 mb-2">Tanggal: {{ $booking->created_at->format('d M Y') }}</p>
-
+    
                                 <p class="text-sm">
                                     Status Pembayaran:
                                     @if ($booking->payment_status == 'paid')
@@ -53,6 +53,18 @@
                                         <span class="text-red-500 font-bold">GAGAL / KADALUARSA</span>
                                     @endif
                                 </p>
+    
+                                <!-- Tombol Detail Booking -->
+                                <a href="{{ route('booking.detail', $booking->id) }}" class="btn btn-link text-blue-600 mt-2">Lihat Detail</a>
+    
+                                <!-- Tombol Cancel Booking (Hanya tampilkan jika status booking belum selesai atau dibatalkan) -->
+                                @if ($booking->booking_status !== 'completed' && $booking->booking_status !== 'cancelled')
+                                    <form action="{{ route('booking.cancel', $booking->id) }}" method="POST" class="mt-2">
+                                        @csrf
+                                        @method('PUT')
+                                        <button type="submit" class="btn btn-danger">Batalkan Booking</button>
+                                    </form>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -62,5 +74,6 @@
             </div>
         </div>
     </div>
+    
 </div>
 @endsection

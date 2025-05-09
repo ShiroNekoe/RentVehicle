@@ -16,14 +16,36 @@ class BookingController extends Controller
         return view('booking.create', compact('vehicle'));
     }
 
-    public function show(Booking $booking)
+    public function show($id)
     {
-        return view('payment.checkout', compact('booking'));
+      
+    
+        $booking = Booking::with('vehicle')->findOrFail($id);
+        return view('user.booking_detail', compact('booking'));
+    
     }
     public function downloadInvoice(Booking $booking)
     {
         $pdf = Pdf::loadView('pdf.invoice', ['booking' => $booking]);
         return $pdf->download('invoice-booking-'.$booking->id.'.pdf');
     }
+
+    
+
+public function cancel($id)
+{
+    $booking = Booking::findOrFail($id);
+
+    // Pastikan hanya bisa dibatalkan jika status booking belum selesai atau dibatalkan
+    if ($booking->booking_status !== 'completed' && $booking->booking_status !== 'cancelled') {
+        $booking->update([
+            'booking_status' => 'cancelled',
+             'payment_status' => 'failed'
+        ]);
+    }
+
+    return redirect()->route('user.history')->with('success', 'Booking berhasil dibatalkan');
+}
+
     
 }

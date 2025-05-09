@@ -18,6 +18,7 @@ Route::get('/', function () {
 // Dashboard pengguna
 Route::middleware('auth')->get('/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
 Route::middleware('auth')->get('/history', [UserHistoryController::class, 'index'])->name('user.history');
+Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
 
 // Profil pengguna
 Route::middleware('auth')->group(function () {
@@ -37,6 +38,13 @@ Route::get('/booking/{vehicle}', function (Vehicle $vehicle) {
 Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
 Route::get('/booking/{booking}', [BookingController::class, 'show'])->name('booking.show');
 
+// Halaman Detail Booking
+Route::get('/booking/{booking}', [BookingController::class, 'show'])->name('user.booking_detail');
+
+// Cancel Booking
+Route::put('/booking/{booking}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
+
+
 // Rute Pembayaran Midtrans
 Route::get('/payment/redirect/{booking}', [PaymentController::class, 'redirectToMidtrans'])->name('payment.redirect');
 Route::post('/payment/callback', [PaymentController::class, 'handleCallback'])->name('payment.callback');
@@ -53,7 +61,6 @@ Route::post('/midtrans/callback', [PaymentController::class, 'handleCallback']);
 // Rute Pembayaran Sukses dan Gagal (Jika diperlukan untuk mengarah ke tampilan khusus)
 Route::get('/payment/success/{order_id}', [PaymentController::class, 'success'])->name('payment.success');
 Route::get('/payment/failed/{order_id}', [PaymentController::class, 'failed'])->name('payment.failed');
-
 
 
 
