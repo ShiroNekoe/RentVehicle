@@ -14,35 +14,48 @@ class UserDashboardController extends Controller
         $user = Auth::user();
     
         // Mulai query builder untuk kendaraan
-        $vehicleQuery = Vehicle::query();
+        $query = Vehicle::query();
     
         // Cek apakah ada filter
-        if ($request->filled('tanggal')) {
-            $vehicleQuery->whereDate('created_at', $request->tanggal);
+        if ($request->filled('brand')) {
+            $query->where('vehicle_brand', $request->brand);
         }
-        if ($request->filled('vehicle_brand')) {
-            $vehicleQuery->where('vehicle_brand', 'like', '%' . $request->brand . '%');
+        
+        if ($request->filled('model')) {
+            $query->where('vehicle_model', $request->model);
         }
-        if ($request->filled('vehicle_model')) {
-            $vehicleQuery->where('vehicle_model', 'like', '%' . $request->model . '%');
+        
+        if ($request->filled('type')) {
+            $query->where('vehicle_type', $request->type);
         }
-        if ($request->filled('vehicle_type')) {
-            $vehicleQuery->where('vehicle_type', 'like', '%' . $request->type . '%');
+        
+        if ($request->filled('transmission')) {
+            $query->where('vehicle_transmission', $request->transmission);
         }
-        if ($request->filled('vehicle_name')) {
-            $vehicleQuery->where('vehicle_name', 'like', '%' . $request->nama . '%');
+        
+        if ($request->filled('seat')) {
+            $query->where('seat', $request->seat);
         }
+        
+        if ($request->filled('nama')) {
+            $query->where('vehicle_name', 'like', '%' . $request->nama . '%');
+        }        
     
-        // Ambil 5 kendaraan terbaru setelah filter (atau tanpa filter)
-        $vehicles = $vehicleQuery->latest()->take(5)->get();
+        // Ambil hasil
+        $vehicles = $query->latest()->get();
     
         // Ambil 5 riwayat booking terbaru user
         $bookings = Booking::where('id_user', $user->id)
             ->latest()
             ->take(5)
             ->get();
-    
-        return view('user.dashboard', compact('user', 'vehicles', 'bookings'));
+
+            $popularVehicles = Vehicle::withCount('bookings')
+            ->orderBy('bookings_count', 'desc')
+            ->take(5)
+            ->get();
+            
+            return view('user.dashboard', compact('user', 'vehicles', 'bookings', 'popularVehicles'));
     }
     
 }

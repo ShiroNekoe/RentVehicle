@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Booking;
 use App\Models\Vehicle;
-
+use App\Models\Review;
 use Illuminate\Http\Request;
 
 class BookingController extends Controller
@@ -46,6 +46,44 @@ public function cancel($id)
 
     return redirect()->route('user.history')->with('success', 'Booking berhasil dibatalkan');
 }
+
+public function reviewForm(Booking $booking)
+{
+    if (
+        $booking->review ||
+        $booking->payment_status !== 'paid' ||
+        $booking->booking_status !== 'completed'
+    ) {
+        return redirect()->route('user.dashboard')->with('error', 'Kamu hanya bisa memberikan ulasan jika booking selesai dan pembayaran lunas.');
+    }
+
+    return view('user.review', compact('booking'));
+}
+
+public function submitReview(Request $request, Booking $booking)
+{
+    if (
+        $booking->review ||
+        $booking->payment_status !== 'paid' ||
+        $booking->booking_status !== 'completed'
+    ) {
+        return redirect()->route('user.dashboard')->with('error', 'Akses tidak valid untuk beri ulasan.');
+    }
+
+    $request->validate([
+        'rating' => 'required|in:1,2,3,4,5',
+    ]);
+
+    Review::create([
+        'id_booking' => $booking->id,
+        'id_user' => auth()->id(),
+        'rating' => $request->rating,
+        'review_date' => now(),
+    ]);
+
+    return redirect()->route('user.dashboard')->with('success', 'Ulasan berhasil dikirim.');
+}
+
 
     
 }

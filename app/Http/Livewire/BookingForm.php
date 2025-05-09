@@ -28,6 +28,8 @@ class BookingForm extends Component
     public $identity;
     public $id_driver;
     public $drivers = [];
+
+    public $pickup_location;
     public $agree_terms = false;
 
 public $total_price = 0;
@@ -42,6 +44,7 @@ public $days = 0;
         'phone_person' => 'required|numeric|digits_between:12,15',
         'nik_identity' => 'required|numeric|digits:16',
         'identity' => 'required|file|mimes:jpg,png,pdf|max:10240',
+        'pickup_location' => 'nullable|string|max:255', 
         'agree_terms' => 'accepted',
     ];
 
@@ -126,6 +129,7 @@ public function updated($property)
             'booking_price' => $this->total_price,  // Gunakan total_price
             'payment_method' => $this->payment_method,
             'status' => 'pending',
+            'pickup_location' => $this->pickup_location,
             'booking_date' => Carbon::now(),
         ]);
     

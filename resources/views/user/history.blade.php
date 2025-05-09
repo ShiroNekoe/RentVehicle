@@ -55,16 +55,7 @@
                                 </p>
     
                                 <!-- Tombol Detail Booking -->
-                                <a href="{{ route('booking.detail', $booking->id) }}" class="btn btn-link text-blue-600 mt-2">Lihat Detail</a>
-    
-                                <!-- Tombol Cancel Booking (Hanya tampilkan jika status booking belum selesai atau dibatalkan) -->
-                                @if ($booking->booking_status !== 'completed' && $booking->booking_status !== 'cancelled')
-                                    <form action="{{ route('booking.cancel', $booking->id) }}" method="POST" class="mt-2">
-                                        @csrf
-                                        @method('PUT')
-                                        <button type="submit" class="btn btn-danger">Batalkan Booking</button>
-                                    </form>
-                                @endif
+                                <a href="{{ route('user.booking_detail', $booking->id) }}" class="btn btn-link text-blue-600 mt-2">Lihat Detail</a>
                             </div>
                         </div>
                     </div>

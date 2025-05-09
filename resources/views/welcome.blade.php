@@ -14,11 +14,17 @@
     
         <!-- Menu Area (kanan) -->
         <div class="ml-auto flex space-x-6 px-4">
-            <a href="#" class="btn btn-ghost text-white">Home</a>
             <a href="#" class="btn btn-ghost text-white">Service</a>
             <a href="#" class="btn btn-ghost text-white">Top Rated</a>
             <a href="#" class="btn btn-ghost text-white">Experience</a>
+            @guest
             <a href="{{ route('login') }}" class="btn btn-warning text-white">Login</a>
+        @endguest
+        
+        @auth
+            <a href="{{ route('user.dashboard') }}" class="btn btn-success text-white">Home</a>
+        @endauth
+        
         </div>
     </div>
 </div>
@@ -42,46 +48,41 @@
     </div>
 
     <!-- Filter Search -->
-    <div class="absolute bottom-[-90px] left-0 right-0 w-full py-6 z-20">
-        <div class="max-w-4xl mx-auto bg-white p-6 shadow-lg rounded-lg">
-            <form>
-                <div class="flex flex-wrap justify-center gap-4">
-                    <div class="flex flex-col w-40">
-                        <label for="brand" class="text-gray-700 mb-1">SELECT BRAND</label>
-                        <select id="brand" class="select select-bordered w-full">
-                            <option>All Brand</option>
-                            <option>Honda</option>
-                            <option>Toyota</option>
-                            <option>Suzuki</option>
-                        </select>
-                    </div>
-
-                    <div class="flex flex-col w-40">
-                        <label for="model" class="text-gray-700 mb-1">SELECT MODEL</label>
-                        <select id="model" class="select select-bordered w-full">
-                            <option>All Models</option>
-                            <option>big</option>
-                            <option>Medium</option>
-                            <option>Small</option>
-                        </select>
-                    </div>
-
-                    <div class="flex flex-col w-40">
-                        <label for="type" class="text-gray-700 mb-1">SELECT TYPE</label>
-                        <select id="type" class="select select-bordered w-full">
-                            <option>All Type</option>
-                            <option>Car</option>
-                            <option>Motorbike</option>
-                        </select>
-                    </div>
-
-                    <div class="flex items-end">
-                        <button class="btn btn-warning px-6">Search</button>
-                    </div>
-                </div>
-            </form>
+    <form method="GET" @guest action="{{ route('login') }}" @else action="{{ route('user.dashboard') }}" @endguest>
+        <div class="flex flex-wrap md:flex-nowrap justify-center gap-4">
+            <div class="w-full md:w-1/3">
+                <select name="brand" class="select select-bordered w-full">
+                    <option value="">Pilih Brand </option>
+                    @foreach (['Honda','Toyota','Daihatsu','Suzuki','Mitsubishi','Yamaha'] as $brand)
+                        <option value="{{ $brand }}" @selected(request('brand') == $brand)>{{ $brand }}</option>
+                    @endforeach
+                </select>
+            </div>
+    
+            <div class="w-full md:w-1/3">
+                <select name="model" class="select select-bordered w-full">
+                    <option value="">Pilih Model</option>
+                    @foreach (['big','medium','small'] as $model)
+                        <option value="{{ $model }}" @selected(request('model') == $model)>{{ ucfirst($model) }}</option>
+                    @endforeach
+                </select>
+            </div>
+    
+            <div class="w-full md:w-1/3">
+                <select name="type" class="select select-bordered w-full">
+                    <option value="">Pilih Tipe Kendaraan</option>
+                    @foreach (['car','motorcycles'] as $type)
+                        <option value="{{ $type }}" @selected(request('type') == $type)>{{ ucfirst($type) }}</option>
+                    @endforeach
+                </select>
+            </div>
+    
+            <div class="flex items-end">
+                <button class="btn btn-warning px-6">Search</button>
+            </div>
         </div>
-    </div>
+    </form>
+    
 </div>
 
     <!-- Keunggulan -->
@@ -103,30 +104,53 @@
         </div>
     </section>
 
-    <!-- Kendaraan Populer -->
-    <section class="py-12 px-6">
-        <h2 class="text-3xl font-bold text-center mb-10">Kendaraan Populer</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            @foreach ([ 
-                ['brand' => 'Toyota', 'model' => 'Avanza', 'img' => 'img/car1.jpg', 'seat' => 7, 'type' => 'Mobil', 'transmisi' => 'Manual'],
-                ['brand' => 'Honda', 'model' => 'Beat', 'img' => 'img/motor1.jpg', 'seat' => 2, 'type' => 'Motor', 'transmisi' => 'Automatic'],
-                ['brand' => 'Daihatsu', 'model' => 'Sigra', 'img' => 'img/car2.jpg', 'seat' => 5, 'type' => 'Mobil', 'transmisi' => 'Automatic']
-            ] as $vehicle)
-                <div class="card bg-base-200 shadow-xl">
-                    <figure>
-                        <img src="{{ asset($vehicle['img']) }}" alt="{{ $vehicle['brand'] }}" class="w-full h-48 object-cover" />
-                    </figure>
-                    <div class="card-body">
-                        <h2 class="card-title">{{ $vehicle['brand'] }} - {{ $vehicle['model'] }}</h2>
-                        <p>{{ $vehicle['seat'] }} Seat | {{ $vehicle['transmisi'] }} | {{ $vehicle['type'] }}</p>
-                        <div class="card-actions justify-end">
-                            <a href="{{ route('login') }}" class="btn btn-primary btn-sm">Sewa Sekarang</a>
-                        </div>
+   <!-- Kendaraan Populer -->
+   <section class="py-12 px-6">
+    <h2 class="text-3xl font-bold text-center mb-10">Kendaraan Populer</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @foreach ($popularVehicles as $vehicle)
+            <div class="card w-full bg-base-100 shadow-xl">
+                <figure>
+                    <img src="{{ asset('storage/vehicles/' . $vehicle->image_path) }}" class="object-cover h-40 w-full">
+                </figure>
+                <div class="card-body">
+                    <h3 class="text-xl font-bold">{{ $vehicle->name }}</h3>
+                    <p class="text-gray-600">{{ $vehicle->type }} - {{ $vehicle->price }} per hari</p>
+                    <p class="text-sm text-gray-500">Total Booking: {{ $vehicle->bookings_count }}</p>
+                    <div class="card-actions justify-end">
+                        @auth
+                            <a href="{{ route('vehicles.show', $vehicle->id) }}" class="btn btn-warning">Lihat Detail</a>
+                        @else
+                            <a href="{{ route('login') }}" class="btn btn-warning">Lihat Detail</a>
+                        @endauth
                     </div>
+                    
                 </div>
-            @endforeach
+            </div>
+        @endforeach
+    </div>
+</section>
+
+<h2 class="text-3xl font-bold text-center mb-10">Review Kendaraan</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    @foreach ($reviews as $review)
+        <div class="card w-full bg-base-100 shadow-xl">
+            <div class="card-body">
+                @if ($review->vehicle) <!-- Check if vehicle exists -->
+                    <h3 class="text-xl font-bold">{{ $review->vehicle->vehicle_name }}</h3>
+                @else
+                    <h3 class="text-xl font-bold">Vehicle Name Not Available</h3>
+                @endif
+                <p class="text-gray-600">Rating: {{ $review->rating }} / 5</p>
+                <p class="text-sm text-gray-500">Diberikan oleh: {{ $review->user->name }}</p>
+                <p class="text-sm text-gray-500">Tanggal Review: {{ $review->review_date->format('d M Y') }}</p>
+            </div>
         </div>
-    </section>
+    @endforeach
+</div>
+
+
+
 
     <!-- Footer -->
     <footer class="footer p-10 bg-base-200 text-base-content">

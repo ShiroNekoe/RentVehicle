@@ -1,89 +1,102 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\User\UserDashboardController;
 use App\Http\Controllers\User\UserHistoryController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RentalController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ReviewController;
 use App\Models\Vehicle;
-use Livewire\Livewire;
-use Illuminate\Support\Facades\Route;
 
-// Halaman utama
-Route::get('/', function () {
-    return view('welcome');
-});
+// =======================
+// ✅ Halaman Utama
+// =======================
+Route::get('/', [HomeController::class, 'index']);
 
-// Dashboard pengguna
-Route::middleware('auth')->get('/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
-Route::middleware('auth')->get('/history', [UserHistoryController::class, 'index'])->name('user.history');
-Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
-
-// Profil pengguna
+// =======================
+// ✅ Autentikasi & Dashboard User
+// =======================
 Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
+    Route::get('/history', [UserHistoryController::class, 'index'])->name('user.history');
+
+    // Profil pengguna
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Rute untuk Kendaraan
+// =======================
+// ✅ Kendaraan
+// =======================
 Route::get('/vehicles/{vehicle}', [RentalController::class, 'show'])->name('vehicles.show');
 
-// Rute untuk Booking
-Route::get('/booking/{vehicle}', function (Vehicle $vehicle) {
-    return view('booking.create', compact('vehicle'));
-})->name('booking.create');
+// =======================
+// ✅ Booking
+// =======================
+Route::middleware('auth')->group(function () {
+    // Halaman form booking
+    Route::get('/booking/{vehicle}', function (Vehicle $vehicle) {
+        return view('booking.create', compact('vehicle'));
+    })->name('booking.create');
 
-Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
-Route::get('/booking/{booking}', [BookingController::class, 'show'])->name('booking.show');
+    // Menyimpan booking baru
+    Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
 
-// Halaman Detail Booking
-Route::get('/booking/{booking}', [BookingController::class, 'show'])->name('user.booking_detail');
+    // Menampilkan detail booking
+    Route::get('/booking/detail/{booking}', [BookingController::class, 'show'])->name('user.booking_detail');
 
-// Cancel Booking
-Route::put('/booking/{booking}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
+    // Membatalkan booking
+    Route::put('/booking/{booking}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
+});
 
+// =======================
+// ✅ Pembayaran (Midtrans & Manual Transfer)
+// =======================
+Route::middleware('auth')->group(function () {
+    // Redirect ke Midtrans
+    Route::get('/payment/redirect/{booking}', [PaymentController::class, 'redirectToMidtrans'])->name('payment.redirect');
 
-// Rute Pembayaran Midtrans
-Route::get('/payment/redirect/{booking}', [PaymentController::class, 'redirectToMidtrans'])->name('payment.redirect');
+    // Invoice
+    Route::get('/booking/{booking}/invoice', [BookingController::class, 'downloadInvoice'])->name('booking.invoice');
+
+    // Halaman konfirmasi transfer manual
+    Route::get('/transfer-confirmation/{amount}', function ($amount) {
+        return view('pages.transfer-confirmation', ['total_transfer' => $amount]);
+    })->name('transfer.confirmation');
+});
+
+// Callback Midtrans (tidak perlu pakai middleware)
 Route::post('/payment/callback', [PaymentController::class, 'handleCallback'])->name('payment.callback');
-Route::get('/booking/{booking}/invoice', [BookingController::class, 'downloadInvoice'])->name('booking.invoice');
+Route::post('/midtrans/callback', [PaymentController::class, 'handleCallback']); // duplikat untuk jaga-jaga
 
-// Rute Konfirmasi Pembayaran Transfer
-Route::get('/transfer-confirmation/{amount}', function ($amount) {
-    return view('pages.transfer-confirmation', ['total_transfer' => $amount]);
-})->name('transfer.confirmation');
-
-// Rute untuk Callback Midtrans (di sini sudah ada di atas, tidak perlu diulang)
-Route::post('/midtrans/callback', [PaymentController::class, 'handleCallback']);
-
-// Rute Pembayaran Sukses dan Gagal (Jika diperlukan untuk mengarah ke tampilan khusus)
+// Halaman sukses/gagal pembayaran
 Route::get('/payment/success/{order_id}', [PaymentController::class, 'success'])->name('payment.success');
 Route::get('/payment/failed/{order_id}', [PaymentController::class, 'failed'])->name('payment.failed');
 
+// Redirect halaman status booking
+Route::view('/booking/success', 'booking.success');
+Route::view('/booking/pending', 'booking.pending');
+Route::view('/booking/failed', 'booking.failed');
 
-
-//redirect 
-Route::get('/booking/success', function () {
-    return view('booking.success');
-});
-Route::get('/booking/pending', function () {
-    return view('booking.pending');
-});
-Route::get('/booking/failed', function () {
-    return view('booking.failed');
-});
-
-
-
-
-// Google Authentication
-use App\Http\Controllers\Auth\GoogleController;
+// =======================
+// ✅ Login Google
+// =======================
 Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 
+// =======================
+// ✅ File Auth Laravel (Login, Register, dll)
+// =======================
 
-//export
+Route::middleware(['auth'])->group(function () {
+    Route::get('/review/{booking}', [ReviewController::class, 'create'])->name('user.review');
+    Route::post('review/{booking}', [ReviewController::class, 'store'])->name('booking.review.submit');
+});
+
 
 require __DIR__.'/auth.php';

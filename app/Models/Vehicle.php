@@ -14,12 +14,17 @@ class Vehicle extends Model
 
     public function bookings()
     {
-        return $this->hasMany(Booking::class);
+        return $this->hasMany(Booking::class, 'id_vehicle');
     }
 
         public function galleries()
     {
         return $this->hasMany(VehicleGallery::class, 'vehicle_id');
     }
+
+    public function reviews()
+{
+    return $this->hasMany(Review::class, 'id_vehicle');
+}
 
 }

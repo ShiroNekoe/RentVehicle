@@ -19,7 +19,7 @@
             <select wire:model="id_driver" id="id_driver" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
                 <option value="">-- Tanpa Supir --</option>
                 @foreach ($drivers as $driver)
-                    <option value="{{ $driver->id }}">{{ $driver->name }} - {{ $driver->phone }}</option>
+                    <option value="{{ $driver->id }}">{{ $driver->name }} </option>
                 @endforeach
             </select>
         </div>
@@ -41,6 +41,12 @@
             <label for="nik_identity" class="block text-sm font-medium text-gray-700">NIK Identitas</label>
             <input type="text" id="nik_identity" wire:model="nik_identity" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
         </div>
+
+        <!-- Titik Jemput -->
+         <div class="mb-4">
+         <label for="pickup_location" class="block text-sm font-medium text-gray-700">Titik Jemput</label>
+          <input type="text" id="pickup_location" wire:model="pickup_location" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" placeholder="Masukkan alamat titik jemput">
+         </div>
 
         <!-- Upload Identitas -->
         <div class="mb-4">
