@@ -136,14 +136,16 @@
     @foreach ($reviews as $review)
         <div class="card w-full bg-base-100 shadow-xl">
             <div class="card-body">
-                @if ($review->vehicle) <!-- Check if vehicle exists -->
-                    <h3 class="text-xl font-bold">{{ $review->vehicle->vehicle_name }}</h3>
+               @if ($review->booking && $review->booking->vehicle)
+                    <h3 class="text-xl font-bold">{{ $review->booking->vehicle->vehicle_name }}</h3>
                 @else
                     <h3 class="text-xl font-bold">Vehicle Name Not Available</h3>
                 @endif
+
+
                 <p class="text-gray-600">Rating: {{ $review->rating }} / 5</p>
-                <p class="text-sm text-gray-500">Diberikan oleh: {{ $review->user->name }}</p>
-                <p class="text-sm text-gray-500">Tanggal Review: {{ $review->review_date->format('d M Y') }}</p>
+              <p class="text-sm text-gray-500">Tanggal Review: {{ \Carbon\Carbon::parse($review->review_date)->format('d M Y') }}</p>
+
             </div>
         </div>
     @endforeach

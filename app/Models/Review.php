@@ -15,12 +15,17 @@ class Review extends Model
 
     public function vehicle()
     {
-        return $this->belongsTo(Vehicle::class);
+        return $this->belongsTo(Vehicle::class, 'vehicle_id'); // assuming the foreign key is 'vehicle_id'
     }
     
     public function user()
     {
         return $this->belongsTo(User::class);
     }
+            public function getVehicleAttribute()
+        {
+            return $this->booking ? $this->booking->vehicle : null;
+        }
+
 
 }
