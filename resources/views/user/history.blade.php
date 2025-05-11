@@ -48,7 +48,7 @@
                                     @if ($booking->payment_status == 'paid')
                                         <span class="text-green-600 font-bold">LUNAS</span>
                                     @elseif ($booking->payment_status == 'pending')
-                                        <span class="text-yellow-500 font-bold">MENUNGGU PEMBAYARAN</span>
+                                        <span class="text-yellow-500 font-bold">MENUNGGU KONFIRMASI ADMIN</span>
                                     @elseif ($booking->payment_status == 'failed' || $booking->payment_status == 'expired')
                                         <span class="text-red-500 font-bold">GAGAL / KADALUARSA</span>
                                     @endif

@@ -32,20 +32,25 @@ class BookingController extends Controller
 
     
 
-public function cancel($id)
-{
-    $booking = Booking::findOrFail($id);
+    public function cancel(Request $request, $id)
+    {
+        $booking = Booking::findOrFail($id);
 
-    // Pastikan hanya bisa dibatalkan jika status booking belum selesai atau dibatalkan
-    if ($booking->booking_status !== 'completed' && $booking->booking_status !== 'cancelled') {
-        $booking->update([
-            'booking_status' => 'cancelled',
-             'payment_status' => 'failed'
-        ]);
+        // Validasi status
+        if ($booking->booking_status === 'completed' || $booking->booking_status === 'cancelled') {
+            return redirect()->back()->with('error', 'Booking tidak dapat dibatalkan.');
+        }
+
+        // Update status booking dan pembayaran
+        $booking->booking_status = 'cancelled';
+        $booking->payment_status = 'failed'; // Tambahan ini
+        $booking->save();
+
+        // Redirect ke halaman konfirmasi admin
+        return redirect()->route('booking.admin_confirm')->with('success', 'Booking berhasil dibatalkan.');
     }
 
-    return redirect()->route('user.history')->with('success', 'Booking berhasil dibatalkan');
-}
+
 
 public function reviewForm(Booking $booking)
 {

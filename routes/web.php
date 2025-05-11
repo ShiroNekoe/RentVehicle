@@ -16,6 +16,14 @@ use App\Models\Vehicle;
 // ✅ Halaman Utama
 // =======================
 Route::get('/', [HomeController::class, 'index']);
+Route::get('/booking/admin-confirmation', function () {
+    return view('booking.admin_confirm', [
+        'adminPhone' => '6281234567890' // ganti dengan no admin kamu
+    ]);
+})->name('booking.admin_confirm');
+
+
+
 
 // =======================
 // ✅ Autentikasi & Dashboard User

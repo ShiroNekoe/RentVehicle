@@ -12,22 +12,20 @@
         </a>
     </div>
     
-        <!-- Menu Area (kanan) -->
+            <!-- Menu Area (kanan) -->
         <div class="ml-auto flex space-x-6 px-4">
-            <a href="#" class="btn btn-ghost text-white">Service</a>
-            <a href="#" class="btn btn-ghost text-white">Top Rated</a>
-            <a href="#" class="btn btn-ghost text-white">Experience</a>
-            @guest
+        <a href="#keunggulan" class="btn btn-ghost text-white">Service</a>
+        <a href="#kendaraan-populer" class="btn btn-ghost text-white">Top Rated</a>
+        <a href="#review-kendaraan" class="btn btn-ghost text-white">Experience</a>
+        @guest
             <a href="{{ route('login') }}" class="btn btn-warning text-white">Login</a>
         @endguest
-        
         @auth
             <a href="{{ route('user.dashboard') }}" class="btn btn-success text-white">Home</a>
         @endauth
-        
+        </div>
         </div>
     </div>
-</div>
 
 <!-- Hero Section -->
 <div class="hero min-h-[70vh] bg-cover bg-center text-white relative" style="background-image: url('{{ asset('img/bg-hero.png') }}')">
@@ -85,8 +83,8 @@
     
 </div>
 
-    <!-- Keunggulan -->
-    <section class="py-16 px-6 text-center">
+        <!-- Keunggulan -->
+        <section class="py-16 px-6 text-center" id="keunggulan">
         <h2 class="text-3xl font-bold mb-8">Kenapa Memilih Kami?</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div class="card bg-base-200 p-6 shadow-lg">
@@ -104,8 +102,8 @@
         </div>
     </section>
 
-   <!-- Kendaraan Populer -->
-   <section class="py-12 px-6">
+    <!-- Kendaraan Populer -->
+    <section class="py-12 px-6" id="kendaraan-populer">
     <h2 class="text-3xl font-bold text-center mb-10">Kendaraan Populer</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         @foreach ($popularVehicles as $vehicle)
@@ -131,7 +129,7 @@
     </div>
 </section>
 
-<h2 class="text-3xl font-bold text-center mb-10">Review Kendaraan</h2>
+<h2 class="text-3xl font-bold text-center mb-10" id="review-kendaraan">Review Kendaraan</h2>
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     @foreach ($reviews as $review)
         <div class="card w-full bg-base-100 shadow-xl">
