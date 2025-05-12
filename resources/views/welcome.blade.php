@@ -12,20 +12,16 @@
         </a>
     </div>
     
-            <!-- Menu Area (kanan) -->
+        <!-- Menu Area (kanan) -->
         <div class="ml-auto flex space-x-6 px-4">
-        <a href="#keunggulan" class="btn btn-ghost text-white">Service</a>
-        <a href="#kendaraan-populer" class="btn btn-ghost text-white">Top Rated</a>
-        <a href="#review-kendaraan" class="btn btn-ghost text-white">Experience</a>
-        @guest
+            <a href="#" class="btn btn-ghost text-white">Home</a>
+            <a href="#" class="btn btn-ghost text-white">Service</a>
+            <a href="#" class="btn btn-ghost text-white">Top Rated</a>
+            <a href="#" class="btn btn-ghost text-white">Experience</a>
             <a href="{{ route('login') }}" class="btn btn-warning text-white">Login</a>
-        @endguest
-        @auth
-            <a href="{{ route('user.dashboard') }}" class="btn btn-success text-white">Home</a>
-        @endauth
-        </div>
         </div>
     </div>
+</div>
 
 <!-- Hero Section -->
 <div class="hero min-h-[70vh] bg-cover bg-center text-white relative" style="background-image: url('{{ asset('img/bg-hero.png') }}')">
@@ -44,20 +40,24 @@
             <a href="{{ route('login') }}" class="btn btn-warning text-white px-6">Book Now</a>
         </div>
     </div>
+</div>
 
-    <!-- Filter Search -->
-    <form method="GET" @guest action="{{ route('login') }}" @else action="{{ route('user.dashboard') }}" @endguest>
-        <div class="flex flex-wrap md:flex-nowrap justify-center gap-4">
-            <div class="w-full md:w-1/3">
+<!-- Filter Search -->
+<form method="GET" @guest action="{{ route('login') }}" @else action="{{ route('user.dashboard') }}" @endguest>
+    <div class="bg-white shadow-lg rounded-lg p-6 mx-auto max-w-4xl mt-12">
+        <div class="flex justify-center gap-6">
+            <!-- Brand -->
+            <div class="w-full md:w-1/4">
                 <select name="brand" class="select select-bordered w-full">
-                    <option value="">Pilih Brand </option>
+                    <option value="">Pilih Brand</option>
                     @foreach (['Honda','Toyota','Daihatsu','Suzuki','Mitsubishi','Yamaha'] as $brand)
                         <option value="{{ $brand }}" @selected(request('brand') == $brand)>{{ $brand }}</option>
                     @endforeach
                 </select>
             </div>
-    
-            <div class="w-full md:w-1/3">
+
+            <!-- Model -->
+            <div class="w-full md:w-1/4">
                 <select name="model" class="select select-bordered w-full">
                     <option value="">Pilih Model</option>
                     @foreach (['big','medium','small'] as $model)
@@ -65,8 +65,9 @@
                     @endforeach
                 </select>
             </div>
-    
-            <div class="w-full md:w-1/3">
+
+            <!-- Type -->
+            <div class="w-full md:w-1/4">
                 <select name="type" class="select select-bordered w-full">
                     <option value="">Pilih Tipe Kendaraan</option>
                     @foreach (['car','motorcycles'] as $type)
@@ -74,83 +75,175 @@
                     @endforeach
                 </select>
             </div>
-    
-            <div class="flex items-end">
+            
+            <!-- Button -->
+            <div class="w-full md:w-1/4 flex items-end justify-center">
                 <button class="btn btn-warning px-6">Search</button>
             </div>
         </div>
-    </form>
-    
-</div>
+    </div>
+</form>
 
-        <!-- Keunggulan -->
-        <section class="py-16 px-6 text-center" id="keunggulan">
-        <h2 class="text-3xl font-bold mb-8">Kenapa Memilih Kami?</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="card bg-base-200 p-6 shadow-lg">
-                <h3 class="text-xl font-semibold">Banyak Pilihan</h3>
-                <p>Kendaraan berbagai jenis: besar, kecil, motor, mobil, manual & matic.</p>
+<!-- How it Works Section -->
+<div class="py-12 bg-gray-100">
+    <div class="max-w-7xl mx-auto text-center px-6">
+        <h2 class="text-lg font-semibold text-gray-600 mb-8">How it Works</h2>
+        <p class="text-3xl font-bold text-gray-900 mb-12">Getting Started with RentKuy! is Easy</p>
+
+        <div class="flex justify-between items-center">
+            <!-- Step 1: Choose a location -->
+            <div class="text-center">
+            <div class="bg-transparent p-6 rounded-full mb-4 mx-auto">
+            <img src="{{ asset('img/location-icon.png') }}" alt="Choose a location" class="w-16 h-16 mx-auto">
+                </div>
+                <p class="font-bold text-xl text-gray-800">Choose a location</p>
+                <p class="text-sm text-gray-500">Select where you want to pick up your ride.</p>
             </div>
-            <div class="card bg-base-200 p-6 shadow-lg">
-                <h3 class="text-xl font-semibold">Pembayaran Mudah</h3>
-                <p>Bayar aman & cepat lewat Midtrans.</p>
+
+            <!-- Step 2: Pick-up date -->
+            <div class="text-center">
+            <div class="bg-transparent p-6 rounded-full mb-4 mx-auto">
+                    <img src="{{ asset('img/calendar-icon.png') }}" alt="Pick-up date" class="w-16 h-16 mx-auto">
+                </div>
+                <p class="font-bold text-xl text-gray-800">Pick-up date</p>
+                <p class="text-sm text-gray-500">Choose the date and time that fits your schedule.</p>
             </div>
-            <div class="card bg-base-200 p-6 shadow-lg">
-                <h3 class="text-xl font-semibold">Terpercaya</h3>
-                <p>Dipercaya ratusan pelanggan tiap bulan.</p>
+
+            <!-- Step 3: Book your car -->
+            <div class="text-center">
+            <div class="bg-transparent p-6 rounded-full mb-4 mx-auto">
+                    <img src="{{ asset('img/car-icon.png') }}" alt="Book your car" class="w-16 h-16 mx-auto">
+                </div>
+                <p class="font-bold text-xl text-gray-800">Book your car</p>
+                <p class="text-sm text-gray-500">Confirm your ride and get ready to go.</p>
             </div>
         </div>
-    </section>
+    </div>
+</div>
 
-    <!-- Kendaraan Populer -->
-    <section class="py-12 px-6" id="kendaraan-populer">
-    <h2 class="text-3xl font-bold text-center mb-10">Kendaraan Populer</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        @foreach ($popularVehicles as $vehicle)
-            <div class="card w-full bg-base-100 shadow-xl">
-                <figure>
-                    <img src="{{ asset('storage/vehicles/' . $vehicle->image_path) }}" class="object-cover h-40 w-full">
-                </figure>
-                <div class="card-body">
-                    <h3 class="text-xl font-bold">{{ $vehicle->name }}</h3>
-                    <p class="text-gray-600">{{ $vehicle->type }} - {{ $vehicle->price }} per hari</p>
-                    <p class="text-sm text-gray-500">Total Booking: {{ $vehicle->bookings_count }}</p>
-                    <div class="card-actions justify-end">
-                        @auth
-                            <a href="{{ route('vehicles.show', $vehicle->id) }}" class="btn btn-warning">Lihat Detail</a>
-                        @else
-                            <a href="{{ route('login') }}" class="btn btn-warning">Lihat Detail</a>
-                        @endauth
+ <!-- Best Service Section -->
+<div class="py-12 bg-white">
+    <div class="max-w-7xl mx-auto flex items-center justify-between px-6">
+        <div class="w-full">
+            <img src="{{ asset('img/vehicle2-image.png') }}" alt="Best Service" class="w-full h-auto object-cover">
+        </div>
+
+        <!-- Teks dan iklan layanan -->
+        <div class="w-full lg:w-2/3 pl-12">
+            <h2 class="text-3xl font-bold text-gray-900">Everything You Need for a Better Rental Experience</h2>
+            <p class="text-lg text-gray-600">Best service to make your experience smooth and memorable.</p>
+
+            <div class="mt-6 space-y-4">
+                <div class="flex items-start space-x-4">
+                    <img src="{{ asset('img/deal-icon.png') }}" alt="Deals" class="w-12 h-12"> <!-- Ikon diperbesar -->
+                    <div>
+                        <p class="text-lg font-semibold text-gray-800">Deals for every budget</p>
+                        <p class="text-lg text-gray-800">Find the perfect ride without breaking the bank.</p>
                     </div>
-                    
+                </div>
+
+                <div class="flex items-start space-x-4">
+                    <img src="{{ asset('img/price-icon.png') }}" alt="Best Price" class="w-12 h-12"> <!-- Ikon diperbesar -->
+                    <div>
+                        <p class="text-lg font-semibold text-gray-800">Best price guaranteed</p>
+                        <p class="text-lg text-gray-800">We match you with the best rates always.</p>
+                    </div>
+                </div>
+
+                <div class="flex items-start space-x-4">
+                    <img src="{{ asset('img/support-icon.png') }}" alt="Support" class="w-12 h-12"> <!-- Ikon diperbesar -->
+                    <div>
+                        <p class="text-lg font-semibold text-gray-800">Support 24/7</p>
+                        <p class="text-lg text-gray-800">We're here for you anytime, day or night.</p>
+                    </div>
                 </div>
             </div>
-        @endforeach
-    </div>
-</section>
-
-<h2 class="text-3xl font-bold text-center mb-10" id="review-kendaraan">Review Kendaraan</h2>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    @foreach ($reviews as $review)
-        <div class="card w-full bg-base-100 shadow-xl">
-            <div class="card-body">
-               @if ($review->booking && $review->booking->vehicle)
-                    <h3 class="text-xl font-bold">{{ $review->booking->vehicle->vehicle_name }}</h3>
-                @else
-                    <h3 class="text-xl font-bold">Vehicle Name Not Available</h3>
-                @endif
-
-
-                <p class="text-gray-600">Rating: {{ $review->rating }} / 5</p>
-              <p class="text-sm text-gray-500">Tanggal Review: {{ \Carbon\Carbon::parse($review->review_date)->format('d M Y') }}</p>
-
-            </div>
         </div>
-    @endforeach
+    </div>
 </div>
 
+    <!-- Kendaraan Populer -->
+    <section class="py-12 px-6">
+        <h2 class="text-3xl font-bold text-center mb-10">Kendaraan Populer</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            @foreach ([ 
+                ['brand' => 'Toyota', 'model' => 'Avanza', 'img' => 'img/car1.jpg', 'seat' => 7, 'type' => 'Mobil', 'transmisi' => 'Manual'],
+                ['brand' => 'Honda', 'model' => 'Beat', 'img' => 'img/motor1.jpg', 'seat' => 2, 'type' => 'Motor', 'transmisi' => 'Automatic'],
+                ['brand' => 'Daihatsu', 'model' => 'Sigra', 'img' => 'img/car2.jpg', 'seat' => 5, 'type' => 'Mobil', 'transmisi' => 'Automatic']
+            ] as $vehicle)
+                <div class="card bg-base-200 shadow-xl">
+                    <figure>
+                        <img src="{{ asset($vehicle['img']) }}" alt="{{ $vehicle['brand'] }}" class="w-full h-48 object-cover" />
+                    </figure>
+                    <div class="card-body">
+                        <h2 class="card-title">{{ $vehicle['brand'] }} - {{ $vehicle['model'] }}</h2>
+                        <p>{{ $vehicle['seat'] }} Seat | {{ $vehicle['transmisi'] }} | {{ $vehicle['type'] }}</p>
+                        <div class="card-actions justify-end">
+                            <a href="{{ route('login') }}" class="btn btn-primary btn-sm">Sewa Sekarang</a>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </section>
+<!-- Best Experience Section -->
+<div class="py-12 bg-white">
+    <div class="max-w-7xl mx-auto text-center px-6">
+        <h2 class="text-3xl font-bold text-gray-900 mb-8">We Are Give You The Best Customer Experience</h2>
+        <p class="text-lg text-gray-600 mb-12">Best service to make your experience smooth and memorable.</p>
 
+        <div class="flex justify-center space-x-6">
+            <!-- Left Icon and Text -->
+            <div class="service-item relative">
+                <img src="{{ asset('img/deal-icon.png') }}" alt="Competitive Pricing" class="w-12 h-12 mx-auto mb-4">
+                <p class="text-lg text-gray-800">Competitive Pricing</p>
+                <div class="line"></div> <!-- Garis penghubung -->
+            </div>
 
+            <!-- Center Icon and Text -->
+            <div class="service-item relative">
+                <img src="{{ asset('img/price-icon.png') }}" alt="Easier Rent On Your Budget" class="w-12 h-12 mx-auto mb-4">
+                <p class="text-lg text-gray-800">Easier Rent On Your Budget</p>
+                <div class="line"></div> <!-- Garis penghubung -->
+            </div>
+
+            <!-- Right Icon and Text -->
+            <div class="service-item relative">
+                <img src="{{ asset('img/support-icon.png') }}" alt="The Best Extended Auto Warranties" class="w-12 h-12 mx-auto mb-4">
+                <p class="text-lg text-gray-800">The Best Extended Auto Warranties</p>
+                <div class="line"></div> <!-- Garis penghubung -->
+            </div>
+        </div>
+
+        <div class="flex justify-center space-x-6 mt-12">
+            <!-- Left Icon and Text -->
+            <div class="service-item relative">
+                <img src="{{ asset('img/deal-icon.png') }}" alt="Roadside Assistance 24/7" class="w-12 h-12 mx-auto mb-4">
+                <p class="text-lg text-gray-800">Roadside Assistance 24/7</p>
+                <div class="line"></div> <!-- Garis penghubung -->
+            </div>
+
+            <!-- Center Icon and Text -->
+            <div class="service-item relative">
+                <img src="{{ asset('img/price-icon.png') }}" alt="Most Flexible Payment Plans" class="w-12 h-12 mx-auto mb-4">
+                <p class="text-lg text-gray-800">Most Flexible Payment Plans</p>
+                <div class="line"></div> <!-- Garis penghubung -->
+            </div>
+
+            <!-- Right Icon and Text -->
+            <div class="service-item relative">
+                <img src="{{ asset('img/support-icon.png') }}" alt="Your Choice of Mechanic" class="w-12 h-12 mx-auto mb-4">
+                <p class="text-lg text-gray-800">Your Choice of Mechanic</p>
+                <div class="line"></div> <!-- Garis penghubung -->
+            </div>
+        </div>
+
+        <div class="flex justify-center mt-12">
+            <!-- Gambar utama mobil -->
+            <img src="{{ asset('img/vehicle2-image.png') }}" alt="Best Service" class="w-full lg:w-1/2 object-cover">
+        </div>
+    </div>
+</div>
 
     <!-- Footer -->
     <footer class="footer p-10 bg-base-200 text-base-content">
@@ -164,5 +257,5 @@
             <a class="link link-hover">Kontak</a>
             <a class="link link-hover">FAQ</a>
         </nav>
-    </footer>
+    </footer>w
 </x-layouts.landing>
