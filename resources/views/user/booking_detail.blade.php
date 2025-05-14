@@ -65,7 +65,7 @@
 
         {{-- Tombol Perpanjang Booking --}}
         @if ($booking->booking_status === 'completed' && $booking->payment_status === 'paid')
-            <a href="{{ route('booking.extend.form', $booking->id) }}"
+           <a href="/booking/{{ $booking->id }}/extend">Perpanjang Booking</a>
                class="inline-block mt-4 bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2 rounded-lg font-medium transition">
                 ⏱️ Perpanjang Booking
             </a>
