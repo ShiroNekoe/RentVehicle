@@ -11,6 +11,10 @@ use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReviewController;
 use App\Models\Vehicle;
+use App\Models\Booking;
+use App\Http\Livewire\BookingExtend;
+
+
 
 // =======================
 // ✅ Halaman Utama
@@ -18,7 +22,7 @@ use App\Models\Vehicle;
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/booking/admin-confirmation', function () {
     return view('booking.admin_confirm', [
-        'adminPhone' => '6281234567890' // ganti dengan no admin kamu
+        'adminPhone' => '6282255479716' // ganti dengan no admin kamu
     ]);
 })->name('booking.admin_confirm');
 
@@ -42,6 +46,8 @@ Route::middleware('auth')->group(function () {
 // ✅ Kendaraan
 // =======================
 Route::get('/vehicles/{vehicle}', [RentalController::class, 'show'])->name('vehicles.show');
+Route::get('/user/history', [BookingController::class, 'history'])->name('user.history')->middleware('auth');
+
 
 // =======================
 // ✅ Booking
@@ -60,23 +66,28 @@ Route::middleware('auth')->group(function () {
 
     // Membatalkan booking
     Route::put('/booking/{booking}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
+
+    // Halaman extend booking (Livewire)
+    Route::get('/booking/{booking}/extend', function (Booking $booking) {
+    return view('user.extend-booking', compact('booking'));
 });
+});
+
 
 // =======================
 // ✅ Pembayaran (Midtrans & Manual Transfer)
 // =======================
 Route::middleware('auth')->group(function () {
-    // Redirect ke Midtrans
     Route::get('/payment/redirect/{booking}', [PaymentController::class, 'redirectToMidtrans'])->name('payment.redirect');
+    Route::get('/midtrans/extend/payment/{booking}', [PaymentController::class, 'extendPayment'])->name('midtrans.extend.payment');
 
-    // Invoice
     Route::get('/booking/{booking}/invoice', [BookingController::class, 'downloadInvoice'])->name('booking.invoice');
 
-    // Halaman konfirmasi transfer manual
     Route::get('/transfer-confirmation/{amount}', function ($amount) {
         return view('pages.transfer-confirmation', ['total_transfer' => $amount]);
     })->name('transfer.confirmation');
 });
+
 
 // Callback Midtrans (tidak perlu pakai middleware)
 Route::post('/payment/callback', [PaymentController::class, 'handleCallback'])->name('payment.callback');

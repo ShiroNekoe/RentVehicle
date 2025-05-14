@@ -106,7 +106,6 @@ public function updated($property)
     {
         $this->validate();
     
-        // Pastikan total_price sudah dihitung dengan benar
         $this->total_price = $this->vehicle->price * $this->days + ($this->id_driver ? 100000 : 0);
     
         // Validasi total_price untuk memastikan lebih dari 0

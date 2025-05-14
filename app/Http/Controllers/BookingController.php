@@ -89,6 +89,26 @@ public function submitReview(Request $request, Booking $booking)
     return redirect()->route('user.dashboard')->with('success', 'Ulasan berhasil dikirim.');
 }
 
+public function history(Request $request)
+{
+    $query = Booking::with('vehicle')
+        ->where('id_user', auth()->id());
+
+    if ($request->filled('booking_status')) {
+        $query->where('booking_status', $request->booking_status);
+    }
+
+    if ($request->filled('payment_status')) {
+        $query->where('payment_status', $request->payment_status);
+    }
+
+    $bookings = $query->latest()->get();
+
+    return view('user.history', compact('bookings'));
+}
+
+
+
 
     
 }

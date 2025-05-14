@@ -63,6 +63,14 @@
             <p class="mt-4 text-green-600 font-semibold">✅ Anda sudah memberikan ulasan pada booking ini.</p>
         @endif
 
+        {{-- Tombol Perpanjang Booking --}}
+        @if ($booking->booking_status === 'completed' && $booking->payment_status === 'paid')
+            <a href="{{ route('booking.extend.form', $booking->id) }}"
+               class="inline-block mt-4 bg-yellow-500 hover:bg-yellow-600 text-white px-5 py-2 rounded-lg font-medium transition">
+                ⏱️ Perpanjang Booking
+            </a>
+        @endif
+
         {{-- Tombol Kembali --}}
         <a href="{{ route('user.history') }}"
            class="inline-block mt-4 text-indigo-600 hover:text-indigo-800 font-medium border border-indigo-500 px-5 py-2 rounded-lg transition">
