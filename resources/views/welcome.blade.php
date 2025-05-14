@@ -28,7 +28,7 @@
     <div class="hero-content flex-col lg:flex-row-reverse z-10 px-6 w-full">
         <!-- Gambar Mobil -->
         <div class="w-full lg:w-1/2 flex justify-end mt-20" data-aos="fade-left" data-aos-duration="1000">
-            <img src="{{ asset('img/hero-car.png') }}" class="max-w-3xl rounded-lg drop-shadow-xl" alt="Hero Car" />
+            <img src="{{ asset('img/hero-car.png') }}" class="max-w-2xl max-h-[70vh] object-contain rounded-lg drop-shadow-xl" alt="Hero Car" />
         </div>
 
         <!-- Teks -->
@@ -78,40 +78,40 @@
             
             <!-- Button -->
             <div class="w-full md:w-1/4 flex items-end justify-center">
-                <button class="btn btn-warning px-6">Search</button>
+                <button class="btn btn-warning text-white px-6">Search</button>
             </div>
         </div>
     </div>
 </form>
 
 <!-- How it Works Section -->
-<div class="py-12 bg-gray-100">
+<div class="py-12 bg-white-100">
     <div class="max-w-7xl mx-auto text-center px-6">
-        <h2 class="text-lg font-semibold text-gray-600 mb-8">How it Works</h2>
-        <p class="text-3xl font-bold text-gray-900 mb-12">Getting Started with RentKuy! is Easy</p>
+        <h2 class="text-lg font-semibold text-gray-600 mb-2">How it Works</h2>
+        <p class="text-3xl font-bold text-gray-900 mb-6">Getting Started with RentKuy! is Easy</p>
 
-        <div class="flex justify-between items-center">
-            <!-- Step 1: Choose a location -->
-            <div class="text-center">
-            <div class="bg-transparent p-6 rounded-full mb-4 mx-auto">
-            <img src="{{ asset('img/location-icon.png') }}" alt="Choose a location" class="w-16 h-16 mx-auto">
+        <div class="flex justify-center items-start gap-x-12 md:gap-x-20">
+            <!-- Step 1 -->
+            <div class="text-center max-w-xs relative" data-aos="fade-up">
+                <div class="bg-transparent p-6 rounded-full mb-4 mx-auto transition-transform transform hover:scale-110 duration-300 ease-in-out">
+                    <img src="{{ asset('img/location-icon.png') }}" alt="Choose a location" class="w-16 h-16 mx-auto">
                 </div>
                 <p class="font-bold text-xl text-gray-800">Choose a location</p>
                 <p class="text-sm text-gray-500">Select where you want to pick up your ride.</p>
             </div>
 
-            <!-- Step 2: Pick-up date -->
-            <div class="text-center">
-            <div class="bg-transparent p-6 rounded-full mb-4 mx-auto">
+            <!-- Step 2 -->
+            <div class="text-center max-w-xs relative" data-aos="fade-up" data-aos-delay="200">
+                <div class="bg-transparent p-6 rounded-full mb-4 mx-auto transition-transform transform hover:scale-110 duration-300 ease-in-out">
                     <img src="{{ asset('img/calendar-icon.png') }}" alt="Pick-up date" class="w-16 h-16 mx-auto">
                 </div>
                 <p class="font-bold text-xl text-gray-800">Pick-up date</p>
                 <p class="text-sm text-gray-500">Choose the date and time that fits your schedule.</p>
             </div>
 
-            <!-- Step 3: Book your car -->
-            <div class="text-center">
-            <div class="bg-transparent p-6 rounded-full mb-4 mx-auto">
+            <!-- Step 3 -->
+            <div class="text-center max-w-xs relative" data-aos="fade-up" data-aos-delay="400">
+                <div class="bg-transparent p-6 rounded-full mb-4 mx-auto transition-transform transform hover:scale-110 duration-300 ease-in-out">
                     <img src="{{ asset('img/car-icon.png') }}" alt="Book your car" class="w-16 h-16 mx-auto">
                 </div>
                 <p class="font-bold text-xl text-gray-800">Book your car</p>
@@ -124,26 +124,26 @@
  <!-- Best Service Section -->
 <div class="py-12 bg-white">
     <div class="max-w-7xl mx-auto flex items-center justify-between px-6">
-        <div class="w-full">
+        <div class="w-full" data-aos="fade-right">
             <img src="{{ asset('img/vehicle2-image.png') }}" alt="Best Service" class="w-full h-auto object-cover">
         </div>
 
         <!-- Teks dan iklan layanan -->
-        <div class="w-full lg:w-2/3 pl-12">
+        <div class="w-full lg:w-2/3 pl-12" data-aos="fade-left">
             <h2 class="text-3xl font-bold text-gray-900">Everything You Need for a Better Rental Experience</h2>
             <p class="text-lg text-gray-600">Best service to make your experience smooth and memorable.</p>
 
             <div class="mt-6 space-y-4">
                 <div class="flex items-start space-x-4">
-                    <img src="{{ asset('img/deal-icon.png') }}" alt="Deals" class="w-12 h-12"> <!-- Ikon diperbesar -->
+                    <img src="{{ asset('img/deal-icon.png') }}" alt="Deals" class="w-12 h-12"> 
                     <div>
                         <p class="text-lg font-semibold text-gray-800">Deals for every budget</p>
-                        <p class="text-lg text-gray-800">Find the perfect ride without breaking the bank.</p>
+                        <p class="text-lg text-gray-800">We have best deals, matched just for you.</p>
                     </div>
                 </div>
 
                 <div class="flex items-start space-x-4">
-                    <img src="{{ asset('img/price-icon.png') }}" alt="Best Price" class="w-12 h-12"> <!-- Ikon diperbesar -->
+                    <img src="{{ asset('img/price-icon.png') }}" alt="Best Price" class="w-12 h-12"> 
                     <div>
                         <p class="text-lg font-semibold text-gray-800">Best price guaranteed</p>
                         <p class="text-lg text-gray-800">We match you with the best rates always.</p>
@@ -151,7 +151,7 @@
                 </div>
 
                 <div class="flex items-start space-x-4">
-                    <img src="{{ asset('img/support-icon.png') }}" alt="Support" class="w-12 h-12"> <!-- Ikon diperbesar -->
+                    <img src="{{ asset('img/support-icon.png') }}" alt="Support" class="w-12 h-12"> 
                     <div>
                         <p class="text-lg font-semibold text-gray-800">Support 24/7</p>
                         <p class="text-lg text-gray-800">We're here for you anytime, day or night.</p>
@@ -192,55 +192,44 @@
         <h2 class="text-3xl font-bold text-gray-900 mb-8">We Are Give You The Best Customer Experience</h2>
         <p class="text-lg text-gray-600 mb-12">Best service to make your experience smooth and memorable.</p>
 
-        <div class="flex justify-center space-x-6">
-            <!-- Left Icon and Text -->
-            <div class="service-item relative">
-                <img src="{{ asset('img/deal-icon.png') }}" alt="Competitive Pricing" class="w-12 h-12 mx-auto mb-4">
-                <p class="text-lg text-gray-800">Competitive Pricing</p>
-                <div class="line"></div> <!-- Garis penghubung -->
+        <!-- Flex container untuk ikon dan gambar -->
+        <div class="flex justify-center items-center gap-16 relative">
+
+            <!-- Gambar Mobil -->
+            <div class="w-full lg:w-1/3 mt-12">
+                <img src="{{ asset('img/vehicle3-image.png') }}" alt="Best Service" class="w-full h-auto object-cover mx-auto">
             </div>
 
-            <!-- Center Icon and Text -->
-            <div class="service-item relative">
-                <img src="{{ asset('img/price-icon.png') }}" alt="Easier Rent On Your Budget" class="w-12 h-12 mx-auto mb-4">
+            <!-- Right Icon and Text -->
+            <div class="service-item right-service relative flex flex-col items-center">
+                <img src="{{ asset('img/price-icon.png') }}" alt="Easier Rent On Your Budget" class="w-12 h-12 mb-4">
                 <p class="text-lg text-gray-800">Easier Rent On Your Budget</p>
-                <div class="line"></div> <!-- Garis penghubung -->
+                <div class="line right-line"></div> <!-- Garis penghubung kanan -->
             </div>
-
-            <!-- Right Icon and Text -->
-            <div class="service-item relative">
-                <img src="{{ asset('img/support-icon.png') }}" alt="The Best Extended Auto Warranties" class="w-12 h-12 mx-auto mb-4">
-                <p class="text-lg text-gray-800">The Best Extended Auto Warranties</p>
-                <div class="line"></div> <!-- Garis penghubung -->
+            <div class="service-item right-service relative flex flex-col items-center">
+                <img src="{{ asset('img/deal-icon.png') }}" alt="Your Choice of Mechanic" class="w-12 h-12 mb-4">
+                <p class="text-lg text-gray-800">Competitive Pricing</p>
+                <div class="line right-line"></div> <!-- Garis penghubung kanan -->
             </div>
         </div>
-
-        <div class="flex justify-center space-x-6 mt-12">
             <!-- Left Icon and Text -->
-            <div class="service-item relative">
-                <img src="{{ asset('img/deal-icon.png') }}" alt="Roadside Assistance 24/7" class="w-12 h-12 mx-auto mb-4">
+            <div class="service-item left-service relative flex flex-col items-center">
+                <img src="{{ asset('img/deal-icon.png') }}" alt="Roadside Assistance 24/7" class="w-12 h-12 mb-4">
                 <p class="text-lg text-gray-800">Roadside Assistance 24/7</p>
-                <div class="line"></div> <!-- Garis penghubung -->
+                <div class="line left-line"></div> <!-- Garis penghubung kiri -->
             </div>
 
-            <!-- Center Icon and Text -->
-            <div class="service-item relative">
-                <img src="{{ asset('img/price-icon.png') }}" alt="Most Flexible Payment Plans" class="w-12 h-12 mx-auto mb-4">
+            <div class="service-item left-service relative flex flex-col items-center">
+                <img src="{{ asset('img/deal-icon.png') }}" alt="Most Flexible Payment Plans" class="w-12 h-12 mb-4">
                 <p class="text-lg text-gray-800">Most Flexible Payment Plans</p>
-                <div class="line"></div> <!-- Garis penghubung -->
+                <div class="line left-line"></div> <!-- Garis penghubung center -->
             </div>
 
-            <!-- Right Icon and Text -->
-            <div class="service-item relative">
-                <img src="{{ asset('img/support-icon.png') }}" alt="Your Choice of Mechanic" class="w-12 h-12 mx-auto mb-4">
+             <div class="service-item left-service relative flex flex-col items-center">
+                <img src="{{ asset('img/deal-icon.png') }}" alt="Your Choice of Mechanic" class="w-12 h-12 mb-4">
                 <p class="text-lg text-gray-800">Your Choice of Mechanic</p>
-                <div class="line"></div> <!-- Garis penghubung -->
+                <div class="line left-line"></div> <!-- Garis penghubung kanan -->
             </div>
-        </div>
-
-        <div class="flex justify-center mt-12">
-            <!-- Gambar utama mobil -->
-            <img src="{{ asset('img/vehicle2-image.png') }}" alt="Best Service" class="w-full lg:w-1/2 object-cover">
         </div>
     </div>
 </div>
@@ -257,5 +246,5 @@
             <a class="link link-hover">Kontak</a>
             <a class="link link-hover">FAQ</a>
         </nav>
-    </footer>w
+    </footer>
 </x-layouts.landing>

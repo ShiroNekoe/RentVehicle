@@ -7,7 +7,7 @@ import daisyui from 'daisyui';
 export default defineConfig({
   plugins: [
     laravel({
-      input: ['resources/css/app.css', 'resources/js/app.js'],  // Menambahkan entry point yang benar
+      input: ['resources/css/app.css', 'resources/js/app.js'],  
       refresh: true,
     }),
     tailwindcss(),  // Menggunakan tailwindcss plugin
