@@ -18,7 +18,12 @@
             <a href="#" class="btn btn-ghost text-white">Service</a>
             <a href="#" class="btn btn-ghost text-white">Top Rated</a>
             <a href="#" class="btn btn-ghost text-white">Experience</a>
-            <a href="{{ route('login') }}" class="btn btn-warning text-white">Login</a>
+            @guest
+                <a href="{{ route('login') }}" class="btn btn-warning text-white">Login</a>
+            @else
+                <a href="{{ route('user.dashboard') }}" class="btn btn-success text-white">Home</a>
+            @endguest
+
         </div>
     </div>
 </div>

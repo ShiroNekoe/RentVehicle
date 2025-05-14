@@ -13,9 +13,12 @@ use App\Http\Controllers\ReviewController;
 use App\Models\Vehicle;
 use App\Models\Booking;
 use App\Http\Livewire\BookingExtend;
+use Illuminate\Support\Facades\Auth;
 
 
-
+Route::get('/test', function () {
+    return Auth::id();
+});
 // =======================
 // ✅ Halaman Utama
 // =======================
@@ -52,7 +55,6 @@ Route::get('/user/history', [BookingController::class, 'history'])->name('user.h
 // =======================
 // ✅ Booking
 // =======================
-Route::middleware('auth')->group(function () {
     // Halaman form booking
     Route::get('/booking/{vehicle}', function (Vehicle $vehicle) {
         return view('booking.create', compact('vehicle'));
@@ -71,7 +73,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/booking/{booking}/extend', function (Booking $booking) {
     return view('user.extend-booking', compact('booking'));
 });
-});
+Route::get('booking/{booking}/extend', BookingExtend::class)
+    ->name('user.extend-booking');
 
 
 // =======================

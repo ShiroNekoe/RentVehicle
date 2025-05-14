@@ -7,19 +7,21 @@ use App\Models\Review;
 
 class HomeController extends Controller
 {
-    public function index()
-    {
-        // Ambil kendaraan populer berdasarkan jumlah booking terbanyak
-        $popularVehicles = Vehicle::withCount('bookings') // Menghitung jumlah booking
-            ->orderBy('bookings_count', 'desc')  // Urutkan berdasarkan jumlah booking
-            ->take(6)  // Ambil 6 kendaraan populer
-            ->get();
+   public function index()
+{
+    // Ambil kendaraan populer dengan relasi galeri dan hitung jumlah booking
+    $popularVehicles = Vehicle::with(['galleries']) // Tambahkan relasi galleries
+        ->withCount('bookings') // Hitung jumlah booking
+        ->orderBy('bookings_count', 'desc') // Urutkan dari yang paling sering di-booking
+        ->take(6) // Ambil 6 teratas
+        ->get();
 
-            $reviews = Review::with('vehicle', 'user')->get();
+    // Ambil review kendaraan beserta user & vehicle-nya
+    $reviews = Review::with('vehicle', 'user')->get();
 
-        // Kirim data kendaraan populer ke view
-        return view('welcome', compact('popularVehicles','reviews'));
-    }
+    return view('welcome', compact('popularVehicles', 'reviews'));
+}
+
 
     public function showReviews()
 {

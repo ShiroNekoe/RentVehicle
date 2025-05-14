@@ -40,7 +40,7 @@ class ReviewController extends Controller
         // Menyimpan review
         Review::create([
             'id_booking' => $booking->id,
-            'id_user' => auth()->id(),
+             'id_user' => Auth::id(),,
             'rating' => $request->rating,
             'review' => $request->review,
             'review_date' => now(),

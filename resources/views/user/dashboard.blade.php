@@ -67,12 +67,18 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach ($popularVehicles as $vehicle)
                 <div class="card w-full bg-base-100 shadow-xl">
-                    <figure>
-                        <img src="{{ asset('storage/vehicles/' . $vehicle->image_path) }}" class="object-cover h-40 w-full">
-                    </figure>
+                   @php
+                        $firstImage = $vehicle->galleries->first();
+                    @endphp
+
+                    @if ($firstImage)
+                        <img src="{{ asset('storage/vehicles/' . $firstImage->image_path) }}" class="object-cover h-40 w-full">
+                    @else
+                        <img src="{{ asset('images/default-vehicle.jpg') }}" class="object-cover h-40 w-full" alt="Tidak ada gambar">
+                    @endif
                     <div class="card-body">
-                        <h3 class="text-xl font-bold">{{ $vehicle->name }}</h3>
-                        <p class="text-gray-600">{{ $vehicle->type }} - {{ $vehicle->price }} per hari</p>
+                        <h3 class="text-xl font-bold">{{ $vehicle->vehicle_name }}</h3>
+                        <p class="text-gray-600">{{ $vehicle->vehicle_type }} - {{ $vehicle->price }} per hari</p>
                         <p class="text-sm text-gray-500">Total Booking: {{ $vehicle->bookings_count }}</p>
                         <div class="card-actions justify-end">
                             <a href="{{ route('vehicles.show', $vehicle->id) }}" class="btn btn-warning">Lihat Detail</a>
@@ -94,8 +100,8 @@
                         <img src="{{ asset('storage/vehicles/' . $vehicle->image_path) }}" class="object-cover h-40 w-full">
                     </figure>
                     <div class="card-body">
-                        <h3 class="text-xl font-bold">{{ $vehicle->name }}</h3>
-                        <p class="text-gray-600">{{ $vehicle->type }} - {{ $vehicle->price }} per hari</p>
+                        <h3 class="text-xl font-bold">{{ $vehicle->vehicle_name }}</h3>
+                        <p class="text-gray-600">{{ $vehicle->vehicle_type }} - {{ $vehicle->price }} per hari</p>
                         <div class="card-actions justify-end">
                             <a href="{{ route('vehicles.show', $vehicle->id) }}" class="btn btn-primary">Lihat Detail</a>
                         </div>

@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 use App\Models\Booking;
+use Illuminate\Support\Facades\Auth; // Pastikan sudah ada baris ini
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class BookingExtensionController extends Controller
 {
-     public function showForm($id)
+    public function showForm($id)
     {
         $booking = Booking::with('vehicle')->findOrFail($id);
 
         // Cek apakah user yang punya booking
-        if ($booking->id_user !== auth()->id()) {
+        if ($booking->id_user !== Auth::id()) { // Ganti auth()->id() dengan Auth::id()
             abort(403);
         }
 
@@ -23,7 +24,7 @@ class BookingExtensionController extends Controller
     {
         $booking = Booking::findOrFail($id);
 
-        if ($booking->id_user !== auth()->id()) {
+        if ($booking->id_user !== Auth::id()) { // Ganti auth()->id() dengan Auth::id()
             abort(403);
         }
 
