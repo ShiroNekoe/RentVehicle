@@ -45,7 +45,6 @@ public $days = 0;
         'nik_identity' => 'required|numeric|digits:16',
         'identity' => 'required|file|mimes:jpg,png,pdf|max:10240',
         'pickup_location' => 'nullable|string|max:255', 
-        'agree_terms' => 'accepted',
     ];
 
     public function mount($vehicleId)

@@ -116,23 +116,13 @@
             </script>
         @endif
 
-        <!-- Syarat dan Ketentuan -->
-        <div class="mb-4">
-            <label class="inline-flex items-center">
-                <input type="checkbox" wire:model="agree_terms" class="form-checkbox text-indigo-600">
-                <span class="ml-2 text-sm text-gray-700">Saya menyetujui <a href="#" class="text-blue-600 underline">Syarat dan Ketentuan</a></span>
-            </label>
-            @error('agree_terms') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-        </div>
 
         <!-- Tombol Submit -->
         <div class="mb-4">
             @if ($payment_method === 'midtrans' && session()->has('snap_token'))
                 <p class="text-green-600">Sedang memuat pembayaran...</p>
             @else
-                <button type="submit"
-                        class="px-4 py-2 rounded-md text-white {{ !$agree_terms ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600' }}"
-                        {{ !$agree_terms ? 'disabled' : '' }}>
+                <button type="submit" style="text-black">
                     {{ $payment_method === 'midtrans' ? 'Bayar dengan Midtrans' : 'Booking' }}
                 </button>
             @endif
