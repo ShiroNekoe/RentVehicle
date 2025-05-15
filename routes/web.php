@@ -15,27 +15,24 @@ use App\Models\Booking;
 use App\Http\Livewire\BookingExtend;
 use Illuminate\Support\Facades\Auth;
 
-
+// Test route
 Route::get('/test', function () {
     return Auth::id();
 });
-// =======================
-// ✅ Halaman Utama
-// =======================
+
+// Halaman Utama
 Route::get('/', [HomeController::class, 'index']);
+
+// Halaman konfirmasi admin booking
 Route::get('/booking/admin-confirmation', function () {
     return view('booking.admin_confirm', [
         'adminPhone' => '6282255479716' // ganti dengan no admin kamu
     ]);
 })->name('booking.admin_confirm');
 
-
-
-
-// =======================
-// ✅ Autentikasi & Dashboard User
-// =======================
+// Middleware auth untuk user yang sudah login
 Route::middleware('auth')->group(function () {
+    // Dashboard dan history user
     Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('user.dashboard');
     Route::get('/history', [UserHistoryController::class, 'index'])->name('user.history');
 
@@ -43,56 +40,45 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
 
-// =======================
-// ✅ Kendaraan
-// =======================
-Route::get('/vehicles/{vehicle}', [RentalController::class, 'show'])->name('vehicles.show');
-Route::get('/user/history', [BookingController::class, 'history'])->name('user.history')->middleware('auth');
-
-
-// =======================
-// ✅ Booking
-// =======================
-    // Halaman form booking
-    Route::get('/booking/{vehicle}', function (Vehicle $vehicle) {
-        return view('booking.create', compact('vehicle'));
-    })->name('booking.create');
-
-    // Menyimpan booking baru
-    Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
-
-    // Menampilkan detail booking
-    Route::get('/booking/detail/{booking}', [BookingController::class, 'show'])->name('user.booking_detail');
-
-    // Membatalkan booking
-    Route::put('/booking/{booking}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
-
-    // Halaman extend booking (Livewire)
-    Route::get('/booking/{booking}/extend', function (Booking $booking) {
-    return view('user.extend-booking', compact('booking'));
-});
-Route::get('booking/{booking}/extend', BookingExtend::class)
-    ->name('user.extend-booking');
-
-
-// =======================
-// ✅ Pembayaran (Midtrans & Manual Transfer)
-// =======================
-Route::middleware('auth')->group(function () {
+    // Pembayaran Midtrans & Transfer Manual
     Route::get('/payment/redirect/{booking}', [PaymentController::class, 'redirectToMidtrans'])->name('payment.redirect');
     Route::get('/midtrans/extend/payment/{booking}', [PaymentController::class, 'extendPayment'])->name('midtrans.extend.payment');
 
+    // Invoice booking
     Route::get('/booking/{booking}/invoice', [BookingController::class, 'downloadInvoice'])->name('booking.invoice');
 
-    Route::get('/transfer-confirmation/{amount}', function ($amount) {
-        return view('pages.transfer-confirmation', ['total_transfer' => $amount]);
-    })->name('transfer.confirmation');
+    // Halaman konfirmasi transfer manual (tanpa parameter)
+    Route::get('/transfer-confirmation', function () {
+        return view('pages.transfer-confirmation');
+    })->name('pages.transfer.confirmation');
+
+    // Review
+    Route::get('/review/{booking}', [ReviewController::class, 'create'])->name('user.review');
+    Route::post('review/{booking}', [ReviewController::class, 'store'])->name('booking.review.submit');
 });
 
+// Kendaraan
+Route::get('/vehicles/{vehicle}', [RentalController::class, 'show'])->name('vehicles.show');
 
-// Callback Midtrans (tidak perlu pakai middleware)
+// History user booking (optional, sudah ada di group auth)
+Route::get('/user/history', [BookingController::class, 'history'])->name('user.history')->middleware('auth');
+
+// Booking Routes
+Route::get('/booking/{vehicle}', function (Vehicle $vehicle) {
+    return view('booking.create', compact('vehicle'));
+})->name('booking.create');
+
+Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
+
+Route::get('/booking/detail/{booking}', [BookingController::class, 'show'])->name('user.booking_detail');
+
+Route::put('/booking/{booking}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
+
+// Booking extend menggunakan Livewire component (tidak pakai closure)
+Route::get('/booking/{booking}/extend', BookingExtend::class)->name('booking.extend');
+
+// Callback Midtrans (tidak perlu middleware)
 Route::post('/payment/callback', [PaymentController::class, 'handleCallback'])->name('payment.callback');
 Route::post('/midtrans/callback', [PaymentController::class, 'handleCallback']); // duplikat untuk jaga-jaga
 
@@ -100,25 +86,14 @@ Route::post('/midtrans/callback', [PaymentController::class, 'handleCallback']);
 Route::get('/payment/success/{order_id}', [PaymentController::class, 'success'])->name('payment.success');
 Route::get('/payment/failed/{order_id}', [PaymentController::class, 'failed'])->name('payment.failed');
 
-// Redirect halaman status booking
+// Redirect halaman status booking (view statis)
 Route::view('/booking/success', 'booking.success');
 Route::view('/booking/pending', 'booking.pending');
 Route::view('/booking/failed', 'booking.failed');
 
-// =======================
-// ✅ Login Google
-// =======================
+// Login Google
 Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 
-// =======================
-// ✅ File Auth Laravel (Login, Register, dll)
-// =======================
-
-Route::middleware(['auth'])->group(function () {
-    Route::get('/review/{booking}', [ReviewController::class, 'create'])->name('user.review');
-    Route::post('review/{booking}', [ReviewController::class, 'store'])->name('booking.review.submit');
-});
-
-
+// Auth routes Laravel default
 require __DIR__.'/auth.php';

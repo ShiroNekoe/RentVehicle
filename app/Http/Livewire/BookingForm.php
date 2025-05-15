@@ -116,7 +116,7 @@ public function updated($property)
     
         // Simpan booking ke database
         $booking = Booking::create([
-            'id_user' => auth()->id(),
+            'id_user' => Auth::id(),
             'id_vehicle' => $this->vehicle->id,
             'id_driver' => $this->id_driver,
             'start_date' => $this->start_date,
@@ -149,8 +149,8 @@ public function updated($property)
                     'gross_amount' => (int)$this->total_price,  // Pastikan total_price yang benar
                 ],
                 'customer_details' => [
-                    'first_name' => auth()->user()->name,
-                    'email' => auth()->user()->email,
+                   'first_name' => Auth::user()->name,
+                    'email' => Auth::user()->email,
                 ],
             ];
     

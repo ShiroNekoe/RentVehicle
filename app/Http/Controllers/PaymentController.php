@@ -2,106 +2,101 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Booking;
 use Illuminate\Http\Request;
-use Midtrans\Snap;
+use App\Models\Booking;
 use Midtrans\Config;
-use Midtrans\Notification;
-use Illuminate\Support\Facades\Log;
+use Midtrans\Snap;
 
 class PaymentController extends Controller
 {
-    public function redirectToMidtrans($bookingId)
+    public function __construct()
     {
-        // Ambil booking dari database
-        $booking = Booking::findOrFail($bookingId);
-    
         // Set konfigurasi Midtrans
-        Config::$serverKey = env('MIDTRANS_SERVER_KEY');
-        Config::$clientKey = env('MIDTRANS_CLIENT_KEY');
-        Config::$isProduction = env('MIDTRANS_IS_PRODUCTION');
-    
-        // Detil transaksi
-        $transactionDetails = [
-            'order_id' => 'order_' . $booking->id,
-            'gross_amount' => $booking->total_price,
-        ];
-    
-        // Detil item
-        $itemDetails = [
-            [
-                'id' => 'item_' . $booking->id,
-                'price' => $booking->booking_price,
-                'quantity' => 1,
-                'name' => 'Booking ' . $booking->vehicle->name
-            ]
-        ];
-    
-        // Detil customer
-        $customerDetails = [
-            'first_name' => $booking->user->name,
-            'email' => $booking->user->email,
-            'phone' => $booking->user->phone,
-        ];
-    
-        // Create transaksi
-        $params = [
-            'transaction_details' => $transactionDetails,
-            'item_details' => $itemDetails,
-            'customer_details' => $customerDetails,
-        ];
-    
-        try {
-            // Dapatkan token untuk Snap Midtrans
-            $snapToken = Snap::getSnapToken($params);
-            if (!$snapToken) {
-                throw new \Exception("Failed to get Snap Token");
-            }
-            return view('payment.midtrans', compact('snapToken'));
-        } catch (\Exception $e) {
-            Log::error('Midtrans error: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Something went wrong. Please try again.');
-        }
+        Config::$serverKey = config('services.midtrans.server_key');
+        Config::$isProduction = config('services.midtrans.is_production');
+        Config::$isSanitized = true;
+        Config::$is3ds = true;
     }
 
-    public function handleCallback(Request $request)
+    // Redirect pembayaran booking biasa ke Midtrans
+    public function redirectToMidtrans(Booking $booking)
     {
-        // Ambil data dari Midtrans notification
-        $notification = new Notification();
-
-        // Tentukan status pembayaran
-        $status = $notification->transaction_status;
-        $orderId = $notification->order_id;
-        $fraudStatus = $notification->fraud_status;
-
-        // Cari booking berdasarkan order_id
-        $booking = Booking::where('order_id', $orderId)->first();
-
-        // Proses status pembayaran
-        if ($status == 'capture') {
-            if ($fraudStatus == 'challenge') {
-                // Pembayaran challenge
-                $booking->status = 'failed';
-            } else {
-                // Pembayaran berhasil
-                $booking->status = 'complete';
-                $booking->payment_status = 'paid';
-            }
-        } elseif ($status == 'settlement') {
-            // Pembayaran sudah berhasil
-            $booking->status = 'complete';
-            $booking->payment_status = 'paid';
-        } elseif ($status == 'pending') {
-            // Pembayaran menunggu
-            $booking->status = 'pending';
-        } elseif ($status == 'deny') {
-            // Pembayaran gagal
-            $booking->status = 'failed';
+        if ($booking->payment_status == 'paid') {
+            return redirect()->route('user.dashboard')->with('message', 'Booking sudah dibayar.');
         }
 
-        // Simpan status pembayaran
-        $booking->save();
+        $params = [
+            'transaction_details' => [
+                'order_id' => 'BOOKING-' . $booking->id,
+                'gross_amount' => $booking->total_price,
+            ],
+            'customer_details' => [
+                'first_name' => $booking->user->name,
+                'email' => $booking->user->email,
+            ],
+            'callbacks' => [
+                'finish' => route('payment.success', ['order_id' => 'BOOKING-' . $booking->id]),
+            ],
+        ];
 
-        return redirect()->route('booking.details', $booking->id);
+        $snapToken = Snap::getSnapToken($params);
+
+        return view('payment.midtrans', compact('snapToken', 'booking'));
+    }
+
+    // Extend payment: pembayaran perpanjangan booking
+    public function extendPayment(Booking $booking)
+    {
+        // Ambil data perpanjangan dari session
+        $newEndDate = session('extend_new_end_date');
+        $extendPrice = session('extend_price');
+
+        if (!$newEndDate || !$extendPrice) {
+            return redirect()->route('booking.extend', $booking->id)
+                ->withErrors('Data perpanjangan tidak ditemukan. Silakan ulangi.');
+        }
+
+        $params = [
+            'transaction_details' => [
+                'order_id' => 'EXTEND-' . $booking->id . '-' . time(),
+                'gross_amount' => $extendPrice,
+            ],
+            'customer_details' => [
+                'first_name' => $booking->user->name,
+                'email' => $booking->user->email,
+            ],
+            'callbacks' => [
+                'finish' => route('payment.success', ['order_id' => 'EXTEND-' . $booking->id . '-' . time()]),
+            ],
+        ];
+
+        $snapToken = Snap::getSnapToken($params);
+
+        return view('payment.midtrans_extend', compact('snapToken', 'booking', 'newEndDate', 'extendPrice'));
+    }
+
+    // Handle callback pembayaran dari Midtrans (notifikasi pembayaran)
+    public function handleCallback(Request $request)
+    {
+        // Implementasi handle callback Midtrans
+        // Update status pembayaran dan booking sesuai notification
+
+        // Contoh singkat:
+        $notification = $request->all();
+        // Cek status dan update database...
+
+        return response()->json(['status' => 'ok']);
+    }
+
+    // Halaman sukses pembayaran
+    public function success($order_id)
+    {
+        return view('payment.success', compact('order_id'));
+    }
+
+    // Halaman gagal pembayaran
+    public function failed($order_id)
+    {
+        return view('payment.failed', compact('order_id'));
     }
 }

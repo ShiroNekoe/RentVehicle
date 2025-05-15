@@ -45,4 +45,11 @@ class BookingExtensionController extends Controller
 
         return redirect()->route('user.history')->with('success', 'Booking berhasil diperpanjang.');
     }
+
+        public function showBookingExtend($id)
+    {
+        $booking = Booking::with('vehicle')->findOrFail($id);
+        return view('booking.extend', compact('booking'));
+    }
+
 }

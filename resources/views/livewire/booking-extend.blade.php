@@ -1,31 +1,25 @@
-<div class="bg-white p-6 rounded shadow max-w-xl mx-auto">
-    <h2 class="text-xl font-bold text-indigo-600 mb-4">Perpanjang Booking</h2>
-
-    <p class="text-gray-700 mb-2">Kendaraan: <strong>{{ $booking->vehicle->vehicle_name }}</strong></p>
-    <p class="text-gray-600 mb-4">Tanggal Selesai Saat Ini: <strong>{{ $booking->end_date }}</strong></p>
+<div class="p-4">
+    <h2 class="text-xl font-bold mb-4">Extend Booking</h2>
 
     <div class="mb-4">
-        <label class="block text-sm font-medium">Tanggal Selesai Baru</label>
-        <input type="date" wire:model="new_end_date" class="mt-1 block w-full border rounded p-2">
-        @error('new_end_date') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+        <label for="new_end_date">New End Date:</label>
+        <input type="date" id="new_end_date" wire:model="new_end_date" class="border p-2 rounded">
+        @error('new_end_date') <span class="text-red-600">{{ $message }}</span> @enderror
     </div>
 
-    @if ($price)
-        <p class="text-indigo-600 font-bold mb-2">Total Tambahan: Rp {{ number_format($price, 0, ',', '.') }}</p>
-    @endif
-
     <div class="mb-4">
-        <label class="block text-sm font-medium">Metode Pembayaran</label>
-        <select wire:model="payment_method" class="mt-1 block w-full border rounded p-2">
-            <option value="">-- Pilih Metode --</option>
-            <option value="midtrans">Bayar Otomatis (Midtrans)</option>
+        <label>Payment Method:</label>
+        <select wire:model="payment_method" class="border p-2 rounded">
+            <option value="">Select Payment Method</option>
+            <option value="midtrans">Midtrans</option>
             <option value="transfer">Transfer Manual</option>
         </select>
-        @error('payment_method') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+        @error('payment_method') <span class="text-red-600">{{ $message }}</span> @enderror
     </div>
 
-    <button wire:click="submit"
-        class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded">
-        Perpanjang
-    </button>
+    <div class="mb-4">
+        <p>Price: <strong>Rp {{ number_format($price, 0, ',', '.') }}</strong></p>
+    </div>
+
+    <button wire:click="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Submit</button>
 </div>
