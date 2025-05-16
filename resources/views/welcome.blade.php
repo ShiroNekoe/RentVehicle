@@ -199,44 +199,57 @@
         <!-- Flex container untuk ikon dan gambar -->
         <div class="flex justify-center items-center gap-16 relative">
 
+            <!-- Left Icons -->
+            <div class="flex flex-col items-center space-y-6 w-1/3">
+                <div class="service-item left-service relative flex flex-col items-center">
+                    <img src="{{ asset('img/deal-icon.png') }}" alt="Roadside Assistance 24/7" class="w-12 h-12 mb-4">
+                    <p class="text-lg text-gray-800">Roadside Assistance 24/7</p>
+                    <div class="line left-line mt-2 w-16 h-1 bg-orange-500"></div> <!-- Garis -->
+                </div>
+
+                <div class="service-item left-service relative flex flex-col items-center">
+                    <img src="{{ asset('img/deal-icon.png') }}" alt="Most Flexible Payment Plans" class="w-12 h-12 mb-4">
+                    <p class="text-lg text-gray-800">Most Flexible Payment Plans</p>
+                    <div class="line left-line mt-2 w-16 h-1 bg-orange-500"></div> <!-- Garis -->
+                </div>
+
+                <div class="service-item left-service relative flex flex-col items-center">
+                    <img src="{{ asset('img/deal-icon.png') }}" alt="Your Choice of Mechanic" class="w-12 h-12 mb-4">
+                    <p class="text-lg text-gray-800">Your Choice of Mechanic</p>
+                    <div class="line left-line mt-2 w-16 h-1 bg-orange-500"></div> <!-- Garis -->
+                </div>
+            </div>
+
             <!-- Gambar Mobil -->
             <div class="w-full lg:w-1/3 mt-12">
                 <img src="{{ asset('img/vehicle3-image.png') }}" alt="Best Service" class="w-full h-auto object-cover mx-auto">
             </div>
 
-            <!-- Right Icon and Text -->
-            <div class="service-item right-service relative flex flex-col items-center">
-                <img src="{{ asset('img/price-icon.png') }}" alt="Easier Rent On Your Budget" class="w-12 h-12 mb-4">
-                <p class="text-lg text-gray-800">Easier Rent On Your Budget</p>
-                <div class="line right-line"></div> <!-- Garis penghubung kanan -->
-            </div>
-            <div class="service-item right-service relative flex flex-col items-center">
-                <img src="{{ asset('img/deal-icon.png') }}" alt="Your Choice of Mechanic" class="w-12 h-12 mb-4">
-                <p class="text-lg text-gray-800">Competitive Pricing</p>
-                <div class="line right-line"></div> <!-- Garis penghubung kanan -->
-            </div>
-        </div>
-            <!-- Left Icon and Text -->
-            <div class="service-item left-service relative flex flex-col items-center">
-                <img src="{{ asset('img/deal-icon.png') }}" alt="Roadside Assistance 24/7" class="w-12 h-12 mb-4">
-                <p class="text-lg text-gray-800">Roadside Assistance 24/7</p>
-                <div class="line left-line"></div> <!-- Garis penghubung kiri -->
+            <!-- Right Icons -->
+            <div class="flex flex-col items-center space-y-6 w-1/3">
+                <div class="service-item right-service relative flex flex-col items-center">
+                    <img src="{{ asset('img/deal-icon.png') }}" alt="Easier Rent On Your Budget" class="w-12 h-12 mb-4">
+                    <p class="text-lg text-gray-800">Easier Rent On Your Budget</p>
+                    <div class="line right-line mt-2 w-16 h-1 bg-orange-500"></div> <!-- Garis -->
+                </div>
+                
+                <div class="service-item right-service relative flex flex-col items-center">
+                    <img src="{{ asset('img/deal-icon.png') }}" alt="Competitive Pricing" class="w-12 h-12 mb-4">
+                    <p class="text-lg text-gray-800">Competitive Pricing</p>
+                    <div class="line right-line mt-2 w-16 h-1 bg-orange-500"></div> <!-- Garis -->
+                </div>
+
+                <div class="service-item right-service relative flex flex-col items-center">
+                    <img src="{{ asset('img/deal-icon.png') }}" alt="The Best Extended Auto Warranties" class="w-12 h-12 mb-4">
+                    <p class="text-lg text-gray-800">The Best Extended Auto Warranties</p>
+                    <div class="line right-line mt-2 w-16 h-1 bg-orange-500"></div> <!-- Garis -->
+                </div>
             </div>
 
-            <div class="service-item left-service relative flex flex-col items-center">
-                <img src="{{ asset('img/deal-icon.png') }}" alt="Most Flexible Payment Plans" class="w-12 h-12 mb-4">
-                <p class="text-lg text-gray-800">Most Flexible Payment Plans</p>
-                <div class="line left-line"></div> <!-- Garis penghubung center -->
-            </div>
-
-             <div class="service-item left-service relative flex flex-col items-center">
-                <img src="{{ asset('img/deal-icon.png') }}" alt="Your Choice of Mechanic" class="w-12 h-12 mb-4">
-                <p class="text-lg text-gray-800">Your Choice of Mechanic</p>
-                <div class="line left-line"></div> <!-- Garis penghubung kanan -->
-            </div>
         </div>
     </div>
 </div>
+
 
     <!-- Footer -->
     <footer class="footer p-10 bg-base-200 text-base-content">
