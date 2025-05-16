@@ -1,32 +1,7 @@
 <x-guest-layout>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
     <!-- Navbar -->
-    <div class="sticky top-0 z-50 shadow-md bg-gradient-to-r from-[#FFFFFF] to-[#316783]">
-        <div class="flex w-full h-16 items-center">
-    <!-- Logo Area (kiri) -->
-    <div class="flex items-center px-4">
-        <a href="#" class="flex items-center space-x-2">
-            <img src="{{ asset('img/logo.png') }}" alt="Logo" class="h-12 w-13 object-contain">
-            <span class="text-[#316783] text-2xl font-extrabold">RentKuy!</span>
-        </a>
-    </div>
-    
-        <!-- Menu Area (kanan) -->
-        <div class="ml-auto flex space-x-6 px-4">
-            <a href="#" class="btn btn-ghost text-white">Home</a>
-            <a href="#" class="btn btn-ghost text-white">Service</a>
-            <a href="#" class="btn btn-ghost text-white">Top Rated</a>
-            <a href="#" class="btn btn-ghost text-white">Experience</a>
-            @guest
-                <a href="{{ route('login') }}" class="btn btn-warning text-white">Login</a>
-            @else
-                <a href="{{ route('user.dashboard') }}" class="btn btn-success text-white">Home</a>
-            @endguest
-
-        </div>
-    </div>
-</div>
+    @include('layouts.navigation') <!-- Menyertakan navbar dari navigation.blade.php -->
 
 <!-- Hero Section -->
 <div class="hero min-h-[70vh] bg-cover bg-center text-white relative" style="background-image: url('{{ asset('img/bg-hero.png') }}')">
