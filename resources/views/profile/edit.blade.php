@@ -28,12 +28,6 @@
             <input type="email" id="email" name="email" class="mt-2 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" value="{{ old('email', $user->email) }}" required>
         </div>
 
-        <!-- Input untuk nomor telepon -->
-        <div class="mb-4">
-            <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
-            <input type="text" id="phone" name="phone" class="mt-2 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" value="{{ old('phone', $user->phone) }}">
-        </div>
-
         <!-- Input untuk password -->
         <div class="mb-4">
             <label for="password" class="block text-sm font-medium text-gray-700">Password</label>

@@ -14,7 +14,6 @@
     
         <!-- Menu Area (kanan) -->
         <div class="ml-auto flex space-x-6 px-4">
-            <a href="#" class="btn btn-ghost text-white">Home</a>
             <a href="#" class="btn btn-ghost text-white">Service</a>
             <a href="#" class="btn btn-ghost text-white">Top Rated</a>
             <a href="#" class="btn btn-ghost text-white">Experience</a>
