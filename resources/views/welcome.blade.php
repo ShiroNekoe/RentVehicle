@@ -1,7 +1,7 @@
 <x-guest-layout>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <!-- Navbar -->
-    @include('layouts.navigation') <!-- Menyertakan navbar dari navigation.blade.php -->
+    @include('layouts.navigation') 
 
 <!-- Hero Section -->
 <div class="hero min-h-[70vh] bg-cover bg-center text-white relative" style="background-image: url('{{ asset('img/bg-hero.png') }}')">

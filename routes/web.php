@@ -95,5 +95,7 @@ Route::view('/booking/failed', 'booking.failed');
 Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 
+
+
 // Auth routes Laravel default
 require __DIR__.'/auth.php';
