@@ -75,6 +75,8 @@ Route::get('/booking/detail/{booking}', [BookingController::class, 'show'])->nam
 
 Route::put('/booking/{booking}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
 
+Route::get('/booking/{id}/invoice', [BookingController::class, 'invoice'])->name('booking.invoice');
+
 // Booking extend menggunakan Livewire component (tidak pakai closure)
 Route::get('/booking/{booking}/extend', BookingExtend::class)->name('booking.extend');
 
