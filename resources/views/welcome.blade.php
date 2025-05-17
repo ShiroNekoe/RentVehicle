@@ -5,10 +5,10 @@
 
 <!-- Hero Section -->
 <div class="hero min-h-[70vh] bg-cover bg-center text-white relative" style="background-image: url('{{ asset('img/bg-hero.png') }}')">
-    <div class="hero-content flex-col lg:flex-row-reverse z-10 px-6 w-full">
+    <div class="hero-content flex-col lg:flex-row-reverse z-10 px-6 w-full space-y-6 lg:space-y-0 lg:space-x-6">
         <!-- Gambar Mobil -->
-        <div class="w-full lg:w-1/2 flex justify-end mt-20" data-aos="fade-left" data-aos-duration="1000">
-            <img src="{{ asset('img/hero-car.png') }}" class="max-w-2xl max-h-[70vh] object-contain rounded-lg drop-shadow-xl" alt="Hero Car" />
+        <div class="w-full lg:w-1/2 flex justify-end mt-20">
+            <img src="{{ asset('img/hero-car.png') }}" class="max-w-full lg:max-w-[80%] max-h-[60vh] lg:max-h-[80vh] object-contain rounded-lg drop-shadow-xl" alt="Hero Car" />
         </div>
 
         <!-- Teks -->
@@ -101,15 +101,16 @@
     </div>
 </div>
 
- <!-- Best Service Section -->
+<!-- Best Service Section -->
 <div class="py-12 bg-white">
-    <div class="max-w-7xl mx-auto flex items-center justify-between px-6">
-        <div class="w-full" data-aos="fade-right">
+    <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between px-6">
+        <!-- Gambar -->
+        <div class="w-full lg:w-1/2" data-aos="fade-right">
             <img src="{{ asset('img/vehicle2-image.png') }}" alt="Best Service" class="w-full h-auto object-cover">
         </div>
 
         <!-- Teks dan iklan layanan -->
-        <div class="w-full lg:w-2/3 pl-12" data-aos="fade-left">
+        <div class="w-full lg:w-1/2 pl-12 mt-6 lg:mt-0" data-aos="fade-left">
             <h2 class="text-3xl font-bold text-gray-900">Everything You Need for a Better Rental Experience</h2>
             <p class="text-lg text-gray-600">Best service to make your experience smooth and memorable.</p>
 
