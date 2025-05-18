@@ -108,7 +108,8 @@ public function invoice($id)
     $booking = Booking::with('vehicle', 'user')->findOrFail($id);
 
     // Optional: Pastikan user hanya bisa akses booking miliknya
-    if (auth()->id() !== $booking->user_id) {
+    if (auth()->id() !== $booking->id_user) {
+
         abort(403);
     }
 

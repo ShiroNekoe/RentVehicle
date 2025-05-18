@@ -15,6 +15,7 @@
     
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+      @livewireStyles
 </head>
 
 <body class="font-sans antialiased">
@@ -33,6 +34,7 @@
         <!-- Page Content -->
         <main>
             @yield('content')
+               @livewireScripts
         </main>
     </div>
 
@@ -45,4 +47,32 @@
             once: false, 
         });
     </script>
+
+
+
 </body>
+@stack('scripts')
+    @push('scripts')
+<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
+<script>
+    window.addEventListener('midtrans-payment', function (event) {
+        snap.pay(event.detail.snapToken, {
+            onSuccess: function(result) {
+                alert("Pembayaran berhasil!");
+              window.location.href = "/booking/success";
+
+            },
+            onPending: function(result) {
+                alert("Menunggu pembayaran!");
+                window.location.href = "/booking/failed";
+            },
+            onError: function(result) {
+                alert("Terjadi kesalahan pembayaran.");
+            },
+            onClose: function() {
+                alert("Pembayaran dibatalkan.");
+            }
+        });
+    });
+</script>
+@endpush

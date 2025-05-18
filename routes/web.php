@@ -14,6 +14,8 @@ use App\Models\Vehicle;
 use App\Models\Booking;
 use App\Http\Livewire\BookingExtend;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Livewire\BookingForm;
+
 
 // Test route
 Route::get('/test', function () {
@@ -75,7 +77,8 @@ Route::get('/booking/detail/{booking}', [BookingController::class, 'show'])->nam
 
 Route::put('/booking/{booking}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
 
-Route::get('/booking/{id}/invoice', [BookingController::class, 'invoice'])->name('booking.invoice');
+Route::get('/booking/{id}/invoice', [BookingController::class, 'invoice'])->name('invoice.booking');
+Route::get('/booking/{vehicleId}', BookingForm::class)->middleware('auth'); 
 
 // Booking extend menggunakan Livewire component (tidak pakai closure)
 Route::get('/booking/{booking}/extend', BookingExtend::class)->name('booking.extend');
@@ -83,6 +86,10 @@ Route::get('/booking/{booking}/extend', BookingExtend::class)->name('booking.ext
 // Callback Midtrans (tidak perlu middleware)
 Route::post('/payment/callback', [PaymentController::class, 'handleCallback'])->name('payment.callback');
 Route::post('/midtrans/callback', [PaymentController::class, 'handleCallback']); // duplikat untuk jaga-jaga
+Route::get('/booking/success', fn() => view('booking.success'))->name('booking.success');
+Route::get('/booking/pending', fn() => view('booking.pending'))->name('booking.pending');
+Route::get('/booking/failed', fn() => view('booking.failed'))->name('booking.failed');
+
 
 // Halaman sukses/gagal pembayaran
 Route::get('/payment/success/{order_id}', [PaymentController::class, 'success'])->name('payment.success');
