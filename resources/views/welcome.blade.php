@@ -4,7 +4,7 @@
     @include('layouts.navigation') 
 
 <!-- home Section -->
-<section id="services" class="py-16 bg-white">
+<section id="services">
  <div class="hero min-h-[70vh] bg-cover bg-center text-white relative" style="background-image: url('{{ asset('img/bg-hero.png') }}')">
     <div class="hero-content flex-col lg:flex-row-reverse z-10 px-6 w-full space-y-6 lg:space-y-0 lg:space-x-6">
         <!-- Gambar Mobil -->
@@ -24,6 +24,7 @@
 </div>
 
 <!-- Filter Search -->
+ <section id="service">
 <form method="GET" @guest action="{{ route('login') }}" @else action="{{ route('user.dashboard') }}" @endguest>
     <div class="bg-white shadow-lg rounded-lg p-6 mx-auto max-w-4xl mt-12">
         <div class="flex justify-center gap-6">
@@ -66,7 +67,7 @@
 </form>
 
 <!-- How it Works Section -->
- <section id="service" class="py-12 bg-white-100">
+ <div class="py-12 bg-white-100">
     <div class="max-w-7xl mx-auto text-center px-6">
         <h2 class="text-lg font-semibold text-gray-600 mb-2">How it Works</h2>
         <p class="text-3xl font-bold text-gray-900 mb-6">Getting Started with RentKuy! is Easy</p>
@@ -145,15 +146,24 @@
 </div>
 
 <!-- Kendaraan Populer -->
-<section id="top rated" class="py-12 px-6">
-    <h2 class="text-3xl font-bold text-center mb-10 "data-aos="fade-up" data-aos-delay="100">Your Next Adventure Starts with a Top Rated Deal</h2>
+<section id="top-rated" class="py-12 px-6">
+    <!-- Vehicle of the Month -->
+    <div class="text-center mb-4">
+        <h4 class="text-lg text-gray-600 mb-6"data-aos="fade-up" data-aos-delay="100">Vehicle of the Month</h4>
+    </div>
+
+    <!-- Main Title -->
+    <h2 class="text-3xl font-bold text-center mb-10" data-aos="fade-up" data-aos-delay="100">
+        Your Next Adventure Starts with a Top Rated Deal
+    </h2>
+    
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         @foreach ([ 
             ['brand' => 'Toyota', 'model' => 'Avanza', 'img' => 'img/contoh1.png', 'seat' => 7, 'type' => 'Mobil', 'transmisi' => 'Manual', 'price' => 'Rp 50.000/day', 'rating' => 4.5],
             ['brand' => 'Honda', 'model' => 'Beat', 'img' => 'img/contoh2.jpg', 'seat' => 2, 'type' => 'Motor', 'transmisi' => 'Automatic', 'price' => 'Rp 25.000/day', 'rating' => 4.7],
             ['brand' => 'Daihatsu', 'model' => 'Sigra', 'img' => 'img/contoh3.jpg', 'seat' => 5, 'type' => 'Mobil', 'transmisi' => 'Automatic', 'price' => 'Rp 45.000/day', 'rating' => 4.6]
         ] as $vehicle)
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl">
                 <figure>
                     <img src="{{ asset($vehicle['img']) }}" alt="{{ $vehicle['brand'] }} - {{ $vehicle['model'] }}" class="w-full h-64 object-cover" />
                 </figure>
@@ -182,6 +192,7 @@
         @endforeach
     </div>
 </section>
+
 
 <!-- Best Experience Section -->
   <section id="experience" class="py-12 bg-white">
@@ -244,46 +255,45 @@
 </div>
 
 <!-- Footer Section -->
-<footer class="bg-gradient-to-r from-[#FFA629] to-[#316783] py-12 text-white">
+<footer class="bg-[#2C3E50] py-12 text-white">
     <div class="max-w-7xl mx-auto px-6">
-        <!-- Logo dan Informasi Umum -->
+        <!-- Logo dan Deskripsi -->
         <div class="flex flex-col lg:flex-row justify-between items-center mb-8">
-            <!-- Logo -->
             <div class="text-center lg:text-left">
                 <img src="{{ asset('img/logo.png') }}" alt="RentKuy Logo" class="h-12 w-auto mb-4">
-                <p class="text-lg">Your trusted partner for car and motorbike rentals</p>
+                <p class="text-lg">The best car & motorbike rental service for your next journey.</p>
             </div>
 
-            <!-- Links -->
+            <!-- Navigasi Footer -->
             <div class="flex flex-col lg:flex-row gap-6 mt-6 lg:mt-0">
-                <a href="#home" class="text-white hover:text-gray-200">Home</a>
-                <a href="#services" class="text-white hover:text-gray-200">Services</a>
-                <a href="#about" class="text-white hover:text-gray-200">About Us</a>
-                <a href="#contact" class="text-white hover:text-gray-200">Contact</a>
+                <a href="#home" class="text-white hover:text-gray-200 transition duration-300">Home</a>
+                <a href="#services" class="text-white hover:text-gray-200 transition duration-300">Services</a>
+                <a href="#about" class="text-white hover:text-gray-200 transition duration-300">About Us</a>
+                <a href="#contact" class="text-white hover:text-gray-200 transition duration-300">Contact</a>
             </div>
         </div>
 
-        <!-- Social Media and Contact -->
+        <!-- Social Media and Contact Info -->
         <div class="flex flex-col lg:flex-row justify-between items-center mb-8">
             <!-- Social Media Icons -->
             <div class="flex gap-6 mb-4 lg:mb-0">
-                <a href="#" class="text-white hover:text-gray-200">
+                <a href="#" class="text-white hover:text-gray-200 transition duration-300">
                     <i class="fab fa-facebook-square text-2xl"></i>
                 </a>
-                <a href="#" class="text-white hover:text-gray-200">
+                <a href="#" class="text-white hover:text-gray-200 transition duration-300">
                     <i class="fab fa-twitter-square text-2xl"></i>
                 </a>
-                <a href="#" class="text-white hover:text-gray-200">
+                <a href="#" class="text-white hover:text-gray-200 transition duration-300">
                     <i class="fab fa-instagram-square text-2xl"></i>
                 </a>
-                <a href="#" class="text-white hover:text-gray-200">
+                <a href="#" class="text-white hover:text-gray-200 transition duration-300">
                     <i class="fab fa-linkedin text-2xl"></i>
                 </a>
             </div>
 
             <!-- Contact Info -->
             <div class="text-center lg:text-right">
-                <p class="text-lg">Contact us: <span class="font-semibold">+62 123 456 789</span></p>
+                <p class="text-lg">Call us: <span class="font-semibold">+62 123 456 789</span></p>
                 <p class="text-lg">Email: <span class="font-semibold">support@rentkuy.com</span></p>
             </div>
         </div>
@@ -294,6 +304,5 @@
         </div>
     </div>
 </footer>
-
 
 </x-layouts.landing>

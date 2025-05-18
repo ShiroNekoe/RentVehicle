@@ -2,9 +2,6 @@
 
 @section('content')
 <div class="container mx-auto p-4">
-    <!-- Greeting -->
-    <h1 class="text-3xl font-bold mb-6 text-center text-blue-500">Halo, {{ $user->name }} 👋</h1>
-
 
 <!-- Filter Kendaraan -->
 <div class="mb-10">
