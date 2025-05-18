@@ -77,7 +77,7 @@
                     <div class="relative">
                         <!-- Input Nama Kendaraan -->
                         <input type="text" name="nama" id="nama" value="{{ request('nama') }}"
-                               class="input input-bordered w-full text-xl py-3 px-6 rounded-full focus:ring-[#316783] focus:bg-[#316783] focus:text-white"
+                               class="input input-bordered w-full text-xl py-3 px-6 rounded-fulliyaa"
                                placeholder="Search Vehicle">
                         <button type="submit" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-500">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="w-6 h-6">
