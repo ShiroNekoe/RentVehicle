@@ -3,16 +3,17 @@
     <!-- Navbar -->
     @include('layouts.navigation') 
 
-<!-- Hero Section -->
-<div class="hero min-h-[70vh] bg-cover bg-center text-white relative" style="background-image: url('{{ asset('img/bg-hero.png') }}')">
-    <div class="hero-content flex-col lg:flex-row-reverse z-10 px-6 w-full">
+<!-- home Section -->
+<section id="services" class="py-16 bg-white">
+ <div class="hero min-h-[70vh] bg-cover bg-center text-white relative" style="background-image: url('{{ asset('img/bg-hero.png') }}')">
+    <div class="hero-content flex-col lg:flex-row-reverse z-10 px-6 w-full space-y-6 lg:space-y-0 lg:space-x-6">
         <!-- Gambar Mobil -->
-        <div class="w-full lg:w-1/2 flex justify-end mt-20" data-aos="fade-left" data-aos-duration="1000">
-            <img src="{{ asset('img/hero-car.png') }}" class="max-w-2xl max-h-[70vh] object-contain rounded-lg drop-shadow-xl" alt="Hero Car" />
+        <div class="w-full lg:w-1/2 flex justify-end mt-20" data-aos="fade-right" data-aos-duration="1000">
+            <img src="{{ asset('img/hero-car.png') }}" class="max-w-full lg:max-w-[80%] max-h-[60vh] lg:max-h-[80vh] object-contain rounded-lg drop-shadow-xl" alt="Hero Car" />
         </div>
 
         <!-- Teks -->
-        <div class="w-full lg:w-1/2 text-left space-y-4" data-aos="fade-right" data-aos-duration="1000">
+        <div class="w-full lg:w-1/2 text-left space-y-4" data-aos="fade-left" data-aos-duration="1000">
             <h1 class="text-5xl font-bold leading-tight">
                 Ready to Ride? Rent Anytime, Anywhere with <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#81a2e2] to-[#9db4bf] font-extrabold">RentKuy!</span>
             </h1>
@@ -65,7 +66,7 @@
 </form>
 
 <!-- How it Works Section -->
-<div class="py-12 bg-white-100">
+ <section id="service" class="py-12 bg-white-100">
     <div class="max-w-7xl mx-auto text-center px-6">
         <h2 class="text-lg font-semibold text-gray-600 mb-2">How it Works</h2>
         <p class="text-3xl font-bold text-gray-900 mb-6">Getting Started with RentKuy! is Easy</p>
@@ -101,15 +102,16 @@
     </div>
 </div>
 
- <!-- Best Service Section -->
+<!-- Best Service Section -->
 <div class="py-12 bg-white">
-    <div class="max-w-7xl mx-auto flex items-center justify-between px-6">
-        <div class="w-full" data-aos="fade-right">
+    <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between px-6">
+        <!-- Gambar -->
+        <div class="w-full lg:w-1/2" data-aos="fade-right">
             <img src="{{ asset('img/vehicle2-image.png') }}" alt="Best Service" class="w-full h-auto object-cover">
         </div>
 
         <!-- Teks dan iklan layanan -->
-        <div class="w-full lg:w-2/3 pl-12" data-aos="fade-left">
+        <div class="w-full lg:w-1/2 pl-12 mt-6 lg:mt-0" data-aos="fade-left">
             <h2 class="text-3xl font-bold text-gray-900">Everything You Need for a Better Rental Experience</h2>
             <p class="text-lg text-gray-600">Best service to make your experience smooth and memorable.</p>
 
@@ -142,41 +144,56 @@
     </div>
 </div>
 
-    <!-- Kendaraan Populer -->
-    <section class="py-12 px-6">
-        <h2 class="text-3xl font-bold text-center mb-10">Kendaraan Populer</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            @foreach ([ 
-                ['brand' => 'Toyota', 'model' => 'Avanza', 'img' => 'img/car1.jpg', 'seat' => 7, 'type' => 'Mobil', 'transmisi' => 'Manual'],
-                ['brand' => 'Honda', 'model' => 'Beat', 'img' => 'img/motor1.jpg', 'seat' => 2, 'type' => 'Motor', 'transmisi' => 'Automatic'],
-                ['brand' => 'Daihatsu', 'model' => 'Sigra', 'img' => 'img/car2.jpg', 'seat' => 5, 'type' => 'Mobil', 'transmisi' => 'Automatic']
-            ] as $vehicle)
-                <div class="card bg-base-200 shadow-xl">
-                    <figure>
-                        <img src="{{ asset($vehicle['img']) }}" alt="{{ $vehicle['brand'] }}" class="w-full h-48 object-cover" />
-                    </figure>
-                    <div class="card-body">
-                        <h2 class="card-title">{{ $vehicle['brand'] }} - {{ $vehicle['model'] }}</h2>
-                        <p>{{ $vehicle['seat'] }} Seat | {{ $vehicle['transmisi'] }} | {{ $vehicle['type'] }}</p>
-                        <div class="card-actions justify-end">
-                            <a href="{{ route('login') }}" class="btn btn-primary btn-sm">Sewa Sekarang</a>
-                        </div>
+<!-- Kendaraan Populer -->
+<section id="top rated" class="py-12 px-6">
+    <h2 class="text-3xl font-bold text-center mb-10 "data-aos="fade-up" data-aos-delay="100">Your Next Adventure Starts with a Top Rated Deal</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        @foreach ([ 
+            ['brand' => 'Toyota', 'model' => 'Avanza', 'img' => 'img/contoh1.png', 'seat' => 7, 'type' => 'Mobil', 'transmisi' => 'Manual', 'price' => 'Rp 50.000/day', 'rating' => 4.5],
+            ['brand' => 'Honda', 'model' => 'Beat', 'img' => 'img/contoh2.jpg', 'seat' => 2, 'type' => 'Motor', 'transmisi' => 'Automatic', 'price' => 'Rp 25.000/day', 'rating' => 4.7],
+            ['brand' => 'Daihatsu', 'model' => 'Sigra', 'img' => 'img/contoh3.jpg', 'seat' => 5, 'type' => 'Mobil', 'transmisi' => 'Automatic', 'price' => 'Rp 45.000/day', 'rating' => 4.6]
+        ] as $vehicle)
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <figure>
+                    <img src="{{ asset($vehicle['img']) }}" alt="{{ $vehicle['brand'] }} - {{ $vehicle['model'] }}" class="w-full h-64 object-cover" />
+                </figure>
+                <div class="p-4">
+                    <h3 class="text-xl font-semibold text-gray-800">{{ $vehicle['brand'] }} - {{ $vehicle['model'] }}</h3>
+                    <p class="text-sm text-gray-600">{{ $vehicle['seat'] }} Seat | {{ $vehicle['transmisi'] }} | {{ $vehicle['type'] }}</p>
+                    <p class="text-lg text-gray-900 font-bold mt-2">{{ $vehicle['price'] }}</p>
+                    <div class="flex items-center mt-2">
+                        <span class="text-yellow-500">
+                            @for ($i = 0; $i < floor($vehicle['rating']); $i++)
+                                ★
+                            @endfor
+                            @if ($vehicle['rating'] - floor($vehicle['rating']) >= 0.5)
+                                ★
+                            @else
+                                ☆
+                            @endif
+                        </span>
+                        <span class="ml-2 text-sm text-gray-500">({{ $vehicle['rating'] }})</span>
+                    </div>
+                    <div class="mt-4 text-right">
+                        <a href="{{ route('login') }}" class="btn btn-warning text-white px-6 py-2 rounded-lg">Sewa Sekarang</a>
                     </div>
                 </div>
-            @endforeach
-        </div>
-    </section>
+            </div>
+        @endforeach
+    </div>
+</section>
+
 <!-- Best Experience Section -->
-<div class="py-12 bg-white">
+  <section id="experience" class="py-12 bg-white">
     <div class="max-w-7xl mx-auto text-center px-6">
-        <h2 class="text-3xl font-bold text-gray-900 mb-8">We Are Give You The Best Customer Experience</h2>
-        <p class="text-lg text-gray-600 mb-12">Best service to make your experience smooth and memorable.</p>
+        <h2 class="text-3xl font-bold text-gray-900 mb-8" data-aos="fade-up">We Are Give You The Best Customer Experience</h2>
+        <p class="text-lg text-gray-600 mb-6" data-aos="fade-up" data-aos-delay="100">Best service to make your experience smooth and memorable.</p>
 
         <!-- Flex container untuk ikon dan gambar -->
-        <div class="flex justify-center items-center gap-16 relative">
+        <div class="flex flex-col lg:flex-row justify-center items-center gap-16 relative">
 
             <!-- Left Icons -->
-            <div class="flex flex-col items-center space-y-6 w-1/3">
+            <div class="flex flex-col items-center space-y-6 w-full lg:w-1/3" data-aos="fade-right">
                 <div class="service-item left-service relative flex flex-col items-center">
                     <img src="{{ asset('img/deal-icon.png') }}" alt="Roadside Assistance 24/7" class="w-12 h-12 mb-4">
                     <p class="text-lg text-gray-800">Roadside Assistance 24/7</p>
@@ -197,12 +214,12 @@
             </div>
 
             <!-- Gambar Mobil -->
-            <div class="w-full lg:w-1/3 mt-12">
-                <img src="{{ asset('img/vehicle3-image.png') }}" alt="Best Service" class="w-full h-auto object-cover mx-auto">
+            <div class="w-full lg:w-1/3 mt-12 lg:mt-0" data-aos="fade-up" data-aos-delay="200">
+            <img src="{{ asset('img/vehicle3-image.png') }}" alt="Best Service" class="w-full max-w-sm lg:max-w-[70%] h-auto object-contain mx-auto">
             </div>
 
             <!-- Right Icons -->
-            <div class="flex flex-col items-center space-y-6 w-1/3">
+            <div class="flex flex-col items-center space-y-6 w-full lg:w-1/3" data-aos="fade-left">
                 <div class="service-item right-service relative flex flex-col items-center">
                     <img src="{{ asset('img/deal-icon.png') }}" alt="Easier Rent On Your Budget" class="w-12 h-12 mb-4">
                     <p class="text-lg text-gray-800">Easier Rent On Your Budget</p>
@@ -226,18 +243,57 @@
     </div>
 </div>
 
+<!-- Footer Section -->
+<footer class="bg-gradient-to-r from-[#FFA629] to-[#316783] py-12 text-white">
+    <div class="max-w-7xl mx-auto px-6">
+        <!-- Logo dan Informasi Umum -->
+        <div class="flex flex-col lg:flex-row justify-between items-center mb-8">
+            <!-- Logo -->
+            <div class="text-center lg:text-left">
+                <img src="{{ asset('img/logo.png') }}" alt="RentKuy Logo" class="h-12 w-auto mb-4">
+                <p class="text-lg">Your trusted partner for car and motorbike rentals</p>
+            </div>
 
-    <!-- Footer -->
-    <footer class="footer p-10 bg-base-200 text-base-content">
-        <aside>
-            <h3 class="text-xl font-bold">RentalKendaraan</h3>
-            <p>Kami hadir untuk kebutuhan mobilitasmu<br/>Cepat, aman, terpercaya.</p>
-        </aside>
-        <nav>
-            <h6 class="footer-title">Navigasi</h6> 
-            <a class="link link-hover">Tentang Kami</a>
-            <a class="link link-hover">Kontak</a>
-            <a class="link link-hover">FAQ</a>
-        </nav>
-    </footer>
+            <!-- Links -->
+            <div class="flex flex-col lg:flex-row gap-6 mt-6 lg:mt-0">
+                <a href="#home" class="text-white hover:text-gray-200">Home</a>
+                <a href="#services" class="text-white hover:text-gray-200">Services</a>
+                <a href="#about" class="text-white hover:text-gray-200">About Us</a>
+                <a href="#contact" class="text-white hover:text-gray-200">Contact</a>
+            </div>
+        </div>
+
+        <!-- Social Media and Contact -->
+        <div class="flex flex-col lg:flex-row justify-between items-center mb-8">
+            <!-- Social Media Icons -->
+            <div class="flex gap-6 mb-4 lg:mb-0">
+                <a href="#" class="text-white hover:text-gray-200">
+                    <i class="fab fa-facebook-square text-2xl"></i>
+                </a>
+                <a href="#" class="text-white hover:text-gray-200">
+                    <i class="fab fa-twitter-square text-2xl"></i>
+                </a>
+                <a href="#" class="text-white hover:text-gray-200">
+                    <i class="fab fa-instagram-square text-2xl"></i>
+                </a>
+                <a href="#" class="text-white hover:text-gray-200">
+                    <i class="fab fa-linkedin text-2xl"></i>
+                </a>
+            </div>
+
+            <!-- Contact Info -->
+            <div class="text-center lg:text-right">
+                <p class="text-lg">Contact us: <span class="font-semibold">+62 123 456 789</span></p>
+                <p class="text-lg">Email: <span class="font-semibold">support@rentkuy.com</span></p>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="text-center mt-8">
+            <p class="text-sm">&copy; 2025 RentKuy. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+
 </x-layouts.landing>
