@@ -9,54 +9,54 @@
                 </a>
             </div>
 
-            <!-- Menu Area (kanan) -->
-            <div class="hidden sm:flex sm:items-center sm:space-x-8">
-                @guest
-                    <!-- Menu untuk yang belum login -->
-                    <a href="#" class="text-white">Home</a>
-                    <a href="#service" class="text-white">Service</a>
-                    <a href="#top-rated" class="text-white">Top Rated</a>
-                    <a href="#experience" class="text-white">Experience</a>
-                    <a href="{{ route('login') }}" class="btn btn-warning text-white">Login</a>
-                @else
-                    <!-- Menu untuk yang sudah login -->
-                    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                        <x-nav-link :href="route('user.dashboard')" :active="request()->routeIs('user.dashboard')">
-                            {{ __('Dashboard') }}
-                        </x-nav-link>
-                        <x-nav-link :href="route('user.history')" :active="request()->routeIs('user.history')">
-                            {{ __('History') }}
-                        </x-nav-link>
-                    </div>
+<!-- Menu Area (kanan) -->
+<div class="hidden sm:flex sm:items-center sm:space-x-8">
+    @guest
+        <!-- Menu untuk yang belum login -->
+        <a href="#" class="text-white">Home</a>
+        <a href="#service" class="text-white">Service</a>
+        <a href="#top-rated" class="text-white">Top Rated</a>
+        <a href="#experience" class="text-white">Experience</a>
+        <a href="{{ route('login') }}" class="btn btn-warning text-white">Login</a>
+    @else
+        <!-- Menu untuk yang sudah login (warna tetap sama dengan yang belum login) -->
+        <div class="space-x-8 sm:-my-px sm:ms-10 sm:flex">
+            <x-nav-link :href="route('user.dashboard')" :active="request()->routeIs('user.dashboard')" class="text-white">
+                {{ __('Dashboard') }}
+            </x-nav-link>
+            <x-nav-link :href="route('user.history')" :active="request()->routeIs('user.history')" class="text-white">
+                {{ __('History') }}
+            </x-nav-link>
+        </div>
 
-                    <!-- Dropdown -->
-                    <x-dropdown align="right" width="48">
-                        <x-slot name="trigger">
-                            <button class="inline-flex items-center px-3 py-2 text-white">
-                                {{ Auth::user()->name }}
-                                <svg class="ml-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 20 20">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-                                </svg>
-                            </button>
-                        </x-slot>
+        <!-- Dropdown -->
+        <x-dropdown align="right" width="48">
+            <x-slot name="trigger">
+                <!-- Ubah warna latar belakang untuk tombol dropdown -->
+                <button class="inline-flex items-center px-3 py-2 btn btn-warning text-white">
+                  Hai, {{ Auth::user()->name }} !
+                    <svg class="ml-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 20 20">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+                    </svg>
+                </button>
+            </x-slot>
 
-                        <x-slot name="content">
-                            <x-dropdown-link :href="route('profile.edit')">
-                                {{ __('Profile') }}
-                            </x-dropdown-link>
+            <x-slot name="content">
+                <x-dropdown-link :href="route('profile.edit')" class="text-warning">
+                    {{ __('Profile') }}
+                </x-dropdown-link>
 
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <x-dropdown-link :href="route('logout')"
-                                                 onclick="event.preventDefault(); this.closest('form').submit();">
-                                    {{ __('Log Out') }}
-                                </x-dropdown-link>
-                            </form>
-                        </x-slot>
-                    </x-dropdown>
-                @endguest
-            </div>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();" class="text-warning">
+                        {{ __('Log Out') }}
+                    </x-dropdown-link>
+                </form>
+            </x-slot>
+        </x-dropdown>
+    @endguest
+</div>
 
             <!-- Hamburger Menu for Mobile -->
             <div class="-me-2 flex items-center sm:hidden">

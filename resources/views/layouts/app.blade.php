@@ -19,7 +19,7 @@
 </head>
 
 <body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100">
+    <div class="min-h-screen bg-white shadow">
         @include('layouts.navigation')
 
         <!-- Page Heading -->
