@@ -122,7 +122,7 @@ class BookingForm extends Component
             'identity' => $this->identity->store('identities', 'public'),
             'booking_price' => $this->total_price,
             'payment_method' => 'midtrans',
-            'booking_status' => 'pending',
+            'booking_status' => 'ongoing',
             'pickup_location' => $this->pickup_location,
             'booking_date' => now(),
         ]);

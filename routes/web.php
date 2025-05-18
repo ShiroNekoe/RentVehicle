@@ -10,6 +10,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\MidtransController;
 use App\Models\Vehicle;
 use App\Models\Booking;
 use App\Http\Livewire\BookingExtend;
@@ -79,6 +80,8 @@ Route::put('/booking/{booking}/cancel', [BookingController::class, 'cancel'])->n
 
 Route::get('/booking/{id}/invoice', [BookingController::class, 'invoice'])->name('invoice.booking');
 Route::get('/booking/{vehicleId}', BookingForm::class)->middleware('auth'); 
+Route::post('/midtrans/callback', [MidtransController::class, 'callback']);
+
 
 // Booking extend menggunakan Livewire component (tidak pakai closure)
 Route::get('/booking/{booking}/extend', BookingExtend::class)->name('booking.extend');
