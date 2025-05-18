@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Booking;
 use Midtrans\Config;
 use Midtrans\Snap;
+use Midtrans\Notification;
 
 class PaymentController extends Controller
 {
@@ -76,17 +77,70 @@ class PaymentController extends Controller
     }
 
     // Handle callback pembayaran dari Midtrans (notifikasi pembayaran)
+
+
+
     public function handleCallback(Request $request)
     {
-        // Implementasi handle callback Midtrans
-        // Update status pembayaran dan booking sesuai notification
+        // Set konfigurasi Midtrans
+        Config::$serverKey = config('midtrans.server_key');
+        Config::$isProduction = config('midtrans.is_production');
+        Config::$isSanitized = true;
+        Config::$is3ds = true;
 
-        // Contoh singkat:
-        $notification = $request->all();
-        // Cek status dan update database...
+        // Ambil notification dari Midtrans (otomatis verifikasi signature)
+        $notification = new Notification();
+
+        $transactionStatus = $notification->transaction_status;
+        $paymentType = $notification->payment_type;
+        $orderId = $notification->order_id;
+        $fraudStatus = $notification->fraud_status;
+
+        // Cari booking berdasarkan order_id Midtrans yang sudah tersimpan di database
+        $booking = Booking::where('midtrans_order_id', $orderId)->first();
+
+        if (!$booking) {
+            return response()->json(['message' => 'Booking tidak ditemukan'], 404);
+        }
+
+        // Update status booking & pembayaran berdasarkan status transaksi Midtrans
+        if ($transactionStatus == 'capture') {
+            // Jika pembayaran kartu kredit dan statusnya challenge
+            if ($fraudStatus == 'challenge') {
+                $booking->update([
+                    'payment_status' => 'pending',
+                    'booking_status' => 'ongoing',
+                ]);
+            } else {
+                // Pembayaran berhasil
+                $booking->update([
+                    'payment_status' => 'paid',
+                    'booking_status' => 'ongoing',
+                ]);
+            }
+        } elseif ($transactionStatus == 'settlement') {
+            // Pembayaran berhasil via bank transfer, e-wallet, dll
+            $booking->update([
+                'payment_status' => 'paid',
+                'booking_status' => 'ongoing',
+            ]);
+        } elseif ($transactionStatus == 'pending') {
+            // Pembayaran belum selesai
+            $booking->update([
+                'payment_status' => 'pending',
+                'booking_status' => 'ongoing',
+            ]);
+        } elseif (in_array($transactionStatus, ['deny', 'cancel', 'expire'])) {
+            // Pembayaran gagal atau dibatalkan
+            $booking->update([
+                'payment_status' => 'failed',
+                'booking_status' => 'cancelled',
+            ]);
+        }
 
         return response()->json(['status' => 'ok']);
     }
+
 
     // Halaman sukses pembayaran
     public function success($order_id)
