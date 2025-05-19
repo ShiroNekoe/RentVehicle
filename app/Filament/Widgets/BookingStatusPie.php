@@ -21,7 +21,7 @@ class BookingStatusPie extends ChartWidget
                 [
                     'label' => 'Status Booking',
                     'data' => $data->values()->toArray(),
-                    'backgroundColor' => ['#3b82f6', '#10b981', '#ef4444'],
+                    'backgroundColor' => ['#10b981', '#ef4444','#3b82f6' ]
                 ],
             ],
             'labels' => $data->keys()->map(fn ($key) => ucfirst($key))->toArray(),
