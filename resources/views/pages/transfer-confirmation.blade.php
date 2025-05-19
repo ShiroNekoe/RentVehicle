@@ -38,5 +38,6 @@
             Konfirmasi Transfer
         </button>
     </form>
+      <a href="{{ route('user.history') }}" class="text-indigo-600 hover:underline">⬅️ Kembali</a>
 </div>
 @endsection

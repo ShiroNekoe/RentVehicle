@@ -87,7 +87,7 @@ Route::get('/booking/{vehicleId}', BookingForm::class)->middleware('auth');
 Route::get('/booking/{booking}/extend', BookingExtend::class)->name('booking.extend');
 
 Route::get('/transfer-confirmation/{booking_id}', [BookingController::class, 'transferConfirmation'])->name('pages.transfer-confirmation');
-Route::get('/cod-invoice/{booking_id}', [BookingController::class, 'codInvoice'])->name('pages.cod-invoice');
+Route::get('/cod-invoice/{booking_id}', [BookingController::class, 'invoice'])->name('pages.cod-invoice');
 
 Route::get('/transfer/{booking}', [BookingController::class, 'showTransferForm'])->name('transfer.form');
 Route::post('/transfer/{booking}', [BookingController::class, 'submitTransfer'])->name('transfer.submit');
