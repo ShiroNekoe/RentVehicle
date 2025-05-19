@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\BookingResource\Pages;
 use App\Filament\Resources\BookingResource\RelationManagers;
 use App\Models\Booking;
+use App\Models\Payment;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -29,6 +30,7 @@ class BookingResource extends Resource
     {
         return $form
             ->schema([
+
                 Select::make('id_user')
                 ->label('User')
                 ->relationship('user', 'name')
@@ -92,6 +94,7 @@ class BookingResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('id')->label('Booking ID')->searchable()->sortable(),
                 TextColumn::make('user.name')->label('User')->searchable()->sortable(),
                 TextColumn::make('vehicle.vehicle_name')->label('Vehicle')->searchable()->sortable(),
                 TextColumn::make('driver.name')->label('Driver')->sortable()->toggleable(),
@@ -118,6 +121,7 @@ class BookingResource extends Resource
                 TextColumn::make('booking_date')->date()->sortable(),
             ])
             ->filters([
+         
                 Tables\Filters\SelectFilter::make('payment_status')->options([
                     'pending' => 'Pending',
                     'paid' => 'Paid',
