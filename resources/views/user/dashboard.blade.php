@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+<h1 class="text-3xl font-bold text-center text-gray-800 my-10">Select the Wheels for Your Journey</h1>
+
 <div class="container mx-auto p-4" x-data="{ open: false }" x-init="open = false">
     <!-- Filter Kendaraan -->
     <div class="mb-10">
@@ -8,7 +10,7 @@
             {{-- Nama Kendaraan --}}
             <div class="flex items-center space-x-4">
                 <div class="flex-1">
-                    <input type="text" name="nama" id="nama" value="{{ request('nama') }}" class="input input-bordered w-full" placeholder="Contoh: Avanza, Vario...">
+                    <input type="text" name="nama" id="nama" value="{{ request('nama') }}" class="input input-bordered w-full" placeholder="Vehicle">
                 </div>
 
                 <!-- Tombol Cari dan Reset -->

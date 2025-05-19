@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
+<h1 class="text-3xl font-bold text-center text-gray-800 my-10">Your Rental Journey, Recapped</h1>
 <div class="container mx-auto p-6 max-w-7xl">
     <div class="space-y-10">
         <!-- Filter Section -->
         <form method="GET" action="{{ route('user.history') }}" class="bg-white p-6 rounded-xl shadow-md border mb-6">
-            <h2 class="text-xl font-semibold mb-4 text-gray-800">Your Rental Journey, Recapped</h2>
             <div class="flex items-center space-x-4">
                 <!-- Filter Booking Status -->
                 <div class="flex-1">
@@ -27,7 +27,6 @@
 
         <!-- Riwayat Booking -->
         <div>
-            <h2 class="text-2xl font-bold mb-4 text-primary">📖 Riwayat Booking Anda</h2>
             @if ($bookings->count())
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     @foreach ($bookings as $booking)
@@ -64,7 +63,7 @@
                     @endforeach
                 </div>
             @else
-                <div class="text-center text-gray-500 mt-8">🔎 No results found based on the filter.</div>
+                <div class="text-center text-gray-500 mt-8">No results found based on the filter.</div>
             @endif
         </div>
     </div>
