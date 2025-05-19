@@ -10,8 +10,10 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\{Select, DatePicker, TextInput};
 use Filament\Tables\Columns\{TextColumn, BadgeColumn};
 
@@ -47,6 +49,14 @@ class PaymentResource extends Resource
                     ->numeric()
                     ->required(),
 
+                Forms\Components\Card::make([
+                FileUpload::make('proof')
+                    ->image()
+                    ->directory('proofs')
+                    ->required(),
+                     ]),
+
+
                 DatePicker::make('payment_date')->required(),
             ]);
     }
@@ -65,6 +75,10 @@ class PaymentResource extends Resource
                     ])
                     ->sortable(),
                 TextColumn::make('payment_price')->money('IDR')->sortable(),
+                TextColumn::make('transfer_to'),
+            Tables\Columns\ImageColumn::make('proof')
+                ->disk('public')
+                ->label('Bukti Transfer'),
                 TextColumn::make('payment_date')->date()->sortable(),
             ])
             ->filters([

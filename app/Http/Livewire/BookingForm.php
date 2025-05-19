@@ -131,7 +131,7 @@ class BookingForm extends Component
     ]);
 
      if ($this->payment_method === 'transfer') {
-    return redirect()->to(route('pages.transfer', ['booking_id' => $booking->id]));
+    return redirect()->to(route('pages.transfer-confirmation', ['booking_id' => $booking->id]));
     }
 
     if ($this->payment_method === 'cod') {

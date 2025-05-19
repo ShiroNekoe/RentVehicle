@@ -132,7 +132,7 @@ public function transferConfirmation($booking_id)
 
 public function showTransferForm(Booking $booking)
 {
-    return view('pages.transfer', compact('booking'));
+    return view('pages.transfer-confirmation', compact('booking'));
 }
 
 public function submitTransfer(Request $request, Booking $booking)
