@@ -1,57 +1,72 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="space-y-10">
-    <!-- Filter Section -->
-    <form method="GET" action="{{ route('user.history') }}" class="bg-white p-6 rounded-xl shadow-md border mb-6">
-        <h2 class="text-xl font-semibold mb-4 text-gray-800">🔍 Filter Riwayat Booking</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <!-- Filter Booking Status -->
-            <div>
-                <label for="booking_status" class="block text-sm font-medium text-gray-700 mb-1">Status Booking</label>
-                <select name="booking_status" id="booking_status" class="w-full border rounded px-3 py-2 text-sm">
-                    <option value="">Semua</option>
-                    <option value="ongoing" {{ request('booking_status') == 'pending' ? 'selected' : '' }}>Pending</option>
-                    <option value="completed" {{ request('booking_status') == 'completed' ? 'selected' : '' }}>Selesai</option>
-                    <option value="cancelled" {{ request('booking_status') == 'cancelled' ? 'selected' : '' }}>Dibatalkan</option>
-                </select>
-            </div>
+<div class="container mx-auto p-6 max-w-7xl">
+    <div class="space-y-10">
+        <!-- Filter Section -->
+        <form method="GET" action="{{ route('user.history') }}" class="bg-white p-6 rounded-xl shadow-md border mb-6">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">Your Rental Journey, Recapped</h2>
+            <div class="flex items-center space-x-4">
+                <!-- Filter Booking Status -->
+                <div class="flex-1">
+                    <select name="booking_status" id="booking_status" class="w-full border rounded-lg px-4 py-2 text-sm">
+                        <option value="">Semua Status</option>
+                        <option value="ongoing" {{ request('booking_status') == 'ongoing' ? 'selected' : '' }}>Pending</option>
+                        <option value="completed" {{ request('booking_status') == 'completed' ? 'selected' : '' }}>Completed</option>
+                        <option value="cancelled" {{ request('booking_status') == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                    </select>
+                </div>
 
-            <!-- Submit Button -->
-            <div class="flex items-end">
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition w-full">Filter</button>
+                <!-- Tombol Cari dan Reset -->
+                <div class="flex space-x-2">
+                    <button type="submit" class="btn btn-warning text-white w-24">Cari</button>
+                    <a href="{{ route('user.history') }}" class="btn btn-outline w-24">Reset</a>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
 
-    <!-- Riwayat Booking -->
-    <div>
-        <h2 class="text-2xl font-bold mb-4 text-primary">📖 Riwayat Booking Anda</h2>
-        @if ($bookings->count())
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                @foreach ($bookings as $booking)
-                    <div class="bg-white shadow-md rounded-xl p-5 border hover:shadow-lg transition duration-300">
-                        <div class="flex items-start">
-                            <div class="text-3xl mr-3">🚗</div>
-                            <div class="flex-grow">
+        <!-- Riwayat Booking -->
+        <div>
+            <h2 class="text-2xl font-bold mb-4 text-primary">📖 Riwayat Booking Anda</h2>
+            @if ($bookings->count())
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    @foreach ($bookings as $booking)
+                        <div class="bg-white shadow-md rounded-xl p-5 border hover:shadow-xl transition duration-300 hover:scale-105">
+                            <div class="relative">
+                                <!-- Vehicle Image -->
+                                @php
+                                    $firstImage = $booking->vehicle->galleries->first();
+                                @endphp
+                                @if ($firstImage)
+                                    <img src="{{ asset('storage/vehicles/' . $firstImage->image_path) }}" alt="{{ $booking->vehicle->vehicle_name }}" class="w-full h-40 object-cover rounded-t-xl">
+                                @else
+                                    <img src="{{ asset('images/default-vehicle.jpg') }}" alt="No image available" class="w-full h-40 object-cover rounded-t-xl">
+                                @endif
+
+                                <div class="absolute top-2 left-2 bg-white text-blue-500 px-3 py-1 text-xs rounded-md">
+                                    {{ ucfirst($booking->booking_status) }}
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <!-- Vehicle Name -->
                                 <h3 class="text-lg font-semibold text-gray-700">{{ $booking->vehicle->vehicle_name }}</h3>
 
-                                <p class="text-sm text-gray-500">
-                                    Status Booking:
-                                    <span class="capitalize font-medium text-blue-600">{{ $booking->booking_status }}</span>
-                                </p>
+                                <!-- Booking Date -->
+                                <p class="text-sm text-gray-500 mb-1">Booking Date: {{ $booking->created_at->format('d M Y') }}</p>
 
-                                <p class="text-sm text-gray-400 mb-1">Tanggal Booking: {{ $booking->created_at->format('d M Y') }}</p>
+                                <!-- Price -->
+                                <p class="text-sm text-gray-600 font-semibold mb-2">Rp {{ number_format($booking->vehicle->price, 0, ',', '.') }} / day</p>
 
-                                <a href="{{ route('user.booking_detail', $booking->id) }}" class="inline-block mt-3 text-sm text-blue-500 hover:underline font-medium">🔍 Lihat Detail</a>
+                                <!-- View Detail Button -->
+                                <a href="{{ route('user.booking_detail', $booking->id) }}" class="inline-block mt-3 text-sm text-blue-500 hover:underline font-medium">🔍 View Details</a>
                             </div>
                         </div>
-                    </div>
-                @endforeach
-            </div>
-        @else
-            <div class="text-center text-gray-500 mt-8">🔎 Tidak ditemukan hasil yang sesuai dengan filter.</div>
-        @endif
+                    @endforeach
+                </div>
+            @else
+                <div class="text-center text-gray-500 mt-8">🔎 No results found based on the filter.</div>
+            @endif
+        </div>
     </div>
 </div>
 @endsection
