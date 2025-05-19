@@ -80,23 +80,19 @@ Route::put('/booking/{booking}/cancel', [BookingController::class, 'cancel'])->n
 
 Route::get('/booking/{id}/invoice', [BookingController::class, 'invoice'])->name('invoice.booking');
 Route::get('/booking/{vehicleId}', BookingForm::class)->middleware('auth'); 
-Route::post('/midtrans/callback', [MidtransController::class, 'callback']);
+
 
 
 // Booking extend menggunakan Livewire component (tidak pakai closure)
 Route::get('/booking/{booking}/extend', BookingExtend::class)->name('booking.extend');
 
-// Callback Midtrans (tidak perlu middleware)
-Route::post('/payment/callback', [PaymentController::class, 'handleCallback'])->name('payment.callback');
-Route::post('/midtrans/callback', [PaymentController::class, 'handleCallback']); // duplikat untuk jaga-jaga
-Route::get('/booking/success', fn() => view('booking.success'))->name('booking.success');
-Route::get('/booking/pending', fn() => view('booking.pending'))->name('booking.pending');
-Route::get('/booking/failed', fn() => view('booking.failed'))->name('booking.failed');
+Route::get('/transfer-confirmation/{booking_id}', [BookingController::class, 'transferConfirmation'])->name('pages.transfer-confirmation');
+Route::get('/cod-invoice/{booking_id}', [BookingController::class, 'codInvoice'])->name('pages.cod-invoice');
+
+Route::get('/transfer/{booking}', [BookingController::class, 'showTransferForm'])->name('transfer.form');
+Route::post('/transfer/{booking}', [BookingController::class, 'submitTransfer'])->name('transfer.submit');
 
 
-// Halaman sukses/gagal pembayaran
-Route::get('/payment/success/{order_id}', [PaymentController::class, 'success'])->name('payment.success');
-Route::get('/payment/failed/{order_id}', [PaymentController::class, 'failed'])->name('payment.failed');
 
 // Redirect halaman status booking (view statis)
 Route::view('/booking/success', 'booking.success');

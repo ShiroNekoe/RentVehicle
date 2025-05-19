@@ -31,6 +31,8 @@ class BookingForm extends Component
     public $total_price = 0;
     public $days = 0;
     public $isVehicleAvailable = true;
+    public $payment_method;
+
 
     protected $rules = [
         'start_date' => 'required|date|after_or_equal:today',
@@ -40,6 +42,8 @@ class BookingForm extends Component
         'nik_identity' => 'required|numeric|digits:16',
         'identity' => 'required|file|mimes:jpg,png,pdf|max:10240',
         'pickup_location' => 'nullable|string|max:255',
+          'payment_method' => 'required|in:transfer,cod',
+        
     ];
 
     public function mount($vehicleId)
@@ -93,69 +97,51 @@ class BookingForm extends Component
         $this->isVehicleAvailable = !$existingBooking;
     }
 
-    public function submitBooking()
-    {
-        $this->validate();
-        $this->calculateDaysAndPrice();
-        $this->checkVehicleBookingAvailability();
+  public function submitBooking()
+{
+    $this->validate();
+    $this->calculateDaysAndPrice();
+    $this->checkVehicleBookingAvailability();
 
-        if (! $this->isVehicleAvailable) {
-            session()->flash('error', 'Kendaraan sudah dibooking di tanggal tersebut.');
-            return;
-        }
-
-        if ($this->total_price < 1) {
-            session()->flash('error', 'Total harga tidak valid.');
-            return;
-        }
-
-        // Simpan booking ke DB
-        $booking = Booking::create([
-            'id_user' => Auth::id(),
-            'id_vehicle' => $this->vehicle->id,
-            'id_driver' => $this->id_driver,
-            'start_date' => $this->start_date,
-            'end_date' => $this->end_date,
-            'phone_person' => $this->phone_person,
-            'phone_security' => $this->phone_security,
-            'nik_identity' => $this->nik_identity,
-            'identity' => $this->identity->store('identities', 'public'),
-            'booking_price' => $this->total_price,
-            'payment_method' => 'midtrans',
-            'booking_status' => 'ongoing',
-            'pickup_location' => $this->pickup_location,
-            'booking_date' => now(),
-        ]);
-
-        // MIDTRANS
-        Config::$serverKey = config('midtrans.server_key');
-        Config::$isProduction = false;
-        Config::$isSanitized = true;
-        Config::$is3ds = true;
-
-        $orderId = 'BOOK-' . $booking->id . '-' . time();
-
-        $params = [
-            'transaction_details' => [
-                'order_id' => $orderId,
-                'gross_amount' => (int) $this->total_price,
-            ],
-            'customer_details' => [
-                'first_name' => Auth::user()->name,
-                'email' => Auth::user()->email,
-                'phone' => $this->phone_person,
-            ],
-        ];
-
-        $snapToken = Snap::getSnapToken($params);
-
-        // Trigger ke browser untuk buka popup
-        $this->dispatchBrowserEvent('midtrans-payment', [
-            'snapToken' => $snapToken
-        ]);
-        session()->flash('snap_token', $snapToken);
-
+    if (! $this->isVehicleAvailable) {
+        session()->flash('error', 'Kendaraan sudah dibooking di tanggal tersebut.');
+        return;
     }
+
+    if ($this->total_price < 1) {
+        session()->flash('error', 'Total harga tidak valid.');
+        return;
+    }
+
+    // Simpan booking ke DB
+    $booking = Booking::create([
+        'id_user' => Auth::id(),
+        'id_vehicle' => $this->vehicle->id,
+        'id_driver' => $this->id_driver,
+        'start_date' => $this->start_date,
+        'end_date' => $this->end_date,
+        'phone_person' => $this->phone_person,
+        'phone_security' => $this->phone_security,
+        'nik_identity' => $this->nik_identity,
+        'identity' => $this->identity->store('identities', 'public'),
+        'booking_price' => $this->total_price,
+        'booking_status' => 'ongoing',
+        'pickup_location' => $this->pickup_location,
+        'booking_date' => now(),
+    ]);
+
+     if ($this->payment_method === 'transfer') {
+    return redirect()->to(route('pages.transfer', ['booking_id' => $booking->id]));
+    }
+
+    if ($this->payment_method === 'cod') {
+        return redirect()->to(route('pages.cod-invoice', ['booking_id' => $booking->id]));
+    }
+
+
+    session()->flash('error', 'Metode pembayaran tidak dikenali.');
+}
+
 
     public function render()
     {

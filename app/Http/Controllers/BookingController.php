@@ -8,6 +8,9 @@ use App\Models\Booking;
 use App\Models\Vehicle;
 use App\Models\Review;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Payment;
 
 class BookingController extends Controller
 {
@@ -115,6 +118,47 @@ public function invoice($id)
 
     return view('invoice.booking', compact('booking'));
 }
+
+
+public function transferConfirmation($booking_id)
+{
+    $booking = Booking::with(['user', 'vehicle'])->findOrFail($booking_id);
+    
+    // Ubah booking_date ke Carbon instance jika belum
+    $booking->booking_date = Carbon::parse($booking->booking_date);
+
+    return view('pages.transfer-confirmation', compact('booking'));
+}
+
+public function showTransferForm(Booking $booking)
+{
+    return view('pages.transfer', compact('booking'));
+}
+
+public function submitTransfer(Request $request, Booking $booking)
+{
+    $request->validate([
+        'transfer_to' => 'required|string|max:255',
+        'proof' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+    ]);
+
+    $path = $request->file('proof')->store('proofs', 'public');
+
+    // Update atau buat payment
+    $payment = Payment::updateOrCreate(
+        ['id_booking' => $booking->id],
+        [
+            'payment_status' => 'pending',
+            'payment_price' => $booking->booking_price,
+            'payment_date' => now(),
+            'transfer_to' => $request->transfer_to,
+            'proof' => $path,
+        ]
+    );
+
+    return redirect()->route('transfer.form', $booking->id)->with('success', 'Bukti transfer berhasil dikirim!');
+}
+
 
 
 }
