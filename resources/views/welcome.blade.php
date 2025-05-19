@@ -4,13 +4,12 @@
     @include('layouts.navigation') 
 
 <!-- home Section -->
-<section id="services">
- <div class="hero min-h-[70vh] bg-cover bg-center text-white relative" style="background-image: url('{{ asset('img/bg-hero.png') }}')">
-    <div class="hero-content flex-col lg:flex-row-reverse z-10 px-6 w-full space-y-6 lg:space-y-0 lg:space-x-6">
+<div class="hero min-h-[70vh] bg-cover bg-center relative" style="color: #316783;">
+        <div class="hero-content flex-col lg:flex-row-reverse z-10 px-6 w-full space-y-6 lg:space-y-0 lg:space-x-6">
         <!-- Gambar Mobil -->
-        <div class="w-full lg:w-1/2 flex justify-end mt-20" data-aos="fade-right" data-aos-duration="1000">
-            <img src="{{ asset('img/hero-car.png') }}" class="max-w-full lg:max-w-[80%] max-h-[60vh] lg:max-h-[80vh] object-contain rounded-lg drop-shadow-xl" alt="Hero Car" />
-        </div>
+      <div class="w-full lg:w-1/2 flex justify-center lg:justify-end mt-12 lg:mt-0" data-aos="fade-right" data-aos-duration="1000">
+        <img src="{{ asset('img/car.jpg') }}" class="max-w-full lg:max-w-[90%] max-h-[70vh] object-contain rounded-lg drop-shadow-xl" alt="Hero Car" />
+      </div>
 
         <!-- Teks -->
         <div class="w-full lg:w-1/2 text-left space-y-4" data-aos="fade-left" data-aos-duration="1000">
