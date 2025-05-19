@@ -95,45 +95,62 @@
                     <h3 class="text-xl text-gray-800 mt-4">Rekomendasi Kendaraan:</h3>
 
                     <!-- Rekomendasi Kendaraan Populer -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-                        @foreach($recommendedVehicles as $vehicle)  <!-- Assuming $recommendedVehicles contains the vehicles for recommendation -->
-                            <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl">
-                                @php
-                                    $firstImage = $vehicle->galleries->first();
-                                @endphp
+                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+                     @foreach($popularVehicles as $vehicle )
 
-                                @if ($firstImage)
-                                    <img src="{{ asset('storage/vehicles/' . $firstImage->image_path) }}" class="object-cover h-40 w-full">
-                                @else
-                                    <img src="{{ asset('images/default-vehicle.jpg') }}" class="object-cover h-40 w-full" alt="Tidak ada gambar">
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl">
+                    @php
+                        $firstImage = $vehicle->galleries->first();
+                        // Hitung rata-rata rating dari semua review kendaraan ini
+                        $totalRating = 0;
+                        $totalReviews = 0;
+                        foreach ($vehicle->bookings as $booking) {
+                            if ($booking->review) {
+                                $totalRating += (int) $booking->review->rating;
+                                $totalReviews++;
+                            }
+                        }
+                        $averageRating = $totalReviews > 0 ? round($totalRating / $totalReviews, 1) : 0;
+                    @endphp
+
+                    @if ($firstImage)
+                        <img src="{{ asset('storage/vehicles/' . $firstImage->image_path) }}" class="object-cover h-40 w-full">
+                    @else
+                        <img src="{{ asset('images/default-vehicle.jpg') }}" class="object-cover h-40 w-full" alt="Tidak ada gambar">
+                    @endif
+
+                    <div class="p-4">
+                        <h3 class="text-sm font-semibold text-gray-600">{{ $vehicle->vehicle_brand }} - {{ $vehicle->vehicle_name }}</h3>
+                        <p class="text-sm text-gray-600">
+                            {{ $vehicle->seat }} Seat | {{ ucfirst($vehicle->vehicle_transmission) }} | {{ ucfirst($vehicle->vehicle_type) }}
+                        </p>
+                        <p class="text-lg text-gray-900 font-bold mt-2">Rp{{ number_format($vehicle->price, 0, ',', '.') }} /hari</p>
+
+                        <div class="flex items-center mt-2">
+                            <span class="text-yellow-500">
+                                @for ($i = 0; $i < floor($averageRating); $i++)
+                                    ★
+                                @endfor
+                                @if ($averageRating - floor($averageRating) >= 0.5)
+                                    ★
                                 @endif
+                                @for ($i = ceil($averageRating); $i < 5; $i++)
+                                    ☆
+                                @endfor
+                            </span>
+                            <span class="ml-2 text-sm text-gray-500">({{ $averageRating }})</span>
+                        </div>
 
-                                <div class="p-4">
-                                    <h3 class="text-xl font-semibold text-gray-800">{{ $vehicle->brand }} - {{ $vehicle->model }}</h3>
-                                    <p class="text-sm text-gray-600">{{ $vehicle->seat }} Seat | {{ $vehicle->transmission }} | {{ $vehicle->vehicle_type }}</p>
-                                    <p class="text-lg text-gray-900 font-bold mt-2">{{ $vehicle->price }} /day</p>
+                <div class="mt-4 text-right">
+                    <a href="{{ route('vehicles.show', $vehicle->id) }}" class="btn btn-warning text-white px-6 py-2 rounded-lg">
+                        Lihat Detail
+                    </a>
+                </div>
+            </div>
+        </div>
+    @endforeach
+</div>
 
-                                    <div class="flex items-center mt-2">
-                                        <span class="text-yellow-500">
-                                            @for ($i = 0; $i < floor($vehicle->rating); $i++)
-                                                ★
-                                            @endfor
-                                            @if ($vehicle->rating - floor($vehicle->rating) >= 0.5)
-                                                ★
-                                            @else
-                                                ☆
-                                            @endif
-                                        </span>
-                                        <span class="ml-2 text-sm text-gray-500">({{ $vehicle->rating }})</span>
-                                    </div>
-
-                                    <div class="mt-4 text-right">
-                                        <a href="{{ route('vehicles.show', $vehicle->id) }}" class="btn btn-warning text-white px-6 py-2 rounded-lg">Lihat Detail</a>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
                 </div>
             @else
                 <!-- Menampilkan kendaraan yang sesuai dengan pencarian -->

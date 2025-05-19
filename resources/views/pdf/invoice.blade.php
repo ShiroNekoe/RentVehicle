@@ -6,94 +6,112 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            font-size: 12px;
+            font-size: 13px;
             color: #333;
             margin: 40px;
+            background-color: #f9fafb;
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
         }
 
         .header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
             margin-bottom: 30px;
-            border-bottom: 2px solid #000;
-            padding-bottom: 10px;
+            border-bottom: 2px solid #6366f1;
+            padding-bottom: 15px;
         }
 
-        .header .left {
-            max-width: 70%;
+        .header .left h1 {
+            font-size: 22px;
+            color: #4f46e5;
+            margin: 0 0 5px;
         }
 
-        .header h2 {
-            margin: 0;
-            font-size: 20px;
+        .header .left p {
+            margin: 2px 0;
         }
 
         .logo {
-            width: 100px;
+            width: 90px;
             height: auto;
+        }
+
+        .section-title {
+            font-weight: bold;
+            margin: 20px 0 10px;
+            font-size: 14px;
+            color: #1f2937;
+        }
+
+        .info p {
+            margin: 5px 0;
         }
 
         table {
             width: 100%;
-            border-collapse: collapse;
             margin-top: 20px;
+            border-collapse: collapse;
         }
 
         th, td {
-            border: 1px solid #000;
             padding: 10px;
             text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
+            vertical-align: top;
         }
 
         .footer {
-            margin-top: 30px;
+            margin-top: 40px;
             font-size: 11px;
             text-align: center;
-            border-top: 1px solid #ccc;
+            color: #6b7280;
+            border-top: 1px solid #d1d5db;
             padding-top: 10px;
-            color: #666;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="left">
-            <h2>Invoice Booking Kendaraan</h2>
-            <p><strong>Tanggal Booking:</strong> {{ $booking->booking_date }}</p>
-            <p><strong>Nama Pengguna:</strong> {{ $booking->user->name ?? '-' }}</p>
+    <div class="container">
+        <div class="header">
+            <div class="left">
+                <h1>Invoice Booking</h1>
+                <p><strong>Booking ID:</strong> {{ $booking->id }}</p>
+                <p><strong>Tanggal Booking:</strong> {{ \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') }}</p>
+            </div>
+            <div class="right">
+                <img src="{{ public_path('logo.png') }}" alt="Logo" class="logo">
+            </div>
         </div>
-        <div class="right">
-            {{-- Ganti src dengan logo asli --}}
-            <img src="{{ public_path('logo.png') }}" alt="Logo" class="logo">
+
+        <div class="section">
+            <h3 class="section-title">Informasi Pengguna</h3>
+            <div class="info">
+                <p><strong>Nama:</strong> {{ $booking->user->name ?? '-' }}</p>
+                <p><strong>Email:</strong> {{ $booking->user->email ?? '-' }}</p>
+            </div>
         </div>
-    </div>
 
-    <table>
-        <tr>
-            <th>Mulai Sewa</th>
-            <td>{{ $booking->start_date }}</td>
-        </tr>
-        <tr>
-            <th>Selesai Sewa</th>
-            <td>{{ $booking->end_date }}</td>
-        </tr>
-        <tr>
-            <th>Harga</th>
-            <td>Rp {{ number_format($booking->booking_price, 0, ',', '.') }}</td>
-        </tr>
-        <tr>
-            <th>Status</th>
-            <td>{{ ucfirst($booking->booking_status) }}</td>
-        </tr>
-    </table>
+        <div class="section">
+            <h3 class="section-title">Detail Booking</h3>
+            <div class="info">
+                <p><strong>Nama Kendaraan:</strong> {{ $booking->vehicle->vehicle_name ?? '-' }}</p>
+                <p><strong>Tanggal Mulai:</strong> {{ \Carbon\Carbon::parse($booking->start_date)->format('d M Y') }}</p>
+                <p><strong>Tanggal Selesai:</strong> {{ \Carbon\Carbon::parse($booking->end_date)->format('d M Y') }}</p>
+                <p><strong>Titik Jemput:</strong> {{ $booking->pickup_location ?? '-' }}</p>
+                <p><strong>Total Harga:</strong> Rp {{ number_format($booking->booking_price, 0, ',', '.') }}</p>
+            </div>
+        </div>
 
-    <div class="footer">
-        <p>Terima kasih telah menggunakan layanan kami. Jika ada pertanyaan, silakan hubungi customer service kami.</p>
+        <div class="footer">
+            <p>Terima kasih telah menggunakan layanan kami. Jika ada pertanyaan, silakan hubungi customer service kami.</p>
+        </div>
     </div>
 </body>
 </html>
