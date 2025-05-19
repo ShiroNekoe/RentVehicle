@@ -2,7 +2,6 @@
 
 @section('content')
 <div class="container mx-auto p-4" x-data="{ open: false }" x-init="open = false">
-
     <!-- Filter Kendaraan -->
     <div class="mb-10">
         <form method="GET" action="{{ route('user.dashboard') }}" class="bg-white shadow-md rounded-xl p-6 space-y-4">
@@ -10,8 +9,14 @@
             <div class="flex items-center space-x-4">
                 <div class="flex-1">
                     <input type="text" name="nama" id="nama" value="{{ request('nama') }}" class="input input-bordered w-full" placeholder="Contoh: Avanza, Vario...">
+                </div>
 
-
+                <!-- Tombol Cari dan Reset -->
+                <div class="flex space-x-2">
+                    <button type="submit" class="btn btn-warning">Cari</button>
+                    <a href="{{ route('user.dashboard') }}" class="btn btn-outline w-24">Reset</a>
+                </div>
+            </div>
 
             <!-- Toggle Filter Button -->
             <button type="button" @click="open = !open" class="flex items-center text-[#316783]">
