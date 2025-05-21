@@ -98,8 +98,8 @@ class BookingResource extends Resource
                 TextColumn::make('user.name')->label('User')->searchable()->sortable(),
                 TextColumn::make('vehicle.vehicle_name')->label('Vehicle')->searchable()->sortable(),
                 TextColumn::make('driver.name')->label('Driver')->sortable()->toggleable(),
-                TextColumn::make('start_date')->date(),
-                TextColumn::make('end_date')->date(),
+                TextColumn::make('start_date')->dateTime('d M Y H:i'),
+                TextColumn::make('end_date')->dateTime('d M Y H:i'),
                 BadgeColumn::make('payment_status')
                     ->colors([
                         'warning' => 'pending',
