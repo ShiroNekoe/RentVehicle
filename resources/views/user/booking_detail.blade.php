@@ -11,6 +11,7 @@
             <p>🛠️ <span class="font-medium">Model:</span> {{ ucfirst($booking->vehicle->vehicle_model) }}</p>
             <p>⚙️ <span class="font-medium">Transmisi:</span> {{ ucfirst($booking->vehicle->vehicle_transmission) }}</p>
             <p>🔢 <span class="font-medium">Nomor Plat:</span> {{ $booking->vehicle->number_plate }}</p>
+            <p>🔢 <span class="font-medium">driver:</span> {{ $booking->driver->name }}</p>
             <p class="md:col-span-2">📍 <span class="font-medium">Titik Jemput:</span> 
                 <span class="font-semibold text-gray-900">
                     {{ $booking->pickup_location ?? 'Tidak ada titik jemput' }}
