@@ -10,10 +10,10 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReviewController;
-use App\Http\Controllers\MidtransController;
+// use App\Http\Controllers\MidtransController;
 use App\Models\Vehicle;
 use App\Models\Booking;
-use App\Http\Livewire\BookingExtend;
+use App\Livewire\BookingExtend;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Livewire\BookingForm;
 

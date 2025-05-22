@@ -42,11 +42,12 @@
                                     <img src="{{ asset('images/default-vehicle.jpg') }}" alt="No image available" class="w-full h-40 object-cover rounded-t-xl">
                                 @endif
 
-                                <div class="absolute top-2 left-2 bg-white text-blue-500 px-3 py-1 text-xs rounded-md">
-                                    {{ ucfirst($booking->booking_status) }}
-                                </div>
+                               
                             </div>
                             <div class="mt-3">
+                                 <div class="absolute top-2 left-2 bg-white text-blue-500 px-3 py-1 text-xs rounded-md">
+                                    {{ ucfirst($booking->booking_status) }}
+                                </div>
                                 <!-- Vehicle Name -->
                                 <h3 class="text-lg font-semibold text-gray-700">{{ $booking->vehicle->vehicle_name }}</h3>
 

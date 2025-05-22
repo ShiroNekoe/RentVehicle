@@ -4,65 +4,71 @@
         {{-- Informasi Waktu --}}
         <div class="grid grid-cols-2 gap-4">
             <div>
-                <label>Tanggal Mulai</label>
-                <input type="date" wire:model.defer="start_date" class="w-full border p-2">
+                <label for="start_date">Tanggal Mulai</label>
+                <input id="start_date" type="date" wire:model.defer="start_date" class="w-full border p-2">
                 @error('start_date') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
             </div>
 
             <div>
-                <label>Jam Mulai</label>
-                <input type="time" wire:model.defer="start_time" class="w-full border p-2">
+                <label for="start_time">Jam pengambilan dan pengembalian</label>
+                <input id="start_time" type="time" wire:model.defer="start_time" class="w-full border p-2">
                 @error('start_time') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
             </div>
 
             <div>
-                <label>Tanggal Selesai</label>
-                <input type="date" wire:model.defer="end_date" class="w-full border p-2">
+                <label for="end_date">Tanggal Selesai</label>
+                <input id="end_date" type="date" wire:model.defer="end_date" class="w-full border p-2">
                 @error('end_date') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
             </div>
 
-            <div>
-                <label>Jam Selesai</label>
-                <input type="time" wire:model.defer="end_time" class="w-full border p-2">
-                @error('end_time') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-            </div>
-        </div>
 
         {{-- Kontak & Identitas --}}
         <div>
-            <label>No. HP Anda</label>
-            <input type="text" wire:model.defer="phone_person" class="w-full border p-2">
+            <label for="phone_person">No. HP Anda</label>
+            <input id="phone_person" type="text" wire:model.defer="phone_person" class="w-full border p-2">
             @error('phone_person') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
 
         <div>
-            <label No. HP Darurat</label>
-            <input type="text" wire:model.defer="phone_security" class="w-full border p-2">
+            <label for="phone_security">No. HP Darurat</label>
+            <input id="phone_security" type="text" wire:model.defer="phone_security" class="w-full border p-2">
             @error('phone_security') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
 
         <div>
-            <label>NIK (16 Digit)</label>
-            <input type="text" wire:model.defer="nik_identity" class="w-full border p-2">
+            <label for="nik_identity">NIK (16 Digit)</label>
+            <input id="nik_identity" type="text" wire:model.defer="nik_identity" class="w-full border p-2">
             @error('nik_identity') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
 
         <div>
-            <label>Upload Identitas (KTP / SIM - JPG, PNG, PDF)</label>
-            <input type="file" wire:model="identity" class="w-full border p-2">
+            <label for="identity">Upload Identitas (KTP / SIM - JPG, PNG, PDF)</label>
+            <input id="identity" type="file" wire:model="identity" accept=".jpg,.jpeg,.png,.pdf" class="w-full border p-2">
             @error('identity') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
 
         {{-- Lokasi Jemput & Metode Pembayaran --}}
         <div>
-            <label>Lokasi Jemput (Opsional)</label>
-            <input type="text" wire:model.defer="pickup_location" class="w-full border p-2">
+            <label for="pickup_location">Lokasi Jemput (Opsional)</label>
+            <input id="pickup_location" type="text" wire:model.defer="pickup_location" class="w-full border p-2">
             @error('pickup_location') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
+        
+        <div>
+            <label>
+                <input type="checkbox" wire:model="return_showroom" value="1"> Ke Showroom
+            </label>
+
+            <label>
+                Lokasi Lain:
+                <input type="text" wire:model.defer="return_location" placeholder="Isi lokasi pengembalian">
+            </label>
+        </div>
+
 
         <div>
-            <label>Metode Pembayaran</label>
-            <select wire:model.defer="payment_method" class="w-full border p-2">
+            <label for="payment_method">Metode Pembayaran</label>
+            <select id="payment_method" wire:model.defer="payment_method" class="w-full border p-2">
                 <option value="">-- Pilih --</option>
                 <option value="transfer">Transfer</option>
                 <option value="cod">COD</option>
@@ -72,15 +78,16 @@
 
         {{-- Opsi Driver --}}
         <div>
-            <label>
-                <input type="checkbox" wire:model="use_driver" class="mr-2"> Tambahkan Driver (Rp125.000)
+            <label class="inline-flex items-center">
+                <input type="checkbox" wire:model="use_driver" class="mr-2">
+                Tambahkan Driver (Rp125.000)
             </label>
         </div>
 
         {{-- STRUK PEMESANAN --}}
         <div class="border p-4 mt-4 bg-gray-100 rounded">
             <h2 class="text-lg font-semibold mb-2">Ringkasan Pemesanan</h2>
-            <p><strong>Nama Kendaraan:</strong> {{ $vehicle->name }}</p>
+            <p><strong>Nama Kendaraan:</strong> {{ $vehicle->vehicle_name }}</p>
             <p><strong>Durasi:</strong> {{ $days }} hari</p>
             <p><strong>Harga per Hari:</strong> Rp{{ number_format($vehicle->price, 0, ',', '.') }}</p>
 
