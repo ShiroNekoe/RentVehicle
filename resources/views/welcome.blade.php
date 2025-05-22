@@ -156,40 +156,48 @@
         Your Next Adventure Starts with a Top Rated Deal
     </h2>
     
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        @foreach ([ 
-            ['brand' => 'Toyota', 'model' => 'Avanza', 'img' => 'img/contoh1.png', 'seat' => 7, 'type' => 'Mobil', 'transmisi' => 'Manual', 'price' => 'Rp 50.000/day', 'rating' => 4.5],
-            ['brand' => 'Honda', 'model' => 'Beat', 'img' => 'img/contoh2.jpg', 'seat' => 2, 'type' => 'Motor', 'transmisi' => 'Automatic', 'price' => 'Rp 25.000/day', 'rating' => 4.7],
-            ['brand' => 'Daihatsu', 'model' => 'Sigra', 'img' => 'img/contoh3.jpg', 'seat' => 5, 'type' => 'Mobil', 'transmisi' => 'Automatic', 'price' => 'Rp 45.000/day', 'rating' => 4.6]
-        ] as $vehicle)
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl">
-                <figure>
-                    <img src="{{ asset($vehicle['img']) }}" alt="{{ $vehicle['brand'] }} - {{ $vehicle['model'] }}" class="w-full h-64 object-cover" />
-                </figure>
-                <div class="p-4">
-                    <h3 class="text-xl font-semibold text-gray-800">{{ $vehicle['brand'] }} - {{ $vehicle['model'] }}</h3>
-                    <p class="text-sm text-gray-600">{{ $vehicle['seat'] }} Seat | {{ $vehicle['transmisi'] }} | {{ $vehicle['type'] }}</p>
-                    <p class="text-lg text-gray-900 font-bold mt-2">{{ $vehicle['price'] }}</p>
-                    <div class="flex items-center mt-2">
-                        <span class="text-yellow-500">
-                            @for ($i = 0; $i < floor($vehicle['rating']); $i++)
-                                ★
-                            @endfor
-                            @if ($vehicle['rating'] - floor($vehicle['rating']) >= 0.5)
-                                ★
-                            @else
-                                ☆
-                            @endif
-                        </span>
-                        <span class="ml-2 text-sm text-gray-500">({{ $vehicle['rating'] }})</span>
-                    </div>
-                    <div class="mt-4 text-right">
-                        <a href="{{ route('login') }}" class="btn btn-warning text-white px-6 py-2 rounded-lg">Sewa Sekarang</a>
-                    </div>
+ <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    @foreach ($popularVehicles as $vehicle)
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl">
+            <figure>
+                <img src="{{ asset('storage/vehicles/' . $vehicle->image_path) }}" alt="{{ $vehicle->vehicle_name }}" class="object-cover h-40 w-full">
+            </figure>
+            <div class="p-4">
+                <h3 class="text-xl font-semibold text-gray-800">{{ $vehicle->vehicle_name }} - {{ $vehicle->vehicle_brand }}</h3>
+                <p class="text-sm text-gray-600">{{ $vehicle->seat }} Seat | {{ $vehicle->vehicle_transmission }} | {{ $vehicle->vehicle_type }}</p>
+                <p class="text-lg text-gray-900 font-bold mt-2">Rp {{ number_format($vehicle->price, 0, ',', '.') }} /day</p>
+                
+                {{-- RATING --}}
+                <div class="flex items-center mt-2">
+                    <span class="text-yellow-500">
+                        @for ($i = 0; $i < floor($vehicle->rating); $i++)
+                            ★
+                        @endfor
+                        @if ($vehicle->rating - floor($vehicle->rating) >= 0.5)
+                            ★
+                        @endif
+                        @for ($i = ceil($vehicle->rating); $i < 5; $i++)
+                            ☆
+                        @endfor
+                    </span>
+                    <span class="ml-2 text-sm text-gray-500">({{ number_format($vehicle->rating, 1) }})</span>
+                </div>
+              {{-- BUTTON --}}
+                <div class="mt-4 text-right">
+                    @auth
+                        <a href="{{ route('vehicles.show', $vehicle->id) }}" class="btn btn-warning text-white px-6 py-2 rounded-lg">View Details</a>
+                    @endauth
+
+                    @guest
+                        <a href="{{ route('login') }}" class="btn btn-warning text-white px-6 py-2 rounded-lg">Login to View</a>
+                    @endguest
                 </div>
             </div>
-        @endforeach
-    </div>
+        </div>
+    @endforeach
+</div>
+
+
 </section>
 
 

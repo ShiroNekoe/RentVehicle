@@ -141,22 +141,22 @@
                             <img src="{{ asset('storage/vehicles/' . $vehicle->image_path) }}" class="object-cover h-40 w-full">
                         </figure>
                         <div class="p-4">
-                            <h3 class="text-xl font-semibold text-gray-800">{{ $vehicle->brand }} - {{ $vehicle->model }}</h3>
-                            <p class="text-sm text-gray-600">{{ $vehicle->seat }} Seat | {{ $vehicle->transmission }} | {{ $vehicle->vehicle_type }}</p>
+                            <h3 class="text-xl font-semibold text-gray-800">{{ $vehicle->vehicle_name }} - {{ $vehicle->vehicle_brand }}</h3>
+                            <p class="text-sm text-gray-600">{{ $vehicle->seat }} Seat | {{ $vehicle->vehicle_transmission }} | {{ $vehicle->vehicle_type }}</p>
                             <p class="text-lg text-gray-900 font-bold mt-2">{{ $vehicle->price }} /day</p>
-                            <div class="flex items-center mt-2">
-                                <span class="text-yellow-500">
-                                    @for ($i = 0; $i < floor($vehicle->rating); $i++)
-                                        ★
-                                    @endfor
-                                    @if ($vehicle->rating - floor($vehicle->rating) >= 0.5)
-                                        ★
-                                    @else
-                                        ☆
-                                    @endif
-                                </span>
-                                <span class="ml-2 text-sm text-gray-500">({{ $vehicle->rating }})</span>
-                            </div>
+                          <div class="flex items-center mt-2">
+                            <span class="text-yellow-500">
+                                @for ($i = 0; $i < floor($vehicle->rating); $i++)
+                                    ★
+                                @endfor
+                                @if ($vehicle->rating - floor($vehicle->rating) >= 0.5)
+                                    ★
+                                @else
+                                    ☆
+                                @endif
+                            </span>
+                            <span class="ml-2 text-sm text-gray-500">({{ number_format($vehicle->rating, 1) }})</span>
+                        </div>
                             <div class="mt-4 text-right">
                                 <a href="{{ route('vehicles.show', $vehicle->id) }}" class="btn btn-warning text-white px-6 py-2 rounded-lg">View Details</a>
                             </div>

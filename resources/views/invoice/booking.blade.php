@@ -26,7 +26,7 @@
     <div class="mt-6 flex items-center justify-between">
         <a href="{{ route('user.history') }}" class="text-indigo-600 hover:underline">⬅️ Kembali</a>
        <a href="{{ route('booking.invoice', $booking->id) }}" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">Download PDF</a>
-
+a
     </div>
 </div>
 @endsection

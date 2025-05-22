@@ -26,23 +26,31 @@ class BookingForm extends Component
     public $total_price = 0;
     public $days = 0;
     public $isVehicleAvailable = true;
+     public $return_option = 'showroom';
+    public $return_location = null;
     
 
     /** @var \Illuminate\Support\Collection<int, \App\Models\Driver> */
     public Collection $drivers;
 
-    protected $rules = [
+   protected function rules()
+{
+    return [
         'start_date' => 'required|date|after_or_equal:today',
         'end_date' => 'required|date|after_or_equal:start_date',
         'start_time' => 'required|date_format:H:i',
-        'end_time' => 'required|date_format:H:i|after:start_time',
+       'end_time' => 'required|date_format:H:i|same:start_time',
         'phone_security' => 'required|numeric|digits_between:12,15',
         'phone_person' => 'required|numeric|digits_between:12,15',
         'nik_identity' => 'required|numeric|digits:16',
         'identity' => 'required|file|mimes:jpg,png,pdf|max:10240',
         'pickup_location' => 'nullable|string|max:255',
         'payment_method' => 'required|in:transfer,cod',
+        'return_option' => 'required|in:showroom,other',
+        'return_location' => $this->return_option === 'other' ? 'required|string|max:255' : 'nullable',
     ];
+}
+
 
     public function mount($vehicleId)
     {
@@ -51,46 +59,53 @@ class BookingForm extends Component
         $this->drivers = Driver::all(); // pastikan ini Collection
     }
 
-    public function updated($property)
-    {
-        if ($property === 'use_driver') {
-            $this->use_driver = (bool) $this->use_driver;
+public function updated($property)
+{
+    if ($property === 'use_driver') {
+        $this->use_driver = (bool) $this->use_driver;
 
-            if ($this->use_driver && $this->drivers->isNotEmpty()) {
-                $this->id_driver = $this->drivers->random()->id;
-            } else {
-                $this->id_driver = null;
-            }
-        }
-
-        if (in_array($property, ['start_date', 'end_date', 'start_time', 'end_time'])) {
-            $this->calculateDaysAndPrice();
+        if ($this->use_driver && $this->drivers->isNotEmpty()) {
+            $this->id_driver = $this->drivers->random()->id;
+        } else {
+            $this->id_driver = null;
         }
     }
+
+    if ($property === 'start_date') {
+        $this->end_date = $this->start_date;
+    }
+
+    if ($property === 'start_time') {
+        $this->end_time = $this->start_time;
+    }
+
+    if (in_array($property, ['start_date', 'end_date', 'start_time', 'end_time'])) {
+        $this->calculateDaysAndPrice();
+    }
+}
+
 
 
     public function calculateDaysAndPrice()
     {
-        if ($this->start_date && $this->end_date && $this->start_time && $this->end_time) {
+        if ($this->start_date && $this->start_time) {
             $start = Carbon::parse("{$this->start_date} {$this->start_time}");
-            $end = Carbon::parse("{$this->end_date} {$this->end_time}");
+            $end = $start->copy()->addDay(); // otomatis 24 jam
 
-            if ($end->greaterThanOrEqualTo($start)) {
-                $this->checkVehicleBookingAvailability();
+            $this->end_date = $end->toDateString();
+            $this->end_time = $end->format('H:i');
 
-                $this->days = $start->diffInDays($end) + 1;
-                $this->total_price = $this->days * $this->vehicle->price;
+            $this->checkVehicleBookingAvailability();
 
-                if ($this->use_driver && $this->id_driver) {
-                    $this->total_price += 125000; // Biaya driver tetap
-                }
-            } else {
-                $this->days = 0;
-                $this->total_price = 0;
-                $this->isVehicleAvailable = false;
+            $this->days = 1;
+            $this->total_price = $this->days * $this->vehicle->price;
+
+            if ($this->use_driver && $this->id_driver) {
+                $this->total_price += 125000;
             }
         }
     }
+
 
     public function checkVehicleBookingAvailability()
     {
@@ -112,6 +127,13 @@ class BookingForm extends Component
 
         if (!$this->isVehicleAvailable) {
             session()->flash('error', 'Kendaraan tidak tersedia untuk rentang waktu yang dipilih.');
+        }
+    }
+
+       public function updatedReturnOption($value)
+    {
+        if ($value === 'showroom') {
+            $this->return_location = null;
         }
     }
 
@@ -153,6 +175,8 @@ class BookingForm extends Component
             'booking_price' => $this->total_price,
             'booking_status' => 'ongoing',
             'pickup_location' => $this->pickup_location,
+            'return_option' => $this->return_option,
+            'return_location' => $this->return_option === 'other' ? $this->return_location : null,
             'booking_date' => now(),
         ]);
 
