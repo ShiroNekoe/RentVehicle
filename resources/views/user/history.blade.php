@@ -11,7 +11,7 @@
                 <div class="flex-1">
                     <select name="booking_status" id="booking_status" class="w-full border rounded-lg px-4 py-2 text-sm">
                         <option value="">Semua Status</option>
-                        <option value="ongoing" {{ request('booking_status') == 'ongoing' ? 'selected' : '' }}>Pending</option>
+                        <option value="ongoing" {{ request('booking_status') == 'ongoing' ? 'selected' : '' }}>OnGoing</option>
                         <option value="completed" {{ request('booking_status') == 'completed' ? 'selected' : '' }}>Completed</option>
                         <option value="cancelled" {{ request('booking_status') == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
                     </select>
@@ -19,7 +19,7 @@
 
                 <!-- Tombol Cari dan Reset -->
                 <div class="flex space-x-2">
-                    <button type="submit" class="btn btn-warning text-white w-24">Cari</button>
+                    <button type="submit" class="btn btn-warning w-24">Search</button>
                     <a href="{{ route('user.history') }}" class="btn btn-outline w-24">Reset</a>
                 </div>
             </div>
@@ -55,12 +55,14 @@
                                 <p class="text-sm text-gray-500 mb-1">Booking Date: {{ $booking->created_at->format('d M Y') }}</p>
 
                                 <!-- Price -->
-                                <p class="text-sm text-gray-600 font-semibold mb-2">Rp {{ number_format($booking->vehicle->price, 0, ',', '.') }} / day</p>
+                                <p class="text-sm text-[#316783] font-semibold mb-2">Rp {{ number_format($booking->vehicle->price, 0, ',', '.') }} / day</p>
 
                                 <!-- View Detail Button -->
-                                <a href="{{ route('user.booking_detail', $booking->id) }}" class="inline-block mt-3 text-sm text-blue-500 hover:underline font-medium">🔍 View Details</a>
+                                 <div class="mt-4 text-right">
+                                <a href="{{ route('user.booking_detail', $booking->id) }}" class="btn btn-warning text-white px-6 py-2 rounded-lg">View Details</a>
                             </div>
                         </div>
+                    </div>
                     @endforeach
                 </div>
             @else

@@ -1,105 +1,153 @@
+@extends('layouts.app')
+
+@section('content')
+<h1 class="text-3xl font-bold text-center text-gray-800 my-10">Your Booking Details</h1>
+
 <div class="px-4 py-6 max-w-4xl mx-auto">
-    <h2 class="text-3xl font-extrabold text-indigo-600 mb-6 border-b pb-2">📝 Detail Booking</h2>
+    <!-- Vehicle Image -->
+    <div class="flex justify-center mb-6">
+        <img src="{{ asset('storage/vehicles/' . $booking->vehicle->image_path) }}" class="object-cover h-64 w-80" alt="Vehicle Image">
+    </div>
 
-    <div class="bg-white shadow-xl rounded-2xl p-6 mb-6 border border-gray-100 space-y-4">
-        {{-- Nama Kendaraan --}}
-        <h3 class="text-2xl font-bold text-gray-800">{{ $booking->vehicle->vehicle_name }}</h3>
+    <!-- Vehicle Name -->
+    <h3 class="text-2xl font-bold text-gray-800 text-center mb-4">{{ $booking->vehicle->vehicle_name }}</h3>
 
-        {{-- Informasi Kendaraan --}}
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 text-gray-700">
-            <p>🚗 <span class="font-medium">Tipe:</span> {{ ucfirst($booking->vehicle->vehicle_type) }}</p>
-            <p>🛠️ <span class="font-medium">Model:</span> {{ ucfirst($booking->vehicle->vehicle_model) }}</p>
-            <p>⚙️ <span class="font-medium">Transmisi:</span> {{ ucfirst($booking->vehicle->vehicle_transmission) }}</p>
-            <p>🔢 <span class="font-medium">Nomor Plat:</span> {{ $booking->vehicle->number_plate }}</p>
-            <p>🔢 <span class="font-medium">driver:</span> {{ $booking->driver->name }}</p>
-            <p class="md:col-span-2">📍 <span class="font-medium">Titik Jemput:</span> 
-                <span class="font-semibold text-gray-900">
-                    {{ $booking->pickup_location ?? 'Tidak ada titik jemput' }}
-                </span>
-            </p>
-        </div>
-
-        {{-- Status dan Waktu --}}
-        <div class="pt-4 border-t space-y-2 text-gray-800">
+    <!-- Vehicle Information -->
+    <div class="bg-white shadow-lg rounded-xl p-6 mb-6 border border-[#316783] space-y-4">
+        <!-- Grid for vehicle details displayed in 3-left 3-right -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 text-center">
             <div>
-                <h4 class="text-lg font-semibold">Status Booking</h4>
-                <p class="text-gray-600">{{ ucfirst($booking->booking_status) }}</p>
+                <p><span class="font-medium">Type:</span> {{ ucfirst($booking->vehicle->vehicle_type) }}</p>
+                <p><span class="font-medium">Model:</span> {{ ucfirst($booking->vehicle->vehicle_model) }}</p>
+                <p><span class="font-medium">Brand:</span> {{ ucfirst($booking->vehicle->brand) }}</p>
             </div>
 
             <div>
-                <h4 class="text-lg font-semibold">Status Pembayaran</h4>
+                <p><span class="font-medium">Transmission:</span> {{ ucfirst($booking->vehicle->vehicle_transmission) }}</p>
+                <p><span class="font-medium">Seats:</span> {{ ucfirst($booking->vehicle->vehicle_seat) }}</p>
+                <p><span class="font-medium">License Plate:</span> {{ $booking->vehicle->number_plate }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Details Information -->
+    <div class="bg-white shadow-lg rounded-xl p-6 mb-6 border border-[#316783] space-y-4">
+        <h4 class="text- text-center font-semibold">Booking Details Information</h4>
+        <div class="space-y-2">
+            <p><span class="font-medium">Rental Start Date:</span> </p>
+            <p><span class="font-medium">End Date:</span> </p>
+            <p><span class="font-medium">Booking Duration:</span>  days</p>
+            <p><span class="font-medium">Driver:</span>  </p>
+            <p><span class="font-medium">Pick-up Location:</span> {{ $booking->pickup_location ?? 'No pick-up location' }} </p>            
+        </div>
+    </div>
+
+    <!-- Status and Payment -->
+    <div class="bg-white shadow-lg rounded-xl p-6 mb-6 border border-[#316783] space-y-4">
+        <!-- Booking Status (left and right) -->
+        <div class="flex justify-between items-center space-x-4">
+            <div class="flex-1">
+                <h4 class="text-lg font-semibold">Booking Status</h4>
+            </div>
+            <div class="flex-1 text-right">
+                <p class="text-gray-600">{{ ucfirst($booking->booking_status) }}</p>
+            </div>
+        </div>
+
+        <!-- Payment Status (left and right) -->
+        <div class="flex justify-between items-center space-x-4">
+            <div class="flex-1">
+                <h4 class="text-lg font-semibold">Payment Status</h4>
+            </div>
+            <div class="flex-1 text-right">
                 <p class="text-lg">
                     @if ($booking->payment_status == 'paid')
-                        <span class="text-green-600 font-bold">✅ LUNAS</span>
+                        <span class="text-green-600 font-bold">✅ PAID</span>
                     @elseif ($booking->payment_status == 'pending')
-                        <span class="text-yellow-500 font-bold">⏳ MENUNGGU KONFIRMASI ADMIN</span>
+                        <span class="text-yellow-500 font-bold">⏳ WAITING FOR ADMIN CONFIRMATION</span>
                     @elseif (in_array($booking->payment_status, ['failed', 'expired']))
-                        <span class="text-red-500 font-bold">❌ GAGAL / KADALUARSA</span>
+                        <span class="text-red-500 font-bold">❌ FAILED / EXPIRED</span>
                     @else
-                        <span class="text-gray-500">Status tidak diketahui</span>
+                        <span class="text-gray-500">Status unknown</span>
                     @endif
                 </p>
             </div>
+        </div>
 
-            <div>
-                <h4 class="text-lg font-semibold">Tanggal Booking</h4>
+        <!-- Booking Date (left and right) -->
+        <div class="flex justify-between items-center space-x-4">
+            <div class="flex-1">
+                <h4 class="text-lg font-semibold">Booking Date</h4>
+            </div>
+            <div class="flex-1 text-right">
                 <p class="text-gray-600">{{ $booking->created_at->format('d M Y H:i') }}</p>
             </div>
+        </div>
 
-            <div>
-                <h4 class="text-lg font-semibold">Total Pembayaran</h4>
-                <p class="text-indigo-700 font-bold text-lg">Rp {{ number_format($booking->vehicle->price, 0, ',', '.') }}</p>
+        <!-- Total Payment (left and right) -->
+        <div class="flex justify-between items-center space-x-4">
+            <div class="flex-1">
+                <h4 class="text-lg font-semibold">Total Payment</h4>
+            </div>
+            <div class="flex-1 text-right">
+                <p class="text-[#316783] font-bold text-lg">Rp {{ number_format($booking->vehicle->price, 0, ',', '.') }}</p>
             </div>
         </div>
 
-        {{-- Tombol Aksi --}}
-        <div class="pt-4 border-t grid gap-3 md:grid-cols-2 mt-4">
-           {{-- Tombol Lihat Invoice --}}
-            <a href="{{ route('invoice.booking', $booking->id) }}"
-            class="inline-block mt-4 bg-indigo-500 hover:bg-indigo-600 text-white px-5 py-2 rounded-lg font-medium transition">
-                🧾 Lihat Invoice
-            </a>
-
-
-            {{-- Tombol Cancel --}}
-            @if (!in_array($booking->booking_status, ['completed', 'cancelled']))
-                <form id="cancelBookingForm" action="{{ route('booking.cancel', $booking->id) }}" method="POST">
-                    @csrf
-                    @method('PUT')
-                    <button type="button"
-                            class="bg-red-600 hover:bg-red-700 text-white w-full px-5 py-2 rounded-lg font-medium transition"
-                            onclick="confirmCancel()">
-                        ❌ Batalkan Booking
-                    </button>
-                </form>
-            @endif
-
-            {{-- Tombol Ulasan --}}
-            @if ($booking->booking_status === 'completed' && $booking->payment_status === 'paid' && !$booking->review)
-                <a href="{{ route('user.review', $booking->id) }}"
-                   class="bg-blue-600 hover:bg-blue-700 text-white text-center px-5 py-2 rounded-lg font-medium transition">
-                    ✍️ Beri Ulasan
-                </a>
-            @elseif ($booking->review)
-                <p class="text-green-600 font-semibold col-span-2">✅ Anda sudah memberikan ulasan.</p>
-            @endif
-
-            {{-- Tombol Perpanjang --}}
-            @if ($booking->booking_status === 'completed' && $booking->payment_status === 'paid')
-                <a href="{{ url('/booking/' . $booking->id . '/extend') }}"
-                   class="bg-yellow-500 hover:bg-yellow-600 text-white text-center px-5 py-2 rounded-lg font-medium transition">
-                    ⏱️ Perpanjang Booking
-                </a>
-            @endif
-        </div>
-
-        {{-- Tombol Kembali --}}
-        <div class="mt-6">
-            <a href="{{ route('user.history') }}"
-               class="inline-block text-indigo-600 hover:text-indigo-800 border border-indigo-500 px-5 py-2 rounded-lg font-medium transition">
-                ⬅️ Kembali ke Riwayat
+        <div class="flex justify-between items-center space-x-4 mt-4">
+            <div class="flex-1">
+                <p class="text-lg font-semibold">Invoice:</p> 
+            </div>
+            <a href="{{ route('invoice.booking', $booking->id) }}" class="flex items-center text-gray-400 hover:text-[#1a4e65] transition duration-300 ease-in-out">
+                <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12h4m-2 2v4m2-4h-6V7h6V3H7v4h6v6H7v4h10z" />
+                </svg>
+                <span class="font-semibold">View Invoice</span>
             </a>
         </div>
+    </div>
+
+{{-- Action Buttons --}}
+<div class="pt-4 border-t grid gap-3 mt-4">
+    <div class="flex justify-between items-center">
+        {{-- Cancel Button --}}
+        @if (!in_array($booking->booking_status, ['completed', 'cancelled']))
+            <form id="cancelBookingForm" action="{{ route('booking.cancel', $booking->id) }}" method="POST">
+                @csrf
+                @method('PUT')
+                <button type="button"
+                        class="bg-red-600 hover:bg-red-700 text-white w-full md:w-auto px-5 py-2 rounded-lg font-medium transition"
+                        onclick="confirmCancel()">
+                    ❌ Cancel Booking
+                </button>
+            </form>
+        @endif
+
+        {{-- Review Button --}}
+        @if ($booking->booking_status === 'completed' && $booking->payment_status === 'paid' && !$booking->review)
+            <a href="{{ route('user.review', $booking->id) }} "
+               class="bg-blue-600 hover:bg-blue-700 text-white text-center px-5 py-2 rounded-lg font-medium transition">
+                ✍️ Give Review
+            </a>
+        @elseif ($booking->review)
+            <p class="text-green-600 text-center font-bold">✅ You have already given a review.</p>
+        @endif
+
+        {{-- Extend Booking Button --}}
+@if ($booking->payment_status === 'paid' && $booking->booking_status !== 'completed')
+    <a href="{{ url('/booking/' . $booking->id . '/extend') }}"
+       class="bg-yellow-500 hover:bg-yellow-600 text-white text-center px-5 py-2 rounded-lg font-medium transition">
+        ⏱️ Extend Booking
+    </a>
+@endif
+</div>
+
+    {{-- Back Button --}}
+    <div class="flex justify-center mt-6">
+        <a href="{{ route('user.history') }}"
+           class="inline-block text-indigo-600 hover:text-indigo-800 border border-indigo-500 px-5 py-2 rounded-lg font-medium transition">
+            ⬅️ Back to History
+        </a>
     </div>
 </div>
 
@@ -108,14 +156,14 @@
 <script>
     function confirmCancel() {
         Swal.fire({
-            title: 'Yakin ingin membatalkan booking?',
-            text: "Booking Anda akan dibatalkan dan diarahkan ke admin.",
+            title: 'Are you sure you want to cancel this booking?',
+            text: "Your booking will be cancelled and directed to admin.",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#d33',
             cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Ya, batalkan',
-            cancelButtonText: 'Tidak'
+            confirmButtonText: 'Yes, cancel',
+            cancelButtonText: 'No'
         }).then((result) => {
             if (result.isConfirmed) {
                 document.getElementById('cancelBookingForm').submit();
@@ -123,3 +171,4 @@
         });
     }
 </script>
+@endsection

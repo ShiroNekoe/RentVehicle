@@ -21,12 +21,12 @@
                             @endforeach
                         </div>
 
-                        <!-- Navigation Buttons -->
-                        <div class="swiper-button-prev text-gray-800 hover:text-blue-600"></div>
-                        <div class="swiper-button-next text-gray-800 hover:text-blue-600"></div>
-
                         <!-- Pagination -->
                         <div class="swiper-pagination mt-4"></div>
+
+                        <!-- Navigation Buttons -->
+                        <div class="swiper-button-next"></div>
+                        <div class="swiper-button-prev"></div>
                     </div>
                 @else
                     <!-- Single Image Gallery -->
@@ -49,7 +49,7 @@
                 <div class="flex flex-col space-y-3 p-4 border rounded-lg shadow-sm bg-gray-50">
                     <p class="text-2xl font-bold text-[#316783] ">Rp {{ number_format($vehicle->price, 0, ',', '.') }} / day</p> 
                     <a href="{{ route('booking.create', $vehicle->id) }}" 
-                       class="btn btn-warning hover:bg-gray-400 text-white rounded-lg py-2 font-semibold shadow-md text-center transition duration-300 transform hover:scale-105"> <!-- Reduced padding and font size -->
+                       class="btn btn-warning text-white rounded-lg py-2 font-semibold shadow-md text-center transition duration-300 transform hover:scale-105"> <!-- Reduced padding and font size -->
                        Book Now
                     </a>
                 </div>
@@ -70,5 +70,22 @@
         </div>
     </div>
 </div>
+
+<!-- Include Swiper JS -->
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script>
+    // Initialize Swiper with navigation buttons
+    var swiper = new Swiper('.swiper-container', {
+        spaceBetween: 10,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev'
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+    });
+</script>
 
 @endsection
