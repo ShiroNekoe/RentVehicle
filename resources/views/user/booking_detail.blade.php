@@ -6,7 +6,9 @@
 <div class="px-4 py-6 max-w-4xl mx-auto">
     <!-- Vehicle Image -->
     <div class="flex justify-center mb-6">
-        <img src="{{ asset('storage/vehicles/' . $booking->vehicle->image_path) }}" class="object-cover h-64 w-80" alt="Vehicle Image">
+
+    <img src="{{ Storage::url(optional($booking->vehicle->galleries->first())->image_path ?? 'default.jpg') }}" class="object-cover h-64 w-80" alt="Vehicle Image">
+
     </div>
 
     <!-- Vehicle Name -->
@@ -19,12 +21,12 @@
             <div>
                 <p><span class="font-medium">Type:</span> {{ ucfirst($booking->vehicle->vehicle_type) }}</p>
                 <p><span class="font-medium">Model:</span> {{ ucfirst($booking->vehicle->vehicle_model) }}</p>
-                <p><span class="font-medium">Brand:</span> {{ ucfirst($booking->vehicle->brand) }}</p>
+                <p><span class="font-medium">Brand:</span> {{ ucfirst($booking->vehicle->vehicle_brand) }}</p>
             </div>
 
             <div>
                 <p><span class="font-medium">Transmission:</span> {{ ucfirst($booking->vehicle->vehicle_transmission) }}</p>
-                <p><span class="font-medium">Seats:</span> {{ ucfirst($booking->vehicle->vehicle_seat) }}</p>
+                <p><span class="font-medium">Seats:</span> {{ ucfirst($booking->vehicle->seat) }}</p>
                 <p><span class="font-medium">License Plate:</span> {{ $booking->vehicle->number_plate }}</p>
             </div>
         </div>
@@ -34,10 +36,14 @@
     <div class="bg-white shadow-lg rounded-xl p-6 mb-6 border border-[#316783] space-y-4">
         <h4 class="text- text-center font-semibold">Booking Details Information</h4>
         <div class="space-y-2">
-            <p><span class="font-medium">Rental Start Date:</span> </p>
-            <p><span class="font-medium">End Date:</span> </p>
-            <p><span class="font-medium">Booking Duration:</span>  days</p>
-            <p><span class="font-medium">Driver:</span>  </p>
+            <p><span class="font-medium">Rental Start Date:</span> {{$booking->start_date}} </p>
+            <p><span class="font-medium">End Date:</span> {{$booking->end_date}}</p>
+            @php
+                use Carbon\Carbon;
+                $duration = Carbon::parse($booking->start_date)->diffInDays(Carbon::parse($booking->end_date));
+            @endphp
+            <p><span class="font-medium">Booking Duration:</span> {{ $duration }} days</p>
+            <p><span class="font-medium">Driver:</span> {{$booking->driver->name}}</p>
             <p><span class="font-medium">Pick-up Location:</span> {{ $booking->pickup_location ?? 'No pick-up location' }} </p>            
         </div>
     </div>
@@ -123,6 +129,14 @@
             </form>
         @endif
 
+        {{-- Transfer Confirmation Button --}}
+        @if ($booking->payment_status === 'pending')
+            <a href="{{ route('pages.transfer-confirmation', $booking->id) }}"
+            class="bg-purple-600 hover:bg-purple-700 text-white text-center px-5 py-2 rounded-lg font-medium transition">
+                💳 Confirm Transfer
+            </a>
+        @endif
+
         {{-- Review Button --}}
         @if ($booking->booking_status === 'completed' && $booking->payment_status === 'paid' && !$booking->review)
             <a href="{{ route('user.review', $booking->id) }} "
@@ -134,13 +148,17 @@
         @endif
 
         {{-- Extend Booking Button --}}
-@if ($booking->payment_status === 'paid' && $booking->booking_status !== 'completed')
-    <a href="{{ url('/booking/' . $booking->id . '/extend') }}"
-       class="bg-yellow-500 hover:bg-yellow-600 text-white text-center px-5 py-2 rounded-lg font-medium transition">
-        ⏱️ Extend Booking
-    </a>
-@endif
-</div>
+        @if ($booking->payment_status === 'paid' && $booking->booking_status !== 'completed')
+            <a href="{{ url('/booking/' . $booking->id . '/extend') }}"
+            class="bg-yellow-500 hover:bg-yellow-600 text-white text-center px-5 py-2 rounded-lg font-medium transition">
+                ⏱️ Extend Booking
+            </a>
+        @endif
+
+
+        </div>
+
+        
 
     {{-- Back Button --}}
     <div class="flex justify-center mt-6">

@@ -3,7 +3,7 @@
         <div class="flex justify-between h-16">
             <!-- Logo Area (kiri) -->
             <div class="flex items-center">
-                <a href="{{ route('user.dashboard') }}" class="flex items-center space-x-2">
+                <a href="{{ route('welcome') }}" class="flex items-center space-x-2">
                     <img src="{{ asset('img/logo.png') }}" alt="Logo" class="h-12 w-13 object-contain">
                     <span class="text-[#316783] text-2xl font-extrabold">RentKuy!</span>
                 </a>

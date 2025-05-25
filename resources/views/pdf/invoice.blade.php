@@ -131,6 +131,11 @@
                 <p><strong>Tanggal Selesai:</strong> {{ \Carbon\Carbon::parse($booking->end_date)->format('d M Y') }}</p>
                 <p><strong>Jam Pengambilan:</strong> {{ $booking->start_time ?? '-' }}</p>
                 <p><strong>Durasi:</strong> {{ $booking->duration_days }} hari</p>
+                 @php
+                use Carbon\Carbon;
+                $duration = Carbon::parse($booking->start_date)->diffInDays(Carbon::parse($booking->end_date));
+                 @endphp
+                <p><strong>Durasi:</strong> {{ $duration }} hari</p>
             </div>
             <div class="info">
                 <p><strong>Lokasi Jemput:</strong> {{ $booking->pickup_location ?? '-' }}</p>
@@ -158,8 +163,9 @@
                 <td>Rp{{ number_format($booking->vehicle->price ?? 0, 0, ',', '.') }}</td>
             </tr>
             <tr>
-                <td>Durasi ({{ $booking->duration_days }} hari)</td>
-                <td>Rp{{ number_format(($booking->vehicle->price ?? 0) * $booking->duration_days, 0, ',', '.') }}</td>
+
+                <td>Durasi ({{ $duration }} hari)</td>
+                <td>Rp{{ number_format(($booking->vehicle->price ?? 0) * $duration, 0, ',', '.') }}</td>
             </tr>
             @if($booking->use_driver)
                 <tr>

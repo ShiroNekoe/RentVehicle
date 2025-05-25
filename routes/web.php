@@ -24,7 +24,8 @@ Route::get('/test', function () {
 });
 
 // Halaman Utama
-Route::get('/', [HomeController::class, 'index']);
+Route::get('/', [HomeController::class, 'index'])->name('welcome');
+
 
 // Halaman konfirmasi admin booking
 Route::get('/booking/admin-confirmation', function () {
@@ -80,6 +81,7 @@ Route::put('/booking/{booking}/cancel', [BookingController::class, 'cancel'])->n
 
 Route::get('/booking/{id}/invoice', [BookingController::class, 'invoice'])->name('invoice.booking');
 Route::get('/booking/{vehicleId}', BookingForm::class)->middleware('auth'); 
+Route::get('/transfer/{id}', [PaymentController::class, 'show'])->name('transfer.show');
 
 
 

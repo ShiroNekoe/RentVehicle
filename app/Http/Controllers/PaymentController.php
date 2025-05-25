@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Booking;
-use Midtrans\Config;
+use id;
 use Midtrans\Snap;
+use Midtrans\Config;
+use App\Models\Booking;
 use Midtrans\Notification;
+use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
+
+    
     public function __construct()
     {
         // Set konfigurasi Midtrans
@@ -153,4 +156,17 @@ class PaymentController extends Controller
     {
         return view('payment.failed', compact('order_id'));
     }
+
+    public function show($booking_id)
+{
+    $booking = Booking::findOrFail($booking_id);
+
+    // Contoh: anggap 24 jam dari waktu pemesanan
+    $deadline = $booking->created_at->addHours(24)->format('Y-m-d H:i:s');
+
+    return view('pages.transfer-confirmation', [
+        'booking' => $booking,
+        'deadline' => $deadline, 
+    ]);
+}
 }

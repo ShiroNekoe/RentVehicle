@@ -1,7 +1,40 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-lg mx-auto mt-10 p-6 bg-white rounded shadow">
+    <div class="max-w-lg mx-auto mt-10 p-6 bg-white rounded shadow">
+  <div class="max-w-lg mx-auto mt-10 p-6 bg-white rounded shadow">
+    <div id="countdown" class="bg-yellow-100 text-yellow-700 p-3 rounded mb-4">
+        Waktu tersisa untuk pembayaran: <span id="timer"></span>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const countdownElement = document.getElementById('timer');
+            const deadline = new Date("{{ $deadline }}").getTime();
+
+            const interval = setInterval(function () {
+                const now = new Date().getTime();
+                const distance = deadline - now;
+
+                if (distance < 0) {
+                    clearInterval(interval);
+                    countdownElement.innerHTML = "Waktu pembayaran telah habis.";
+                    countdownElement.closest('#countdown').classList.replace('bg-yellow-100', 'bg-red-100');
+                    countdownElement.closest('#countdown').classList.replace('text-yellow-700', 'text-red-700');
+                    return;
+                }
+
+                const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+                const minutes = Math.floor((distance / (1000 * 60)) % 60);
+                const seconds = Math.floor((distance / 1000) % 60);
+
+                countdownElement.innerHTML = `${hours}j ${minutes}m ${seconds}d`;
+            }, 1000);
+        });
+    </script>
+</div>
+
+
     <h2 class="text-xl font-bold mb-4">Transfer Pembayaran</h2>
 
     @if(session('success'))
@@ -40,4 +73,6 @@
     </form>
       <a href="{{ route('user.history') }}" class="text-indigo-600 hover:underline">⬅️ Kembali</a>
 </div>
+
+
 @endsection

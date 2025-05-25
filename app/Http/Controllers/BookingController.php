@@ -24,6 +24,7 @@ class BookingController extends Controller
     {
         $booking = Booking::with('vehicle')->findOrFail($id);
         return view('user.booking_detail', compact('booking'));
+        
     }
 
     public function downloadInvoice(Booking $booking)
@@ -122,13 +123,17 @@ public function invoice($id)
 
 public function transferConfirmation($booking_id)
 {
-    $booking = Booking::with(['user', 'vehicle'])->findOrFail($booking_id);
-    
-    // Ubah booking_date ke Carbon instance jika belum
-    $booking->booking_date = Carbon::parse($booking->booking_date);
+    $booking = Booking::findOrFail($booking_id);
 
-    return view('pages.transfer-confirmation', compact('booking'));
+    // Contoh: anggap 24 jam dari waktu pemesanan
+    $deadline = $booking->created_at->addHours(24)->format('Y-m-d H:i:s');
+
+    return view('pages.transfer-confirmation', [
+        'booking' => $booking,
+        'deadline' => $deadline, 
+    ]);
 }
+
 
 public function showTransferForm(Booking $booking)
 {
@@ -158,6 +163,10 @@ public function submitTransfer(Request $request, Booking $booking)
 
     return redirect()->route('transfer.form', $booking->id)->with('success', 'Bukti transfer berhasil dikirim!');
 }
+
+
+
+
 
 
 

@@ -27,11 +27,13 @@ class Vehicle extends Model
         return $this->hasMany(Review::class, 'id_vehicle');
     }
 
-    public function getRatingAttribute()
-    {
-        // Menghitung rata-rata rating dari relasi reviews
-        return $this->reviews()->avg('rating') ?? 0;
-    }
+  public function getRatingAttribute()
+{
+    return Review::whereHas('booking', function ($query) {
+        $query->where('id_vehicle', $this->id);
+    })->avg('rating') ?? 0;
+}
+
 
 
 }
