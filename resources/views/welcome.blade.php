@@ -1,7 +1,7 @@
 <x-guest-layout>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <!-- Navbar -->
-    @include('layouts.navigation') 
+    @include('layouts.navigation')
 
 <section id="services">
  <div class="hero min-h-[70vh] bg-cover bg-center">
@@ -56,7 +56,7 @@
                     @endforeach
                 </select>
             </div>
-            
+
             <!-- Button -->
             <div class="w-full md:w-1/4 flex items-end justify-center">
                 <button class="btn btn-warning text-white px-6">Search</button>
@@ -117,7 +117,7 @@
 
             <div class="mt-6 space-y-4">
                 <div class="flex items-start space-x-4">
-                    <img src="{{ asset('img/deal-icon.png') }}" alt="Deals" class="w-12 h-12"> 
+                    <img src="{{ asset('img/deal-icon.png') }}" alt="Deals" class="w-12 h-12">
                     <div>
                         <p class="text-lg font-semibold text-gray-800">Deals for every budget</p>
                         <p class="text-lg text-gray-800">We have best deals, matched just for you.</p>
@@ -125,7 +125,7 @@
                 </div>
 
                 <div class="flex items-start space-x-4">
-                    <img src="{{ asset('img/price-icon.png') }}" alt="Best Price" class="w-12 h-12"> 
+                    <img src="{{ asset('img/price-icon.png') }}" alt="Best Price" class="w-12 h-12">
                     <div>
                         <p class="text-lg font-semibold text-gray-800">Best price guaranteed</p>
                         <p class="text-lg text-gray-800">We match you with the best rates always.</p>
@@ -133,7 +133,7 @@
                 </div>
 
                 <div class="flex items-start space-x-4">
-                    <img src="{{ asset('img/support-icon.png') }}" alt="Support" class="w-12 h-12"> 
+                    <img src="{{ asset('img/support-icon.png') }}" alt="Support" class="w-12 h-12">
                     <div>
                         <p class="text-lg font-semibold text-gray-800">Support 24/7</p>
                         <p class="text-lg text-gray-800">We're here for you anytime, day or night.</p>
@@ -148,54 +148,57 @@
 <section id="top-rated" class="py-12 px-6">
     <!-- Vehicle of the Month -->
     <div class="text-center mb-4">
-        <h4 class="text-lg text-gray-600 mb-6"data-aos="fade-up" data-aos-delay="100">Vehicle of the Month</h4>
+        <h4 class="text-lg text-gray-600 mb-6" data-aos="fade-up" data-aos-delay="100">Vehicle of the Month</h4>
     </div>
 
     <!-- Main Title -->
     <h2 class="text-3xl font-bold text-center mb-10" data-aos="fade-up" data-aos-delay="100">
         Your Next Adventure Starts with a Top Rated Deal
     </h2>
-    
- <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    @foreach ($popularVehicles as $vehicle)
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl">
-            <figure>
-                <img src="{{ asset('storage/vehicles/' . $vehicle->image_path) }}" alt="{{ $vehicle->vehicle_name }}" class="object-cover h-40 w-full">
-            </figure>
-            <div class="p-4">
-                <h3 class="text-xl font-semibold text-gray-800">{{ $vehicle->vehicle_name }} - {{ $vehicle->vehicle_brand }}</h3>
-                <p class="text-sm text-gray-600">{{ $vehicle->seat }} Seat | {{ $vehicle->vehicle_transmission }} | {{ $vehicle->vehicle_type }}</p>
-                <p class="text-lg text-gray-900 font-bold mt-2">Rp {{ number_format($vehicle->price, 0, ',', '.') }} /day</p>
-                
-                {{-- RATING --}}
-                <div class="flex items-center mt-2">
-                    <span class="text-yellow-500">
-                        @for ($i = 0; $i < floor($vehicle->rating); $i++)
-                            ★
-                        @endfor
-                        @if ($vehicle->rating - floor($vehicle->rating) >= 0.5)
-                            ★
-                        @endif
-                        @for ($i = ceil($vehicle->rating); $i < 5; $i++)
-                            ☆
-                        @endfor
-                    </span>
-                    <span class="ml-2 text-sm text-gray-500">({{ number_format($vehicle->rating, 1) }})</span>
-                </div>
-              {{-- BUTTON --}}
-                <div class="mt-4 text-right">
-                    @auth
-                        <a href="{{ route('vehicles.show', $vehicle->id) }}" class="btn btn-warning text-white px-6 py-2 rounded-lg">View Details</a>
-                    @endauth
 
-                    @guest
-                        <a href="{{ route('login') }}" class="btn btn-warning text-white px-6 py-2 rounded-lg">Login to View</a>
-                    @endguest
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        @foreach ($popularVehicles as $vehicle)
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl">
+                <figure>
+                    @if($vehicle->galleries->isNotEmpty())
+                        <img src="{{ asset('storage/' . $vehicle->galleries->first()->image_path) }}" alt="{{ $vehicle->vehicle_name }}" class="w-full h-40 object-cover">
+                    @else
+                        <img src="{{ asset('img/default-vehicle.jpg') }}" alt="Default Vehicle Image" class="w-full h-40 object-cover">
+                    @endif
+                </figure>
+                <div class="p-4">
+                    <h3 class="text-xl font-semibold text-gray-800">{{ $vehicle->vehicle_name }} - {{ $vehicle->vehicle_brand }}</h3>
+                    <p class="text-sm text-gray-600">{{ $vehicle->seat }} Seat | {{ $vehicle->vehicle_transmission }} | {{ $vehicle->vehicle_type }}</p>
+                    <p class="text-lg text-gray-900 font-bold mt-2">Rp {{ number_format($vehicle->price, 0, ',', '.') }} /day</p>
+
+                    {{-- RATING --}}
+                    <div class="flex items-center mt-2">
+                        <span class="text-yellow-500">
+                            @for ($i = 0; $i < floor($vehicle->rating); $i++)
+                                ★
+                            @endfor
+                            @if ($vehicle->rating - floor($vehicle->rating) >= 0.5)
+                                ★
+                            @endif
+                            @for ($i = ceil($vehicle->rating); $i < 5; $i++)
+                                ☆
+                            @endfor
+                        </span>
+                        <span class="ml-2 text-sm text-gray-500">({{ number_format($vehicle->rating, 1) }})</span>
+                    </div>
+                    {{-- BUTTON --}}
+                    <div class="mt-4 text-right">
+                        @auth
+                            <a href="{{ route('vehicles.show', $vehicle->id) }}" class="btn btn-warning text-white px-6 py-2 rounded-lg">View Details</a>
+                        @endauth
+                        @guest
+                            <a href="{{ route('login') }}" class="btn btn-warning text-white px-6 py-2 rounded-lg">Login to View</a>
+                        @endguest
+                    </div>
                 </div>
             </div>
-        </div>
-    @endforeach
-</div>
+        @endforeach
+    </div>
 
 
 </section>
@@ -243,7 +246,7 @@
                     <p class="text-lg text-gray-800">Easier Rent On Your Budget</p>
                     <div class="line right-line mt-2 w-16 h-1 bg-orange-500"></div> <!-- Garis -->
                 </div>
-                
+
                 <div class="service-item right-service relative flex flex-col items-center">
                     <img src="{{ asset('img/deal-icon.png') }}" alt="Competitive Pricing" class="w-12 h-12 mb-4">
                     <p class="text-lg text-gray-800">Competitive Pricing</p>

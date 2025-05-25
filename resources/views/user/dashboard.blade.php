@@ -95,22 +95,18 @@
             <!-- Recommended Popular Vehicles -->
             <div class="mt-6">
                 <h3 class="text-xl font-semibold mb-4 text-[#316783]">Recommended Popular Vehicles</h3>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     @foreach ($popularVehicles as $vehicle)
                         <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl">
-                            @php
-                                $firstImage = $vehicle->galleries->first();
-                            @endphp
-
-                            @if ($firstImage)
-                                <img src="{{ asset('storage/vehicles/' . $firstImage->image_path) }}" class="object-cover h-40 w-full">
+                            @if($vehicle->galleries->isNotEmpty())
+                                <img src="{{ asset('storage/' . $vehicle->galleries->first()->image_path) }}" alt="{{ $vehicle->vehicle_name }}" class="w-full h-48 object-cover">
                             @else
-                                <img src="{{ asset('images/default-vehicle.jpg') }}" class="object-cover h-40 w-full" alt="No image available">
+                                <img src="{{ asset('img/default-vehicle.jpg') }}" alt="Default Vehicle" class="w-full h-48 object-cover">
                             @endif
                             <div class="p-4">
-                                <h3 class="text-xl font-semibold text-gray-800">{{ $vehicle->brand }} - {{ $vehicle->model }}</h3>
-                                <p class="text-sm text-gray-600">{{ $vehicle->seat }} Seat | {{ $vehicle->transmission }} | {{ $vehicle->vehicle_type }}</p>
-                                <p class="text-lg text-gray-900 font-bold mt-2">{{ $vehicle->price }} /day</p>
+                                <h3 class="text-xl font-semibold text-gray-800">{{ $vehicle->vehicle_name }} - {{ $vehicle->vehicle_brand }}</h3>
+                                <p class="text-sm text-gray-600">{{ $vehicle->seat }} Seat | {{ ucfirst($vehicle->vehicle_transmission) }} | {{ ucfirst($vehicle->vehicle_type) }}</p>
+                                <p class="text-lg text-gray-900 font-bold mt-2">Rp {{ number_format($vehicle->price, 0, ',', '.') }} /day</p>
                                 <div class="flex items-center mt-2">
                                     <span class="text-yellow-500">
                                         @for ($i = 0; $i < floor($vehicle->rating); $i++)
@@ -121,8 +117,11 @@
                                         @else
                                             ☆
                                         @endif
+                                        @for ($i = ceil($vehicle->rating); $i < 5; $i++)
+                                            ☆
+                                        @endfor
                                     </span>
-                                    <span class="ml-2 text-sm text-gray-500">({{ $vehicle->rating }})</span>
+                                    <span class="ml-2 text-sm text-gray-500">({{ number_format($vehicle->rating, 1) }})</span>
                                 </div>
                                 <div class="mt-4 text-right">
                                     <a href="{{ route('vehicles.show', $vehicle->id) }}" class="btn btn-warning text-white px-6 py-2 rounded-lg">View Details</a>
@@ -132,31 +131,35 @@
                     @endforeach
                 </div>
             </div>
-
         @else
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 @foreach ($vehicles as $vehicle)
                     <div class="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-2xl">
-                        <figure>
-                            <img src="{{ asset('storage/vehicles/' . $vehicle->image_path) }}" class="object-cover h-40 w-full">
-                        </figure>
+                        @if($vehicle->galleries->isNotEmpty())
+                            <img src="{{ asset('storage/' . $vehicle->galleries->first()->image_path) }}" alt="{{ $vehicle->vehicle_name }}" class="w-full h-48 object-cover">
+                        @else
+                            <img src="{{ asset('img/default-vehicle.jpg') }}" alt="Default Vehicle" class="w-full h-48 object-cover">
+                        @endif
                         <div class="p-4">
                             <h3 class="text-xl font-semibold text-gray-800">{{ $vehicle->vehicle_name }} - {{ $vehicle->vehicle_brand }}</h3>
-                            <p class="text-sm text-gray-600">{{ $vehicle->seat }} Seat | {{ $vehicle->vehicle_transmission }} | {{ $vehicle->vehicle_type }}</p>
-                            <p class="text-lg text-gray-900 font-bold mt-2">{{ $vehicle->price }} /day</p>
-                          <div class="flex items-center mt-2">
-                            <span class="text-yellow-500">
-                                @for ($i = 0; $i < floor($vehicle->rating); $i++)
-                                    ★
-                                @endfor
-                                @if ($vehicle->rating - floor($vehicle->rating) >= 0.5)
-                                    ★
-                                @else
-                                    ☆
-                                @endif
-                            </span>
-                            <span class="ml-2 text-sm text-gray-500">({{ number_format($vehicle->rating, 1) }})</span>
-                        </div>
+                            <p class="text-sm text-gray-600">{{ $vehicle->seat }} Seat | {{ ucfirst($vehicle->vehicle_transmission) }} | {{ ucfirst($vehicle->vehicle_type) }}</p>
+                            <p class="text-lg text-gray-900 font-bold mt-2">Rp {{ number_format($vehicle->price, 0, ',', '.') }} /day</p>
+                            <div class="flex items-center mt-2">
+                                <span class="text-yellow-500">
+                                    @for ($i = 0; $i < floor($vehicle->rating); $i++)
+                                        ★
+                                    @endfor
+                                    @if ($vehicle->rating - floor($vehicle->rating) >= 0.5)
+                                        ★
+                                    @else
+                                        ☆
+                                    @endif
+                                    @for ($i = ceil($vehicle->rating); $i < 5; $i++)
+                                        ☆
+                                    @endfor
+                                </span>
+                                <span class="ml-2 text-sm text-gray-500">({{ number_format($vehicle->rating, 1) }})</span>
+                            </div>
                             <div class="mt-4 text-right">
                                 <a href="{{ route('vehicles.show', $vehicle->id) }}" class="btn btn-warning text-white px-6 py-2 rounded-lg">View Details</a>
                             </div>
