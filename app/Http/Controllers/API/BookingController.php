@@ -35,7 +35,7 @@ class BookingController extends Controller
             'use_driver' => $validated['use_driver'],
             'booking_price' => $validated['booking_price'],
             'payment_status' => 'pending',
-            'booking_status' => 'waiting',
+            'booking_status' => 'onngoing'
         ]);
 
         return response()->json(['message' => 'Booking berhasil dibuat', 'data' => $booking], 201);

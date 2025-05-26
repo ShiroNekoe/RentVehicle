@@ -29,14 +29,12 @@ class ReviewController extends Controller
         $validated = $request->validate([
             'id_vehicle' => 'required|exists:vehicles,id',
             'rating' => 'required|integer|min:1|max:5',
-            'comment' => 'nullable|string',
         ]);
 
         $review = Review::create([
             'id_user' => Auth::id(),
             'id_vehicle' => $validated['id_vehicle'],
             'rating' => $validated['rating'],
-            'comment' => $validated['comment'],
             'review_date' => now(),
         ]);
 
