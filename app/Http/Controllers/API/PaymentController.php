@@ -15,7 +15,6 @@ class PaymentController extends Controller
         Config::$serverKey = config('midtrans.server_key');
         Config::$clientKey = config('midtrans.client_key');
         Config::$isProduction = config('midtrans.is_production');
-        Config::$merchantId = config('midtrans.merchant_id');
     }
 
     /**

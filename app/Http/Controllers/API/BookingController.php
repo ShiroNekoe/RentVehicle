@@ -1,0 +1,50 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Models\Booking;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class BookingController extends Controller
+{
+    // GET /api/bookings
+    public function index()
+    {
+        $bookings = Booking::with(['vehicle'])->where('id_user', Auth::id())->get();
+        return response()->json($bookings);
+    }
+
+    // POST /api/bookings
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'id_vehicle' => 'required|exists:vehicles,id',
+            'start_date' => 'required|date|after_or_equal:today',
+            'end_date' => 'required|date|after:start_date',
+            'use_driver' => 'required|boolean',
+            'booking_price' => 'required|numeric',
+        ]);
+
+        $booking = Booking::create([
+            'id_user' => Auth::id(),
+            'id_vehicle' => $validated['id_vehicle'],
+            'start_date' => $validated['start_date'],
+            'end_date' => $validated['end_date'],
+            'use_driver' => $validated['use_driver'],
+            'booking_price' => $validated['booking_price'],
+            'payment_status' => 'pending',
+            'booking_status' => 'waiting',
+        ]);
+
+        return response()->json(['message' => 'Booking berhasil dibuat', 'data' => $booking], 201);
+    }
+
+    // GET /api/bookings/{id}
+    public function show($id)
+    {
+        $booking = Booking::with('vehicle')->where('id_user', Auth::id())->findOrFail($id);
+        return response()->json($booking);
+    }
+}
