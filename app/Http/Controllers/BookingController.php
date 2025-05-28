@@ -23,7 +23,15 @@ class BookingController extends Controller
     public function show($id)
     {
         $booking = Booking::with('vehicle')->findOrFail($id);
-        return view('user.booking_detail', compact('booking'));
+        $deadline = $booking->created_at->addHours(24);
+        $isDeadlinePassed = now()->greaterThan($deadline);
+
+         if ($isDeadlinePassed && $booking->payment_status === 'pending') {
+        $booking->booking_status = 'cancelled';
+        $booking->payment_status = 'failed';
+        $booking->save();
+        }
+        return view('user.booking_detail', compact('booking','isDeadlinePassed' ));
         
     }
 
@@ -125,14 +133,16 @@ public function transferConfirmation($booking_id)
 {
     $booking = Booking::findOrFail($booking_id);
 
-    // Contoh: anggap 24 jam dari waktu pemesanan
-    $deadline = $booking->created_at->addHours(24)->format('Y-m-d H:i:s');
+    $deadline = $booking->created_at->addHours(24); // JANGAN format ke string
+    $isDeadlinePassed = now()->timestamp > $deadline;
 
     return view('pages.transfer-confirmation', [
         'booking' => $booking,
-        'deadline' => $deadline, 
+        'deadline' => $deadline, // ini objek Carbon
+        'isDeadlinePassed' => now()->greaterThan($deadline),
     ]);
 }
+
 
 
 public function showTransferForm(Booking $booking)

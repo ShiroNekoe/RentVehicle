@@ -5,7 +5,8 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Auth;
+
 
 class IsAdmin
 {
@@ -14,14 +15,14 @@ class IsAdmin
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
-    {
-        if (Auth::user() && Auth::user()->roles == 'Admin') {
-            return $next($request);
-        }
+ public function handle($request, Closure $next)
+{
+    // logger('Current User:', [Auth::user()]);
+    
+    // if (!Auth::check() || Auth::user()->role !== 'admin') {
+    //     abort(403, 'Akses ditolak. Anda bukan admin.');
+    // }
 
-        return redirect('/');
-
-        return $next($request);
-    }
+    // return $next($request);
+}
 }

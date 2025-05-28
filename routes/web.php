@@ -16,6 +16,7 @@ use App\Models\Booking;
 use App\Livewire\BookingExtend;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Livewire\BookingForm;
+use App\Http\Middleware\IsAdmin;
 
 
 // Test route
@@ -104,6 +105,15 @@ Route::view('/booking/failed', 'booking.failed');
 // Login Google
 Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
+
+//middleware admin
+// Route::middleware([
+//     'auth',
+//     IsAdmin::class
+// ])->group(function () {
+//     Route::get('/admin', function () {
+//     });
+// });
 
 
 

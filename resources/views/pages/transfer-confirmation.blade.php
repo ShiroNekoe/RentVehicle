@@ -7,31 +7,33 @@
         Waktu tersisa untuk pembayaran: <span id="timer"></span>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const countdownElement = document.getElementById('timer');
-            const deadline = new Date("{{ $deadline }}").getTime();
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const countdownElement = document.getElementById('timer');
+        const deadline = new Date("{{ \Carbon\Carbon::parse($deadline)->format('Y-m-d H:i:s') }}").getTime();
 
-            const interval = setInterval(function () {
-                const now = new Date().getTime();
-                const distance = deadline - now;
+        const interval = setInterval(function () {
+            const now = new Date().getTime();
+            const distance = deadline - now;
 
-                if (distance < 0) {
-                    clearInterval(interval);
-                    countdownElement.innerHTML = "Waktu pembayaran telah habis.";
-                    countdownElement.closest('#countdown').classList.replace('bg-yellow-100', 'bg-red-100');
-                    countdownElement.closest('#countdown').classList.replace('text-yellow-700', 'text-red-700');
-                    return;
-                }
+            if (distance < 0) {
+                clearInterval(interval);
+                countdownElement.innerHTML = "Waktu pembayaran telah habis.";
+                countdownElement.closest('#countdown').classList.replace('bg-yellow-100', 'bg-red-100');
+                countdownElement.closest('#countdown').classList.replace('text-yellow-700', 'text-red-700');
+                return;
+            }
 
-                const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
-                const minutes = Math.floor((distance / (1000 * 60)) % 60);
-                const seconds = Math.floor((distance / 1000) % 60);
+            const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((distance / (1000 * 60)) % 60);
+            const seconds = Math.floor((distance / 1000) % 60);
 
-                countdownElement.innerHTML = `${hours}j ${minutes}m ${seconds}d`;
-            }, 1000);
-        });
-    </script>
+            countdownElement.innerHTML = `${hours}j ${minutes}m ${seconds}d`;
+        }, 1000);
+    });
+</script>
+
+
 </div>
 
 

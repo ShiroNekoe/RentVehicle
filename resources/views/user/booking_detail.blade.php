@@ -130,12 +130,13 @@
         @endif
 
         {{-- Transfer Confirmation Button --}}
-        @if ($booking->payment_status === 'pending')
-            <a href="{{ route('pages.transfer-confirmation', $booking->id) }}"
-            class="bg-purple-600 hover:bg-purple-700 text-white text-center px-5 py-2 rounded-lg font-medium transition">
-                💳 Confirm Transfer
-            </a>
-        @endif
+      @if ($booking->payment_status === 'pending' && !$isDeadlinePassed)
+    <a href="{{ route('pages.transfer-confirmation', $booking->id) }}"
+       class="bg-purple-600 hover:bg-purple-700 text-white text-center px-5 py-2 rounded-lg font-medium transition">
+        💳 Confirm Transfer
+    </a>
+    @endif
+
 
         {{-- Review Button --}}
         @if ($booking->booking_status === 'completed' && $booking->payment_status === 'paid' && !$booking->review)
