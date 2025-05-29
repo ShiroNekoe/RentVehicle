@@ -16,6 +16,7 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
+            'phone' => 'required|string|min:10',
         ]);
 
         if ($validator->fails()) {
@@ -26,6 +27,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'phone' => $request->phone,
         ]);
 
         return response()->json(['message' => 'User registered successfully', 'user' => $user], 201);
@@ -34,8 +36,8 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $fields = $request->validate([
-           'email' => 'required|string|email',
-           'password' => 'required|string',
+            'email' => 'required|string|email',
+            'password' => 'required|string',
         ]);
 
         $user = User::where('email', $fields['email'])->first();
@@ -46,16 +48,64 @@ class AuthController extends Controller
 
         $token = $user->createToken('api_token')->plainTextToken;
 
+        // Simpan token ke remember_token
+        $user->remember_token = $token;
+        $user->save();
+
         return response()->json([
             'user' => $user,
             'token' => $token,
         ]);
     }
 
+
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
 
         return response()->json(['message' => 'Logout berhasil']);
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $user = $request->user();
+        if (!$user) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
+
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'sometimes|required|string|max:255',
+            'email' => 'sometimes|required|email|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:6|confirmed',
+            'phone' => 'sometimes|required|string|min:10',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        if ($request->has('name')) {
+            $user->name = $request->name;
+        }
+
+        if ($request->has('email')) {
+            $user->email = $request->email;
+        }
+
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
+
+        if ($request->has('phone')) {
+            $user->phone = $request->phone;
+        }
+
+        $user->save();
+
+        return response()->json([
+            'message' => 'Profile updated successfully',
+            'user' => $user,
+        ]);
     }
 }

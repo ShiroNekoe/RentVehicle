@@ -21,4 +21,24 @@ class VehicleController extends Controller
         $vehicle = Vehicle::with('galleries')->findOrFail($id);
         return response()->json($vehicle);
     }
+
+    // GET /api/vehicles/cars
+    public function cars()
+    {
+        $cars = Vehicle::with('galleries')
+            ->where('vehicle_type', 'car')
+            ->latest()
+            ->get();
+        return response()->json($cars);
+    }
+
+    // GET /api/vehicles/motorcycles
+    public function motorcycles()
+    {
+        $motorcycles = Vehicle::with('galleries')
+            ->where('vehicle_type', 'motorcycles')
+            ->latest()
+            ->get();
+        return response()->json($motorcycles);
+    }
 }
