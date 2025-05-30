@@ -21,7 +21,7 @@
 
 <!-- Email -->
 <div class="mb-4">
-    <x-input-label for="email" :value="__('Gmail')" class="text-[#316783]" />
+    <x-input-label for="email" :value="__('Email')" class="text-[#316783]" />
     <div class="relative">
         <x-text-input
             id="email"

@@ -1,65 +1,78 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto p-6 max-w-lg bg-white shadow-lg rounded-lg">
-    <h2 class="text-2xl font-semibold text-gray-800 mb-6">Edit Profile</h2>
+<div class="container mx-auto max-w-lg p-8 bg-white rounded-xl shadow-lg" x-data="{ showDelete: false }">
+    <h2 class="text-3xl font-extrabold text-gray-900 mb-8 text-center">Edit Profile</h2>
 
-    <!-- Menampilkan pesan status jika ada -->
-    @if(session('status'))
-        <div class="alert alert-success bg-green-100 text-green-800 p-4 rounded-lg mb-4">
-            {{ session('status') }}
-        </div>
-    @endif
-
-    <!-- Form untuk update profil -->
-    <form method="POST" action="{{ route('profile.update') }}">
+    <!-- Form Update Profile -->
+    <form method="POST" action="{{ route('profile.update') }}" class="space-y-6">
         @csrf
         @method('PATCH')
 
-        <!-- Input untuk nama -->
-        <div class="mb-4">
-            <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-            <input type="text" id="name" name="name" class="mt-2 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" value="{{ old('name', $user->name) }}" required>
+        <div>
+            <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">Name</label>
+            <input type="text" id="name" name="name"
+                class="w-full rounded-md border border-gray-300 px-4 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                value="{{ old('name', $user->name) }}" required>
         </div>
 
-        <!-- Input untuk email -->
-        <div class="mb-4">
-            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-            <input type="email" id="email" name="email" class="mt-2 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" value="{{ old('email', $user->email) }}" required>
+        <div>
+            <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+            <input type="email" id="email" name="email"
+                class="w-full rounded-md border border-gray-300 px-4 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                value="{{ old('email', $user->email) }}" required>
         </div>
 
-        <!-- Input untuk password -->
-        <div class="mb-4">
-            <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-            <input type="password" id="password" name="password" class="mt-2 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Leave blank to keep current password">
+        <div>
+            <label for="password" class="block text-sm font-semibold text-gray-700 mb-2">Password</label>
+            <input type="password" id="password" name="password"
+                class="w-full rounded-md border border-gray-300 px-4 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                placeholder="Leave blank to keep current password">
         </div>
 
-        <!-- Input untuk konfirmasi password -->
-        <div class="mb-4">
-            <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirm Password</label>
-            <input type="password" id="password_confirmation" name="password_confirmation" class="mt-2 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <div>
+            <label for="password_confirmation" class="block text-sm font-semibold text-gray-700 mb-2">Confirm Password</label>
+            <input type="password" id="password_confirmation" name="password_confirmation"
+                class="w-full rounded-md border border-gray-300 px-4 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none">
         </div>
 
-        <button type="submit" >Save Changes</button>
+        <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-md font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors">
+            Save Changes
+        </button>
     </form>
 
-    <!-- Form untuk menghapus akun -->
-    <form method="POST" action="{{ route('profile.destroy') }}" class="mt-6">
+    <div class="mt-10 text-center">
+        <button
+            @click="showDelete = !showDelete"
+            class="inline-block text-red-600 hover:text-red-800 font-semibold focus:outline-none"
+            type="button"
+        >
+            Delete Account
+        </button>
+    </div>
+
+    <form method="POST" action="{{ route('profile.destroy') }}" class="mt-6 space-y-6" x-show="showDelete" x-transition>
         @csrf
         @method('DELETE')
 
-        <div class="bg-red-50 p-4 rounded-lg mb-6">
-            <h4 class="text-lg font-semibold text-red-700">Delete Account</h4>
-            <p class="text-sm text-red-600">Are you sure you want to delete your account? This action is permanent and cannot be undone.</p>
+        <div class="bg-red-50 border border-red-300 p-4 rounded-md">
+            <h4 class="text-lg font-semibold text-red-700 mb-2">Delete Account</h4>
+            <p class="text-sm text-red-600">
+                Are you sure you want to delete your account? This action is permanent and cannot be undone.
+            </p>
         </div>
 
-        <!-- Input untuk konfirmasi password saat hapus akun -->
-        <div class="mb-4">
-            <label for="password" class="block text-sm font-medium text-gray-700">Current Password</label>
-            <input type="password" id="password" name="password" class="mt-2 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+        <div>
+            <label for="password_delete" class="block text-sm font-semibold text-gray-700 mb-2">Current Password</label>
+            <input type="password" id="password_delete" name="password" autocomplete="current-password"
+                class="w-full rounded-md border border-gray-300 px-4 py-2 text-gray-900 shadow-sm focus:border-red-500 focus:ring-1 focus:ring-red-500 focus:outline-none"
+                required>
         </div>
 
-        <button type="submit" class="w-full py-2 px-4 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">Delete Account</button>
+        <button type="submit" class="w-full bg-red-600 text-white py-3 rounded-md font-semibold hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-colors">
+            Delete Account
+        </button>
     </form>
 </div>
+
 @endsection
