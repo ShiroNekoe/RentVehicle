@@ -133,15 +133,16 @@ public function transferConfirmation($booking_id)
 {
     $booking = Booking::findOrFail($booking_id);
 
-    $deadline = $booking->created_at->addHours(24); // JANGAN format ke string
-    $isDeadlinePassed = now()->timestamp > $deadline;
+    $deadline = $booking->created_at->addHours(24); // Masih dalam bentuk Carbon
+    $isDeadlinePassed = now()->greaterThan($deadline); // Pake method Carbon
 
     return view('pages.transfer-confirmation', [
         'booking' => $booking,
-        'deadline' => $deadline, // ini objek Carbon
-        'isDeadlinePassed' => now()->greaterThan($deadline),
+        'deadline' => $deadline, // Biarkan Carbon, agar bisa diformat di Blade
+        'isDeadlinePassed' => $isDeadlinePassed,
     ]);
 }
+        
 
 
 
