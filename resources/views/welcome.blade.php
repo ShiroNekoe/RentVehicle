@@ -285,22 +285,15 @@
     <div class="space-y-4 text-right">
       <p class="text-lg font-semibold text-white">
         WhatsApp: 
-        <a href="https://wa.me/62891725353" target="_blank" rel="noopener noreferrer" class="hover:underline">
-          091725353
-        </a>
-      </p>
-
-      <p class="text-lg font-semibold text-white">
-        Email: 
-        <a href="mailto:support@rentkuy.com" class="hover:underline">
-          support@rentkuy.com
+        <a href="https://wa.link/1nhkis" target="_blank" rel="noopener noreferrer" class="hover:underline">
+          +62 857-9148-3603
         </a>
       </p>
 
       <p class="text-lg font-semibold text-white">
         Instagram: 
-        <a href="https://instagram.com/yourprofile" target="_blank" rel="noopener noreferrer" class="hover:underline">
-          @yourprofile
+        <a href="https://www.instagram.com/techkocak__?igsh=MXV3MGozZWRtc2hjZg%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" class="hover:underline">
+          @techkocak__
         </a>
       </p>
     </div>

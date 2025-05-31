@@ -1,4 +1,4 @@
-<div class="min-h-screen flex justify-center items-center px-4 bg-gradient-to-r from-[#316783] to-[#a0c4c7]">
+<div class="min-h-screen flex justify-center items-center px-4 ">
     <div class="w-full max-w-4xl p-8 bg-white rounded-xl shadow-lg space-y-8">
 
         <h2 class="text-3xl font-bold text-center text-[#316783] mb-6">Booking Form</h2>
