@@ -9,6 +9,13 @@
             </div>
         @endif
 
+        @if($start_date && $end_date && $start_time && $end_time && $days <= 0)
+         <div class="p-2 text-sm text-red-600 bg-red-100 rounded">
+            Tanggal dan waktu akhir harus setelah tanggal dan waktu mulai.
+        </div>
+         @endif
+
+
         <form wire:submit.prevent="submitBooking" class="space-y-6">
             <!-- Tanggal dan Waktu -->
             <div class="flex flex-col md:flex-row gap-4">
@@ -21,7 +28,7 @@
                 <div class="w-full md:w-1/3">
                     <label class="block text-sm font-semibold text-gray-700">End Date</label>
                     <input type="date" wire:model="end_date" class="input input-bordered w-full rounded-md py-2 px-4 border-gray-300 focus:ring-[#316783] focus:border-[#316783]">
-                    @error('end_date') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+                   @error('end_date') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
                 </div>
 
                 <div class="w-full md:w-1/3">
@@ -105,16 +112,14 @@
                 @error('payment_method') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
             </div>
 
-            <!-- Total Days and Price -->
-            <div class="p-4 bg-gray-100 rounded mt-4">
-                <p><strong>Total Days:</strong> {{ $days }} days</p>
-                <p><strong>Total Price:</strong> Rp{{ number_format($total_price, 0, ',', '.') }}</p>
-            </div>
 
-            <!-- Terms and Conditions Section -->
-            <div class="pt-2 bg-gray-50 mt-2">
-                <h3 class="text-xl text-center font-semibold text-[#316783] mb-4">Terms and Conditions</h3>
-                <ul class="space-y-2 text-sm text-center">
+            <!-- Terms and Conditions Section with Dropdown -->
+            <div x-data="{ open: false }" class="pt-2 bg-gray-50 mt-2">
+                <h3 @click="open = !open" class="text-xl text-center font-semibold text-[#316783] cursor-pointer mb-2">
+                    Terms and Conditions
+                </h3>
+
+                <ul x-show="open" x-transition class="space-y-2 text-sm text-center">
                     <li><strong>Pickup/Return:</strong> Return the vehicle on time or face extra charges.</li>
                     <li><strong>Driver:</strong> Must show valid ID.</li>
                     <li><strong>Vehicle Condition:</strong> Return in the same condition. Damages will incur fees.</li>
@@ -124,6 +129,13 @@
                     <li><strong>Payment:</strong> Full payment required before rental starts.</li>
                 </ul>
             </div>
+
+            <!-- Total Days and Price -->
+            <div class="p-4 bg-gray-100 rounded mt-4">
+                <p><strong>Total Days:</strong> {{ $days }} days</p>
+                <p><strong>Total Price:</strong> Rp{{ number_format($total_price, 0, ',', '.') }}</p>
+            </div>
+
 
             <!-- Submit Button -->
             <div class="text-center">

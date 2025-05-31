@@ -9,5 +9,7 @@
 <body class="antialiased bg-gray-100 text-gray-800">
     {{ $slot }}
     @livewireScripts
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
 </body>
 </html>

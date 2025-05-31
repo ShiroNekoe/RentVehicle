@@ -43,7 +43,7 @@
                 $duration = Carbon::parse($booking->start_date)->diffInDays(Carbon::parse($booking->end_date));
             @endphp
             <p><span class="font-medium">Booking Duration:</span> {{ $duration }} days</p>
-            <p><span class="font-medium">Driver:</span> {{$booking->driver->name}}</p>
+          <p><span class="font-medium">Driver:</span> {{ $booking->driver?->name ?? 'No driver assigned' }}</p>
             <p><span class="font-medium">Pick-up Location:</span> {{ $booking->pickup_location ?? 'No pick-up location' }} </p>            
         </div>
     </div>
@@ -96,7 +96,7 @@
                 <h4 class="text-lg font-semibold">Total Payment</h4>
             </div>
             <div class="flex-1 text-right">
-                <p class="text-[#316783] font-bold text-lg">Rp {{ number_format($booking->vehicle->price, 0, ',', '.') }}</p>
+                <p class="text-[#316783] font-bold text-lg">Rp {{ number_format($booking->booking_price, 0, ',', '.') }}</p>
             </div>
         </div>
 
@@ -130,13 +130,18 @@
         @endif
 
         {{-- Transfer Confirmation Button --}}
-      @if ($booking->payment_status === 'pending' && !$isDeadlinePassed)
+       @if (
+    $booking->payment &&
+    $booking->payment->payment_status === 'pending' &&
+    !$isDeadlinePassed &&
+    $booking->payment->payment_method === 'transfer' &&
+    is_null($booking->payment->transfer_to)
+)
     <a href="{{ route('pages.transfer-confirmation', $booking->id) }}"
-       class="bg-purple-600 hover:bg-purple-700 text-white text-center px-5 py-2 rounded-lg font-medium transition">
+        class="bg-purple-600 hover:bg-purple-700 text-white text-center px-5 py-2 rounded-lg font-medium transition">
         💳 Confirm Transfer
     </a>
-    @endif
-
+@endif
 
         {{-- Review Button --}}
         @if ($booking->booking_status === 'completed' && $booking->payment_status === 'paid' && !$booking->review)
@@ -150,11 +155,12 @@
 
         {{-- Extend Booking Button --}}
         @if ($booking->payment_status === 'paid' && $booking->booking_status !== 'completed')
-            <a href="{{ url('/booking/' . $booking->id . '/extend') }}"
+            <a href="{{ route('extend.booking', ['booking' => $booking->id]) }}"
             class="bg-yellow-500 hover:bg-yellow-600 text-white text-center px-5 py-2 rounded-lg font-medium transition">
                 ⏱️ Extend Booking
             </a>
         @endif
+
 
 
         </div>

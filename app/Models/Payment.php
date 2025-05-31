@@ -10,6 +10,7 @@ class Payment extends Model
     'id_booking',
     'payment_status',
     'payment_price',
+    'payment_method',
     'payment_date',
     'transfer_to',
     'proof',

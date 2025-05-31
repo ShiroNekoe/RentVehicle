@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Collection;
+use App\Models\Payment;
 
 class BookingForm extends Component
 {
@@ -37,7 +38,7 @@ class BookingForm extends Component
 {
     return [
         'start_date' => 'required|date|after_or_equal:today',
-        'end_date' => 'required|date|after_or_equal:start_date',
+       'end_date' => 'required|date|after:start_date',
         'start_time' => 'required|date_format:H:i',
        'end_time' => 'required|date_format:H:i|same:start_time',
         'phone_security' => 'required|numeric|digits_between:12,15',
@@ -71,13 +72,10 @@ public function updated($property)
         }
     }
 
-    if ($property === 'start_date') {
-        $this->end_date = $this->start_date;
-    }
+if ($property === 'start_time') {
+    $this->end_time = $this->start_time;
+}
 
-    if ($property === 'start_time') {
-        $this->end_time = $this->start_time;
-    }
 
     if (in_array($property, ['start_date', 'end_date', 'start_time', 'end_time'])) {
         $this->calculateDaysAndPrice();
@@ -86,25 +84,46 @@ public function updated($property)
 
 
 
-    public function calculateDaysAndPrice()
-    {
-        if ($this->start_date && $this->start_time) {
-            $start = Carbon::parse("{$this->start_date} {$this->start_time}");
-            $end = $start->copy()->addDay(); // otomatis 24 jam
-
-            $this->end_date = $end->toDateString();
-            $this->end_time = $end->format('H:i');
-
-            $this->checkVehicleBookingAvailability();
-
-            $this->days = 1;
-            $this->total_price = $this->days * $this->vehicle->price;
-
-            if ($this->use_driver && $this->id_driver) {
-                $this->total_price += 125000;
-            }
-        }
+public function calculateDaysAndPrice()
+{
+    if (!$this->start_date || !$this->end_date || !$this->start_time || !$this->end_time) {
+        $this->days = 0;
+        $this->total_price = 0;
+        return;
     }
+
+    try {
+        // Pastikan format tanggal sesuai
+        $start = Carbon::createFromFormat('Y-m-d H:i', "{$this->start_date} {$this->start_time}");
+        $end = Carbon::createFromFormat('Y-m-d H:i', "{$this->end_date} {$this->end_time}");
+
+        if ($end->lessThanOrEqualTo($start)) {
+            $this->addError('end_date', 'Tanggal akhir harus setelah tanggal mulai.');
+            $this->days = 0;
+            $this->total_price = 0;
+            return;
+        }
+
+        $this->checkVehicleBookingAvailability();
+
+        // Ubah perhitungan hari agar tidak minus
+        $durationInDays = $start->diffInDays($end);
+        $this->days = max($durationInDays, 1); // minimal 1 hari
+        $this->total_price = $this->days * $this->vehicle->price;
+
+        if ($this->use_driver && $this->id_driver) {
+            $this->total_price += 125000 * $this->days;
+        }
+    } catch (\Exception $e) {
+        $this->days = 0;
+        $this->total_price = 0;
+    }
+}
+
+
+
+
+
 
 
     public function checkVehicleBookingAvailability()
@@ -179,6 +198,15 @@ public function updated($property)
             'return_location' => $this->return_option === 'other' ? $this->return_location : null,
             'booking_date' => now(),
         ]);
+
+           Payment::create([
+                'id_booking' => $booking->id,
+                'payment_method' => $this->payment_method,
+                'payment_status' => 'pending',
+                'payment_price' => $booking->booking_price, // ambil dari model booking
+                'payment_date' => now(),
+            ]);
+
 
         return redirect()->to(
             $this->payment_method === 'transfer'

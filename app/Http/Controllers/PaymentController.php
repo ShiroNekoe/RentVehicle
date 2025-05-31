@@ -8,10 +8,12 @@ use Midtrans\Config;
 use App\Models\Booking;
 use Midtrans\Notification;
 use Illuminate\Http\Request;
+use App\Models\Payment;
 
 class PaymentController extends Controller
 {
 
+    
     
     public function __construct()
     {
@@ -145,11 +147,6 @@ class PaymentController extends Controller
     }
 
 
-    // Halaman sukses pembayaran
-    public function success($order_id)
-    {
-        return view('payment.success', compact('order_id'));
-    }
 
     // Halaman gagal pembayaran
     public function failed($order_id)
@@ -169,4 +166,32 @@ class PaymentController extends Controller
         'deadline' => $deadline, 
     ]);
 }
+
+public function process(Request $request, $paymentId)
+{
+    $payment = Payment::findOrFail($paymentId);
+
+    $request->validate([
+        'proof' => 'required|image|max:2048', // Validasi gambar max 2MB
+    ]);
+
+    if ($request->hasFile('proof')) {
+        // Simpan file baru ke storage/app/public/payment_proofs
+        $path = $request->file('proof')->store('proofs', 'public');
+
+        // Simpan path file baru di DB (file lama tidak dihapus dari storage)
+        $payment->proof = $path;
+    }
+
+    // Update status & tanggal pembayaran
+    $payment->payment_status = 'pending_verification';
+    $payment->payment_date = now();
+    $payment->save();
+
+    return redirect()->route('transfer.confirmation.extend', ['payment' => $payment->id])
+                     ->with('success', 'Bukti pembayaran berhasil diupload. Tunggu verifikasi dari admin.');
+}
+
+
+
 }

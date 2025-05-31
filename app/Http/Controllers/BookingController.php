@@ -175,6 +175,14 @@ public function submitTransfer(Request $request, Booking $booking)
     return redirect()->route('transfer.form', $booking->id)->with('success', 'Bukti transfer berhasil dikirim!');
 }
 
+public function extend(Booking $booking)
+{
+    return view('booking.extend', compact('booking'));
+}
+
+
+
+
 
 
 

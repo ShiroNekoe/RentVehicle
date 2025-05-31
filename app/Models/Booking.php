@@ -21,6 +21,12 @@ class Booking extends Model
         'nik_identity',
         'identity',
     ];
+
+        protected $casts = [
+        'start_date' => 'datetime',
+        'end_date' => 'datetime',
+        'booking_date' => 'date', // kalau ini hanya tanggal tanpa waktu
+    ];
     
     
     
@@ -58,4 +64,6 @@ class Booking extends Model
     {
         return $this->hasOne(Payment::class, 'id_booking');
     }
+
+    
 }

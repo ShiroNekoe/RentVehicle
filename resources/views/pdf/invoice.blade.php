@@ -145,7 +145,7 @@
                     @else -
                     @endif
                 </p>
-                <p><strong>Driver:</strong> {{ $booking->use_driver ? 'Ya (+Rp125.000)' : 'Tidak' }}</p>
+                <p><strong>Driver:</strong> {{ $booking->driver ? 'Ya (+Rp125.000)' : 'Tidak' }}</p>
                 <p><strong>Metode Pembayaran:</strong> {{ strtoupper($booking->payment_method ?? '-') }}</p>
             </div>
         </div>

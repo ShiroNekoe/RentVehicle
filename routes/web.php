@@ -13,7 +13,8 @@ use App\Http\Controllers\ReviewController;
 // use App\Http\Controllers\MidtransController;
 use App\Models\Vehicle;
 use App\Models\Booking;
-use App\Livewire\BookingExtend;
+use Livewire\Livewire;
+use App\Http\Livewire\ExtendBooking;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Livewire\BookingForm;
 use App\Http\Middleware\IsAdmin;
@@ -84,16 +85,20 @@ Route::get('/booking/{id}/invoice', [BookingController::class, 'invoice'])->name
 Route::get('/booking/{vehicleId}', BookingForm::class)->middleware('auth'); 
 Route::get('/transfer/{id}', [PaymentController::class, 'show'])->name('transfer.show');
 
-
-
-// Booking extend menggunakan Livewire component (tidak pakai closure)
-Route::get('/booking/{booking}/extend', BookingExtend::class)->name('booking.extend');
-
 Route::get('/transfer-confirmation/{booking_id}', [BookingController::class, 'transferConfirmation'])->name('pages.transfer-confirmation');
 Route::get('/cod-invoice/{booking_id}', [BookingController::class, 'invoice'])->name('pages.cod-invoice');
 
 Route::get('/transfer/{booking}', [BookingController::class, 'showTransferForm'])->name('transfer.form');
 Route::post('/transfer/{booking}', [BookingController::class, 'submitTransfer'])->name('transfer.submit');
+Route::get('/booking/{booking}/extend', ExtendBooking::class)->name('extend.booking');
+Livewire::component('extend-booking', ExtendBooking::class);
+Route::get('/transfer-confirmation-extend/{payment}', function ($paymentId) {
+    $payment = \App\Models\Payment::findOrFail($paymentId);
+    return view('pages.transfer-confirmation-extend', compact('payment'));
+})->name('transfer.confirmation.extend');
+Route::post('/payment/process/{payment}', [PaymentController::class, 'process'])->name('payment.process');
+Route::get('/payment/success/{payment}', [PaymentController::class, 'success'])->name('payment.success');
+
 
 
 

@@ -24,14 +24,15 @@
                 return;
             }
 
-            const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
-            const minutes = Math.floor((distance / (1000 * 60)) % 60);
-            const seconds = Math.floor((distance / 1000) % 60);
+            const totalHours = Math.floor(distance / (1000 * 60 * 60)); // total jam (tidak % 24)
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            countdownElement.innerHTML = `${hours}j ${minutes}m ${seconds}d`;
+            countdownElement.innerHTML = `${totalHours}j ${minutes}m ${seconds}d`;
         }, 1000);
     });
 </script>
+
 
 
 </div>
