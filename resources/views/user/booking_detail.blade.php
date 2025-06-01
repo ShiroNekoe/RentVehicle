@@ -6,9 +6,7 @@
 <div class="px-4 py-6 max-w-4xl mx-auto">
     <!-- Vehicle Image -->
     <div class="flex justify-center mb-6">
-
-    <img src="{{ Storage::url(optional($booking->vehicle->galleries->first())->image_path ?? 'default.jpg') }}" class="object-cover h-64 w-80" alt="Vehicle Image">
-
+        <img src="{{ Storage::url(optional($booking->vehicle->galleries->first())->image_path ?? 'default.jpg') }}" class="object-cover h-64 w-80" alt="Vehicle Image">
     </div>
 
     <!-- Vehicle Name -->
@@ -34,7 +32,7 @@
 
     <!-- Booking Details Information -->
     <div class="bg-white shadow-lg rounded-xl p-6 mb-6 border border-[#316783] space-y-4">
-        <h4 class="text- text-center font-semibold">Booking Details Information</h4>
+        <h4 class="text-center font-semibold">Booking Details Information</h4>
         <div class="space-y-2">
             <p><span class="font-medium">Rental Start Date:</span> {{$booking->start_date}} </p>
             <p><span class="font-medium">End Date:</span> {{$booking->end_date}}</p>
@@ -43,10 +41,30 @@
                 $duration = Carbon::parse($booking->start_date)->diffInDays(Carbon::parse($booking->end_date));
             @endphp
             <p><span class="font-medium">Booking Duration:</span> {{ $duration }} days</p>
-          <p><span class="font-medium">Driver:</span> {{ $booking->driver?->name ?? 'No driver assigned' }}</p>
+            <p><span class="font-medium">Driver:</span> {{ $booking->driver?->name ?? 'No driver assigned' }}</p>
             <p><span class="font-medium">Pick-up Location:</span> {{ $booking->pickup_location ?? 'No pick-up location' }} </p>            
         </div>
     </div>
+
+ <!-- Terms and Conditions Section with Toggle -->
+<div x-data="{ open: false }" class="bg-white shadow-lg rounded-xl p-6 mb-6 border border-[#316783] space-y-4">
+    <h4 @click="open = !open" class="text-center font-semibold text-[#316783] mb-4 cursor-pointer select-none flex justify-center items-center space-x-2">
+        <span>Terms and Conditions</span>
+        <svg :class="{'transform rotate-180': open}" class="w-5 h-5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+    </h4>
+    <ol x-show="open" x-transition class="list-decimal list-inside space-y-2 text-base text-gray-700 max-w-xl mx-auto leading-relaxed" style="text-align: justify;">
+        <li><strong>Pickup/Return:</strong> Return the vehicle on time or face extra charges.</li>
+        <li><strong>Driver:</strong> Must show valid ID.</li>
+        <li><strong>Vehicle Condition:</strong> Return in the same condition. Damages will incur fees.</li>
+        <li><strong>Extensions:</strong> Request before rental ends; additional charges apply.</li>
+        <li><strong>Cancellation:</strong> 24 hours in advance, only half price refunded.</li>
+        <li><strong>Liability:</strong> Renter is responsible for any fines or accidents.</li>
+        <li><strong>Payment:</strong> Full payment required before rental starts.</li>
+    </ol>
+</div>
+
 
     <!-- Status and Payment -->
     <div class="bg-white shadow-lg rounded-xl p-6 mb-6 border border-[#316783] space-y-4">

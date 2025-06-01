@@ -278,11 +278,8 @@
       </p>
     </div>
 
-    <!-- Bagian kosong atau konten lain jika perlu di sini (kolom 2) -->
-    <div></div>
-
-    <!-- Kontak -->
-    <div class="space-y-4 text-right">
+    <!-- Kontak Sosmed (sekarang di tengah) -->
+    <div class="space-y-4 text-center md:text-right">
       <p class="text-lg font-semibold text-white">
         WhatsApp: 
         <a href="https://wa.link/1nhkis" target="_blank" rel="noopener noreferrer" class="hover:underline">
@@ -298,6 +295,20 @@
       </p>
     </div>
 
+    <!-- Google Maps Embed (sekarang di kanan) -->
+    <div class="flex justify-center items-center">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d988.2709935800085!2d113.23451798614614!3d-7.780920957513861!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7ad19822b817b%3A0xbe2934f6b7798b3f!2sSewa%20elf%20probolinggo%20kota!5e0!3m2!1sen!2sid!4v1748796570615!5m2!1sen!2sid"
+        width="100%"
+        height="150"
+        style="border:0; border-radius: 8px;"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        class="rounded-lg"
+      ></iframe>
+    </div>
+
   </div>
 
   <!-- Bottom line -->
@@ -305,5 +316,6 @@
     &copy; 2025 RentKuy. All rights reserved.
   </div>
 </footer>
+
 
 </x-guest-layout>

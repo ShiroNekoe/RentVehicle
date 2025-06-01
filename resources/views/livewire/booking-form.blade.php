@@ -68,38 +68,41 @@
                 </div>
             </div>
 
-            <!-- Pickup Location, Driver, and Return Location  -->
-            <div class="flex flex-col md:flex-row gap-4">
-                <div class="w-full md:w-1/3">
-                    <label class="block text-sm font-semibold text-gray-700">Pickup Location (optional)</label>
-                    <input type="text" wire:model="pickup_location" class="input input-bordered w-full rounded-md py-2 px-4 border-gray-300 focus:ring-[#316783] focus:border-[#316783]">
-                    @error('pickup_location') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
-                </div>
+<!-- Pickup Location, Driver, and Return Location  -->
+<div class="flex flex-col md:flex-row gap-4">
+    <div class="w-full md:w-1/3">
+        <label class="block text-sm font-semibold text-gray-700">Pickup Location (optional)</label>
+        <input type="text" wire:model="pickup_location" class="input input-bordered w-full rounded-md py-2 px-4 border-gray-300 focus:ring-[#316783] focus:border-[#316783]">
+        <p class="text-xs text-gray-500 mt-1 italic">Pickup location must be in Probolinggo.</p>
+        @error('pickup_location') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+    </div>
 
-                <div class="w-full md:w-1/3 text-center">
-                    <label class="block text-sm font-semibold text-gray-700">Use a Driver?</label>
-                    <input type="checkbox" wire:model="use_driver" class="toggle toggle-primary">
-                    @if($use_driver)
-                        <div class="mt-2">
-                            <label class="block">Driver automatically selected (random)</label>
-                            <input type="text" value="Driver ID: {{ $id_driver }}" class="input input-bordered w-full rounded-md py-2 px-4 border-gray-300 focus:ring-[#316783] focus:border-[#316783]" disabled>
-                        </div>
-                    @endif
-                </div>
-
-                <div class="w-full md:w-1/3">
-                <label class="block text-sm font-semibold text-gray-700">Return Method</label>
-                <select wire:model="return_option" class="select select-bordered w-full rounded-md py-2 px-4 border-gray-300 focus:ring-[#316783] focus:border-[#316783]">
-                    <option value="showroom">Return to showroom</option>
-                    <option value="other">Other location</option>
-                </select>
-                @if($return_option === 'other')
-                    <input type="text" wire:model="return_location" class="input input-bordered w-full mt-2 rounded-md py-2 px-4 border-gray-300 focus:ring-[#316783] focus:border-[#316783]" placeholder="Return location">
-                    @error('return_location') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
-                @endif
+    <div class="w-full md:w-1/3 text-center">
+        <label class="block text-sm font-semibold text-gray-700">Use a Driver?</label>
+        <input type="checkbox" wire:model="use_driver" class="toggle toggle-primary">
+        @if($use_driver)
+            <div class="mt-2">
+                <label class="block">Driver automatically selected (random)</label>
+                <input type="text" value="Driver ID: {{ $id_driver }}" class="input input-bordered w-full rounded-md py-2 px-4 border-gray-300 focus:ring-[#316783] focus:border-[#316783]" disabled>
             </div>
-            </div>
+        @endif
+    </div>
 
+    <div class="w-full md:w-1/3">
+        <label class="block text-sm font-semibold text-gray-700">Return Method</label>
+<select wire:model="return_option" class="select select-bordered w-full rounded-md py-2 px-4 border-gray-300 focus:ring-[#316783] focus:border-[#316783]">
+    <option value="showroom">Return to showroom</option>
+    <option value="other">Other location</option>
+</select>
+<p class="text-xs text-gray-500 mt-1 italic">Showroom location: Blok pasar mantong, Jl. Sunan Giri No.76, Sumber Taman, Kec. Wonoasih, Kota Probolinggo, Jawa Timur 67237.</p>
+@if($return_option === 'other')
+    <input type="text" wire:model="return_location" class="input input-bordered w-full mt-2 rounded-md py-2 px-4 border-gray-300 focus:ring-[#316783] focus:border-[#316783]" placeholder="Return location">
+    <p class="text-xs text-gray-500 mt-1 italic">Return location must be in Probolinggo.</p>
+    @error('return_location') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+@endif
+
+    </div>
+</div>
 
             <!-- Payment Method -->
             <div>
@@ -113,22 +116,31 @@
             </div>
 
 
-            <!-- Terms and Conditions Section with Dropdown -->
-            <div x-data="{ open: false }" class="pt-2 bg-gray-50 mt-2">
-                <h3 @click="open = !open" class="text-xl text-center font-semibold text-[#316783] cursor-pointer mb-2">
-                    Terms and Conditions
-                </h3>
+<!-- Terms and Conditions Checkbox -->
+<div class="mt-4">
+  <label class="inline-flex items-center">
+    <input type="checkbox" wire:model="acceptTerms" class="form-checkbox text-[#316783]" />
+    <span class="ml-2 text-gray-700 text-sm">I agree to the <span class="font-semibold text-[#316783] cursor-pointer" @click="open = !open">Terms and Conditions</span></span>
+  </label>
+  @error('acceptTerms') <span class="text-red-600 text-sm block mt-1">{{ $message }}</span> @enderror
+</div>
 
-                <ul x-show="open" x-transition class="space-y-2 text-sm text-center">
-                    <li><strong>Pickup/Return:</strong> Return the vehicle on time or face extra charges.</li>
-                    <li><strong>Driver:</strong> Must show valid ID.</li>
-                    <li><strong>Vehicle Condition:</strong> Return in the same condition. Damages will incur fees.</li>
-                    <li><strong>Extensions:</strong> Request before rental ends; additional charges apply.</li>
-                    <li><strong>Cancellation:</strong> 24 hours in advance, only half price refunded.</li>
-                    <li><strong>Liability:</strong> Renter is responsible for any fines or accidents.</li>
-                    <li><strong>Payment:</strong> Full payment required before rental starts.</li>
-                </ul>
-            </div>
+<!-- Terms and Conditions content toggle -->
+<div x-data="{ open: false }" class="pt-2 bg-gray-50 mt-2">
+  <h3 @click="open = !open" class="text-xl text-center font-semibold text-[#316783] cursor-pointer mb-2">
+      Terms and Conditions
+  </h3>
+  <ul x-show="open" x-transition class="space-y-2 text-sm text-center">
+      <li><strong>Pickup/Return:</strong> Return the vehicle on time or face extra charges.</li>
+      <li><strong>Driver:</strong> Must show valid ID.</li>
+      <li><strong>Vehicle Condition:</strong> Return in the same condition. Damages will incur fees.</li>
+      <li><strong>Extensions:</strong> Request before rental ends; additional charges apply.</li>
+      <li><strong>Cancellation:</strong> 24 hours in advance, only half price refunded.</li>
+      <li><strong>Liability:</strong> Renter is responsible for any fines or accidents.</li>
+      <li><strong>Payment:</strong> Full payment required before rental starts.</li>
+  </ul>
+</div>
+
 
             <!-- Total Days and Price -->
             <div class="p-4 bg-gray-100 rounded mt-4">
