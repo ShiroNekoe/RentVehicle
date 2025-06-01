@@ -10,14 +10,14 @@
                 <!-- Filter Booking Status -->
                 <div class="flex-1">
                     <select name="booking_status" id="booking_status" class="w-full border rounded-lg px-4 py-2 text-sm">
-                        <option value="">Semua Status</option>
+                        <option value="">All Status</option>
                         <option value="ongoing" {{ request('booking_status') == 'ongoing' ? 'selected' : '' }}>OnGoing</option>
                         <option value="completed" {{ request('booking_status') == 'completed' ? 'selected' : '' }}>Completed</option>
                         <option value="cancelled" {{ request('booking_status') == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
                     </select>
                 </div>
 
-                <!-- Tombol Cari dan Reset -->
+                <!-- Search and Reset Buttons -->
                 <div class="flex space-x-2">
                     <button type="submit" class="btn btn-warning w-24">Search</button>
                     <a href="{{ route('user.history') }}" class="btn btn-outline w-24">Reset</a>
@@ -25,10 +25,10 @@
             </div>
         </form>
 
-        <!-- Riwayat Booking -->
+        <!-- Booking History -->
         <div>
             @if ($bookings->count())
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                     @foreach ($bookings as $booking)
                         <div class="bg-white shadow-md rounded-xl p-5 border hover:shadow-xl transition duration-300 hover:scale-105">
                             <div class="relative">
@@ -41,11 +41,9 @@
                                 @else
                                     <img src="{{ asset('images/default-vehicle.jpg') }}" alt="No image available" class="w-full h-40 object-cover rounded-t-xl">
                                 @endif
-
-                               
                             </div>
                             <div class="mt-3">
-                                 <div class="absolute top-2 left-2 bg-white text-blue-500 px-3 py-1 text-xs rounded-md">
+                                <div class="absolute top-2 left-2 bg-white text-blue-500 px-3 py-1 text-xs rounded-md">
                                     {{ ucfirst($booking->booking_status) }}
                                 </div>
                                 <!-- Vehicle Name -->
@@ -58,11 +56,11 @@
                                 <p class="text-sm text-[#316783] font-semibold mb-2">Rp {{ number_format($booking->vehicle->price, 0, ',', '.') }} / day</p>
 
                                 <!-- View Detail Button -->
-                                 <div class="mt-4 text-right">
-                                <a href="{{ route('user.booking_detail', $booking->id) }}" class="btn btn-warning text-white px-6 py-2 rounded-lg">View Details</a>
+                                <div class="mt-4 text-right">
+                                    <a href="{{ route('user.booking_detail', $booking->id) }}" class="btn btn-warning text-white px-6 py-2 rounded-lg">View Details</a>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     @endforeach
                 </div>
             @else

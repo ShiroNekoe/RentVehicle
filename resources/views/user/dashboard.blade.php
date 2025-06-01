@@ -3,37 +3,41 @@
 @section('content')
 <h1 class="text-3xl font-bold text-center text-gray-800 my-10">Select the Wheels for Your Journey</h1>
 
-<div class="container mx-auto p-4" x-data="{ open: false }" x-init="open = false">
-    <!-- Filter Kendaraan -->
+<div class="container mx-auto p-6 max-w-7xl" x-data="{ open: false }" x-init="open = false">
+    <!-- Vehicle Filter -->
     <div class="mb-10">
         <form method="GET" action="{{ route('user.dashboard') }}" class="bg-white shadow-md rounded-xl p-6 space-y-4">
-            {{-- Nama Kendaraan --}}
+            {{-- Vehicle Name --}}
             <div class="flex items-center space-x-4">
                 <div class="flex-1">
                     <input type="text" name="nama" id="nama" value="{{ request('nama') }}" class="input input-bordered w-full" placeholder="Vehicle">
                 </div>
 
-                <!-- Tombol Cari dan Reset -->
+                <!-- Search and Reset Buttons -->
                 <div class="flex space-x-2">
-                    <button type="submit" class="btn btn-warning">Cari</button>
+                    <button type="submit" class="btn btn-warning">Search</button>
                     <a href="{{ route('user.dashboard') }}" class="btn btn-outline w-24">Reset</a>
                 </div>
             </div>
 
             <!-- Toggle Filter Button -->
             <button type="button" @click="open = !open" class="flex items-center text-[#316783]">
-                <span x-text="open ? 'Sembunyikan Filter' : 'Tampilkan Filter'"></span>
-                <svg x-show="!open" class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                <svg x-show="open" class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 15l-7-7-7 7"></path></svg>
+                <span x-text="open ? 'Hide Filters' : 'Show Filters'"></span>
+                <svg x-show="!open" class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+                <svg x-show="open" class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 15l-7-7-7 7"></path>
+                </svg>
             </button>
 
-            <!-- Filter yang hanya muncul saat toggle aktif -->
+            <!-- Filters visible only when toggle is active -->
             <div x-show="open" x-transition class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
                 {{-- Brand --}}
                 <div>
                     <label for="brand" class="text-sm font-medium text-gray-700 mb-1 block">Brand</label>
                     <select name="brand" id="brand" class="select select-bordered w-full">
-                        <option value="">Pilih Brand</option>
+                        <option value="">Select Brand</option>
                         @foreach (['Honda','Toyota','Daihatsu','Suzuki','Mitsubishi','Yamaha'] as $brand)
                             <option value="{{ $brand }}" @selected(request('brand') == $brand)>{{ $brand }}</option>
                         @endforeach
@@ -44,7 +48,7 @@
                 <div>
                     <label for="model" class="text-sm font-medium text-gray-700 mb-1 block">Model</label>
                     <select name="model" id="model" class="select select-bordered w-full">
-                        <option value="">Pilih Model</option>
+                        <option value="">Select Model</option>
                         @foreach (['big','medium','small'] as $model)
                             <option value="{{ $model }}" @selected(request('model') == $model)>{{ ucfirst($model) }}</option>
                         @endforeach
@@ -53,9 +57,9 @@
 
                 {{-- Type --}}
                 <div>
-                    <label for="type" class="text-sm font-medium text-gray-700 mb-1 block">Tipe Kendaraan</label>
+                    <label for="type" class="text-sm font-medium text-gray-700 mb-1 block">Vehicle Type</label>
                     <select name="type" id="type" class="select select-bordered w-full">
-                        <option value="">Pilih Tipe Kendaraan</option>
+                        <option value="">Select Vehicle Type</option>
                         @foreach (['car','motorcycles'] as $type)
                             <option value="{{ $type }}" @selected(request('type') == $type)>{{ ucfirst($type) }}</option>
                         @endforeach
@@ -64,9 +68,9 @@
 
                 {{-- Transmission --}}
                 <div>
-                    <label for="transmission" class="text-sm font-medium text-gray-700 mb-1 block">Transmisi</label>
+                    <label for="transmission" class="text-sm font-medium text-gray-700 mb-1 block">Transmission</label>
                     <select name="transmission" id="transmission" class="select select-bordered w-full">
-                        <option value="">Pilih Transmisi</option>
+                        <option value="">Select Transmission</option>
                         @foreach (['matic','manual'] as $trans)
                             <option value="{{ $trans }}" @selected(request('transmission') == $trans)>{{ ucfirst($trans) }}</option>
                         @endforeach
@@ -75,11 +79,11 @@
 
                 {{-- Seat --}}
                 <div>
-                    <label for="seat" class="text-sm font-medium text-gray-700 mb-1 block">Jumlah Kursi</label>
+                    <label for="seat" class="text-sm font-medium text-gray-700 mb-1 block">Number of Seats</label>
                     <select name="seat" id="seat" class="select select-bordered w-full">
-                        <option value="">Jumlah Kursi</option>
+                        <option value="">Number of Seats</option>
                         @foreach (['2','5','8','12-20'] as $seat)
-                            <option value="{{ $seat }}" @selected(request('seat') == $seat)>{{ $seat }} Kursi</option>
+                            <option value="{{ $seat }}" @selected(request('seat') == $seat)>{{ $seat }} Seats</option>
                         @endforeach
                     </select>
                 </div>
