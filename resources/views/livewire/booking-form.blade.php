@@ -11,7 +11,7 @@
 
         @if($start_date && $end_date && $start_time && $end_time && $days <= 0)
          <div class="p-2 text-sm text-red-600 bg-red-100 rounded">
-            Tanggal dan waktu akhir harus setelah tanggal dan waktu mulai.
+            The end date and time must be after the start date and time.
         </div>
          @endif
 
