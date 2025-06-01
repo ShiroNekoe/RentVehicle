@@ -26,8 +26,15 @@
             @error('paymentMethod') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
         </div>
 
-        <div class="flex justify-center">
-            <button type="submit" class="btn btn-warning py-3 px-6 rounded-md font-semibold text-white hover:scale-105 transition-transform duration-200">
+        <!-- Responsive Buttons -->
+        <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mt-6">
+            <a href=""
+               class="inline-block text-indigo-600 hover:text-indigo-800 border border-indigo-500 px-5 py-2 rounded-lg font-medium transition text-center md:text-left w-full md:w-auto">
+                ⬅️ Back to Booking Details
+            </a>
+
+            <button type="submit"
+                class="btn btn-warning py-3 px-6 rounded-md font-semibold text-white hover:scale-105 transition-transform duration-200 w-full md:w-auto">
                 Extend Booking
             </button>
         </div>
