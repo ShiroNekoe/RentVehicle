@@ -4,74 +4,65 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Midtrans\Snap;
-use Midtrans\Config;
+use App\Models\Payment;
+use Illuminate\Support\Facades\Validator;
 
 class PaymentController extends Controller
 {
-    public function __construct()
+    public function createPayment(Request $request)
     {
-        // Set Midtrans configuration
-        Config::$serverKey = config('midtrans.server_key');
-        Config::$clientKey = config('midtrans.client_key');
-        Config::$isProduction = config('midtrans.is_production');
-    }
+        // Kirim balik data request sebagai debug
+        $debugInfo = ['request' => $request->all()];
 
-    /**
-     * Generate Snap token for payment.
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function generateSnapToken(Request $request)
-    {
-        $request->validate([
-            'order_id' => 'required|string',
-            'gross_amount' => 'required|numeric',
+        $validator = Validator::make($request->all(), [
+            'id_booking' => 'required|integer|exists:bookings,id',
+            'payment_price' => 'required|numeric',
+            'payment_method' => 'required|string',
+            'transfer_to' => 'nullable|string',
+            'proof' => 'nullable|file|mimes:jpeg,jpg,png,pdf|max:2048',
         ]);
 
-        // Prepare transaction details
-        $transactionDetails = [
-            'order_id' => $request->order_id,
-            'gross_amount' => $request->gross_amount, // Total price
-        ];
-
-        // Create an item list if necessary (optional)
-        $itemDetails = [
-            [
-                'id' => $request->order_id,
-                'price' => $request->gross_amount,
-                'quantity' => 1,
-                'name' => 'Rental Payment'
-            ]
-        ];
-
-        // Prepare customer details (optional)
-        $customerDetails = [
-            'first_name' => 'Customer First Name',
-            'last_name' => 'Customer Last Name',
-            'email' => 'customer@example.com',
-            'phone' => '08123456789',
-        ];
-
-        // Create the transaction object
-        $transaction = [
-            'transaction_details' => $transactionDetails,
-            'item_details' => $itemDetails,
-            'customer_details' => $customerDetails,
-        ];
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validasi gagal',
+                'errors' => $validator->errors(),
+                'debug' => $debugInfo,
+            ], 422);
+        }
 
         try {
-            // Request Snap token from Midtrans
-            $snapToken = Snap::getSnapToken($transaction);
+            $proofPath = null;
+            if ($request->hasFile('proof')) {
+                $file = $request->file('proof');
+                $proofPath = $file->store('proofs', 'public');
+                $debugInfo['file_stored_path'] = $proofPath;
+            } else {
+                $debugInfo['file_stored_path'] = 'Tidak ada file proof yang diupload';
+            }
 
-            // Return the Snap token as a response
+            $payment = Payment::create([
+                'id_booking' => $request->id_booking,
+                'payment_price' => $request->payment_price,
+                'payment_method' => $request->payment_method,
+                'payment_status' => 'pending',
+                'payment_date' => now(),
+                'transfer_to' => $request->transfer_to,
+                'proof' => $proofPath,
+            ]);
+
             return response()->json([
-                'snap_token' => $snapToken,
+                'status' => true,
+                'message' => 'Pembayaran dibuat, status pending',
+                'data' => $payment,
+                'debug' => $debugInfo,
             ]);
         } catch (\Exception $e) {
             return response()->json([
-                'error' => 'Payment gateway error: ' . $e->getMessage(),
+                'status' => false,
+                'message' => 'Terjadi kesalahan pada server',
+                'error' => $e->getMessage(),
+                'debug' => $debugInfo,
             ], 500);
         }
     }
