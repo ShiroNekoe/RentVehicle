@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Booking;
@@ -37,6 +37,8 @@ public function submit()
     $this->booking->booking_status = 'ongoing';
     $this->booking->save();
 
+
+    
     // Buat pembayaran baru, isi payment_date supaya tidak error
     $payment = $this->booking->payment()->create([
         'payment_method' => $this->paymentMethod,

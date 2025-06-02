@@ -70,13 +70,6 @@
 
 <!-- Pickup Location, Driver, and Return Location  -->
 <div class="flex flex-col md:flex-row gap-4">
-    <div class="w-full md:w-1/3">
-        <label class="block text-sm font-semibold text-gray-700">Pickup Location (optional)</label>
-        <input type="text" wire:model="pickup_location" class="input input-bordered w-full rounded-md py-2 px-4 border-gray-300 focus:ring-[#316783] focus:border-[#316783]">
-        <p class="text-xs text-gray-500 mt-1 italic">Pickup location must be in Probolinggo.</p>
-        @error('pickup_location') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
-    </div>
-
     <div class="w-full md:w-1/3 text-center">
         <label class="block text-sm font-semibold text-gray-700">Use a Driver?</label>
         <input type="checkbox" wire:model="use_driver" class="toggle toggle-primary">

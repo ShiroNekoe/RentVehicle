@@ -14,7 +14,7 @@ use App\Http\Controllers\ReviewController;
 use App\Models\Vehicle;
 use App\Models\Booking;
 use Livewire\Livewire;
-use App\Http\Livewire\ExtendBooking;
+use App\Livewire\ExtendBooking;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Livewire\BookingForm;
 use App\Http\Middleware\IsAdmin;
