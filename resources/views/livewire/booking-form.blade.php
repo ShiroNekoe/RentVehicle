@@ -68,45 +68,59 @@
                 </div>
             </div>
 
-<!-- Pickup Location, Driver, and Return Location  -->
+<!-- Pickup Return Location, Driver, and  Payment  -->
+ 
 <div class="flex flex-col md:flex-row gap-4">
-    <div class="w-full md:w-1/3 text-center">
-        <label class="block text-sm font-semibold text-gray-700">Use a Driver?</label>
-        <input type="checkbox" wire:model="use_driver" class="toggle toggle-primary">
+    <!-- Pickup & Return Section -->
+    <div class="w-full md:w-1/3 flex flex-col">
+        <label class="block text-sm font-semibold text-gray-700 mb-2">Pick Up and Return</label>
+
+        <select wire:model="return_option" 
+                class="select select-bordered w-full rounded-md py-2 px-4 border-gray-300 focus:ring-[#316783] focus:border-[#316783]">
+            <option value="showroom">In Our Showroom</option>
+            <option value="other">Other location</option>
+        </select>
+
+        <p class="text-xs text-gray-500 mt-1 italic">
+            Showroom location: Blok pasar mantong, Jl. Sunan Giri No.76, Sumber Taman, Kec. Wonoasih, Kota Probolinggo, Jawa Timur 67237.
+        </p>
+
+        @if($return_option === 'other')
+            <input type="text" wire:model="return_location" 
+                   class="input input-bordered w-full mt-2 rounded-md py-2 px-4 border-gray-300 focus:ring-[#316783] focus:border-[#316783]" 
+                   placeholder="Return location">
+            <p class="text-xs text-gray-500 mt-1 italic">Return location must be in Probolinggo.</p>
+            @error('return_location') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
+        @endif
+    </div>
+
+    <!-- Use a Driver Section -->
+    <div class="w-full md:w-1/3 flex flex-col items-center">
+        <label class="block text-sm font-semibold text-gray-700 mb-2">Use a Driver?</label>
+        <input type="checkbox" wire:model="use_driver" class="toggle toggle-primary mb-2">
+
         @if($use_driver)
-            <div class="mt-2">
-                <label class="block">Driver automatically selected (random)</label>
-                <input type="text" value="Driver ID: {{ $id_driver }}" class="input input-bordered w-full rounded-md py-2 px-4 border-gray-300 focus:ring-[#316783] focus:border-[#316783]" disabled>
+            <div class="w-full">
+                <label class="block mb-1">Driver automatically selected (random)</label>
+                <input type="text" value="Driver ID: {{ $id_driver }}" 
+                       class="input input-bordered w-full rounded-md py-2 px-4 border-gray-300 focus:ring-[#316783] focus:border-[#316783]" 
+                       disabled>
             </div>
         @endif
     </div>
 
-    <div class="w-full md:w-1/3">
-        <label class="block text-sm font-semibold text-gray-700">Return Method</label>
-<select wire:model="return_option" class="select select-bordered w-full rounded-md py-2 px-4 border-gray-300 focus:ring-[#316783] focus:border-[#316783]">
-    <option value="showroom">Return to showroom</option>
-    <option value="other">Other location</option>
-</select>
-<p class="text-xs text-gray-500 mt-1 italic">Showroom location: Blok pasar mantong, Jl. Sunan Giri No.76, Sumber Taman, Kec. Wonoasih, Kota Probolinggo, Jawa Timur 67237.</p>
-@if($return_option === 'other')
-    <input type="text" wire:model="return_location" class="input input-bordered w-full mt-2 rounded-md py-2 px-4 border-gray-300 focus:ring-[#316783] focus:border-[#316783]" placeholder="Return location">
-    <p class="text-xs text-gray-500 mt-1 italic">Return location must be in Probolinggo.</p>
-    @error('return_location') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
-@endif
-
+    <!-- Payment Method Section -->
+    <div class="w-full md:w-1/3 flex flex-col">
+        <label class="block text-sm font-semibold text-gray-700 mb-2">Payment Method</label>
+        <select wire:model="payment_method" 
+                class="select select-bordered w-full rounded-md py-2 px-4 border-gray-300 focus:ring-[#316783] focus:border-[#316783]">
+            <option value="">Select Payment Method</option>
+            <option value="transfer">Bank Transfer</option>
+            <option value="cod">Cash on Delivery (COD)</option>
+        </select>
+        @error('payment_method') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
     </div>
 </div>
-
-            <!-- Payment Method -->
-            <div>
-                <label class="block text-sm font-semibold text-gray-700">Payment Method</label>
-                <select wire:model="payment_method" class="select select-bordered w-full rounded-md py-2 px-4 border-gray-300 focus:ring-[#316783] focus:border-[#316783]">
-                    <option value="">Select Payment Method</option>
-                    <option value="transfer">Bank Transfer</option>
-                    <option value="cod">Cash on Delivery (COD)</option>
-                </select>
-                @error('payment_method') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
-            </div>
 
 
 <!-- Terms and Conditions Checkbox -->
