@@ -105,7 +105,7 @@
                             @if($vehicle->galleries->isNotEmpty())
                                 <img src="{{ asset('storage/' . $vehicle->galleries->first()->image_path) }}" alt="{{ $vehicle->vehicle_name }}" class="w-full h-48 object-cover">
                             @else
-                                <img src="{{ asset('img/default-vehicle.jpg') }}" alt="Default Vehicle" class="w-full h-48 object-cover">
+                                <img src="{{ asset('img/default-vehicle.jpg') }}" alt="Default Vehicle" class="h-full max-w-full object-contain">">
                             @endif
                             <div class="p-4">
                                 <h3 class="text-xl font-semibold text-gray-800">{{ $vehicle->vehicle_name }} - {{ $vehicle->vehicle_brand }}</h3>

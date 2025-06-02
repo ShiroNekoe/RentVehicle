@@ -33,14 +33,12 @@
                         <div class="bg-white shadow-md rounded-xl p-5 border hover:shadow-xl transition duration-300 hover:scale-105">
                             <div class="relative">
                                 <!-- Vehicle Image -->
-                                @php
-                                    $firstImage = $booking->vehicle->galleries->first();
-                                @endphp
-                                @if ($firstImage)
-                                    <img src="{{ asset('storage/vehicles/' . $firstImage->image_path) }}" alt="{{ $booking->vehicle->vehicle_name }}" class="w-full h-40 object-cover rounded-t-xl">
+                              @if($booking->vehicle && $booking->vehicle->galleries->isNotEmpty())
+                                    <img src="{{ asset('storage/' . $booking->vehicle->galleries->first()->image_path) }}" alt="{{ $booking->vehicle->vehicle_name }}" class="w-full h-48 object-cover">
                                 @else
-                                    <img src="{{ asset('images/default-vehicle.jpg') }}" alt="No image available" class="w-full h-40 object-cover rounded-t-xl">
+                                    <img src="{{ asset('img/default-vehicle.jpg') }}" alt="Default Vehicle" class="w-full h-48 object-cover">
                                 @endif
+
                             </div>
                             <div class="mt-3">
                                 <div class="absolute top-2 left-2 bg-white text-blue-500 px-3 py-1 text-xs rounded-md">

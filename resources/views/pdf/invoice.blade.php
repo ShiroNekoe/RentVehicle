@@ -174,7 +174,6 @@
                     <p><strong>Vehicle Name:</strong> {{ $booking->vehicle->vehicle_name ?? '-' }}</p>
                     <p><strong>Start Date:</strong> {{ \Carbon\Carbon::parse($booking->start_date)->format('d M Y') }}</p>
                     <p><strong>End Date:</strong> {{ \Carbon\Carbon::parse($booking->end_date)->format('d M Y') }}</p>
-                    <p><strong>Pick Up Time:</strong> {{ $booking->start_time ?? '-' }}</p>
                     <p><strong>Duration:</strong> {{ $booking->duration_days }} days</p>
                     @php
                     use Carbon\Carbon;
@@ -185,14 +184,18 @@
 
                 <div class="info">
                     <p><strong>Pick Up Location:</strong> {{ $booking->pickup_location ?? '-' }}</p>
-                    <p><strong>Return Location:</strong>
-                        @if($booking->return_locations === 'showroom') Showroom
-                        @elseif($booking->return_locations === 'other') {{ $booking->return_location ?? '-' }}
-                        @else - 
+                <p><strong>Return Location:</strong>
+                        @if($booking->return_option === 'showroom')
+                            Showroom
+                        @elseif($booking->return_option === 'other')
+                            {{ $booking->return_location ?? '-' }}
+                        @else
+                            -
                         @endif
                     </p>
+
                     <p><strong>Driver:</strong> {{ $booking->use_driver ? 'Yes (+Rp125.000)' : 'No' }}</p>
-                    <p><strong>Payment Method:</strong> {{ strtoupper($booking->payment_method ?? '-') }}</p>
+                    <p><strong>Payment Method:</strong> {{ strtoupper($payment->payment_method ?? '-') }}</p>
                 </div>
             </div>
         </div>
@@ -212,7 +215,7 @@
                     <td>Duration ({{ $duration }} days)</td>
                     <td>Rp{{ number_format(($booking->vehicle->price ?? 0) * $duration, 0, ',', '.') }}</td>
                 </tr>
-                @if($booking->use_driver)
+                @if($booking->driver->driver_name)
                     <tr>
                         <td>Driver</td>
                         <td>Rp125,000</td>
