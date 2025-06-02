@@ -28,6 +28,7 @@ class VehicleController extends Controller
     public function cars()
     {
         $cars = Vehicle::with(['galleries', 'reviews.user'])
+            
             ->where('vehicle_type', 'car')
             ->latest()
             ->get();
@@ -38,6 +39,7 @@ class VehicleController extends Controller
     public function motorcycles()
     {
         $motorcycles = Vehicle::with(['galleries', 'reviews.user'])
+            
             ->where('vehicle_type', 'motorcycles')
             ->latest()
             ->get();

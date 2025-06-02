@@ -30,14 +30,17 @@ Route::get('/vehicles', [VehicleController::class, 'index']);
 Route::get('/vehicles/{vehicle}', [VehicleController::class, 'show']);
 
 // Bookings
-Route::get('/bookings', [BookingController::class, 'getBookings']);
+Route::middleware('auth:sanctum')->get('/bookings', [BookingController::class, 'getUserBookings']);
 Route::get('/bookings/{booking}', [BookingController::class, 'show']);
 Route::middleware('auth:sanctum')->post('/bookings_payment', [BookingController::class, 'store']);
 Route::delete('/bookings/{id}', [BookingController::class, 'cancel']);
 Route::get('/vehicles/filter-by-booking-status', [BookingController::class, 'filterByBookingStatus']);
 Route::middleware('auth:sanctum')->get('/bookings/{id}', [BookingController::class, 'show']);
 
-
+//Rating
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/reviews/{booking}', [ReviewController::class, 'store']);
+});
 
 // Reviews
 Route::get('/reviews', [ReviewController::class, 'index']);
